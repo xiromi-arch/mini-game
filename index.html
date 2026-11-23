@@ -3,19 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Шахта Глубинная 3.8</title>
+  <title>Золотодобыча</title>
   <style>
     :root {
-      /* Установлен ваш фон с легким затемнением */
-      --bg-image: linear-gradient(rgba(10, 10, 15, 0.6), rgba(10, 10, 15, 0.8)), url('https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg');
-      
+      --bg-image: linear-gradient(rgba(10, 10, 15, 0.65), rgba(10, 10, 15, 0.85)), url('https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg');
       --bg-color: #14141c;
-      --panel-bg: rgba(25, 25, 35, 0.9); /* Панели стали чуть плотнее для читаемости */
+      --panel-bg: rgba(25, 25, 35, 0.9);
       --panel-solid: #2a2a35;
       --text: #fff;
       --muted: #aaa;
-      
-      /* Фиолетовая палитра */
       --purple-dark: #6a1b9a;
       --purple-main: #9c27b0;
       --purple-light: #ba68c8;
@@ -24,20 +20,11 @@
     }
     
     * { box-sizing: border-box; font-family: Arial, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-    
     body {
-      background-color: var(--bg-color);
-      background-image: var(--bg-image);
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: var(--text);
-      margin: 0;
-      padding: 10px;
-      display: flex;
-      justify-content: center;
+      background-color: var(--bg-color); background-image: var(--bg-image);
+      background-size: cover; background-position: center; background-attachment: fixed;
+      color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center;
     }
-    
     .app { width: 100%; max-width: 400px; }
     .panel { background: var(--panel-bg); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid rgba(156, 39, 176, 0.3); backdrop-filter: blur(8px); }
     
@@ -46,18 +33,29 @@
     .header h1 { margin: 0; font-size: 20px; color: var(--purple-bright); text-shadow: 0 0 10px rgba(224, 64, 251, 0.5); }
     .header p { font-size: 11px; color: var(--muted); margin: 4px 0 0 0; }
     
+    /* Профиль */
+    .profile-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .avatar { font-size: 30px; background: #333; padding: 5px; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--purple-main); }
+    .profile-info { flex: 1; }
+    .profile-email { font-size: 14px; font-weight: bold; color: var(--purple-light); }
+    .profile-stats { font-size: 10px; color: var(--muted); margin-top: 4px; display: flex; gap: 10px; }
+    .login-input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #555; background: #111; color: white; margin-bottom: 8px; }
+    .avatar-selector { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+    .avatar-btn { font-size: 20px; padding: 5px; background: #333; border: 1px solid transparent; }
+    .avatar-btn.active { border-color: var(--purple-bright); background: var(--purple-dark); }
+
     /* Статы */
     .stats-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-bottom: 8px; }
     .top-bar { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 10px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
     
-    /* Кнопки действий */
+    /* Кнопки */
     .main-buttons { display: flex; gap: 5px; margin-bottom: 5px; }
     .main-buttons button { flex: 1; padding: 10px 2px; font-size: 11px; }
     .btn-hire { background: var(--purple-dark); border: 1px solid var(--purple-main); }
     .btn-buy { background: var(--purple-main); border: 1px solid var(--purple-light); }
     .btn-prestige { background: var(--purple-bright); border: 1px solid #ff80ab; color: #000; text-shadow: none; }
     
-    /* Списки улучшений */
+    /* Списки */
     .section-title { color: var(--purple-light); font-size: 13px; margin: 0 0 10px 0; font-weight: bold; border-bottom: 1px solid rgba(156, 39, 176, 0.3); padding-bottom: 4px; }
     .item { display: flex; align-items: center; justify-content: space-between; background: var(--panel-solid); padding: 6px 8px; border-radius: 6px; margin-bottom: 6px; border-left: 3px solid var(--purple-main); }
     .item-info { display: flex; flex-direction: column; flex: 1; }
@@ -80,9 +78,37 @@
 </head>
 <body>
   <div class="app">
+    <!-- Профиль игрока -->
+    <div class="panel">
+      <!-- Форма входа -->
+      <div id="login-view">
+        <div class="section-title">👤 Профиль игрока</div>
+        <input type="email" id="login-email" class="login-input" placeholder="Ваш Gmail (example@gmail.com)">
+        <button class="buy" style="width: 100%;" onclick="loginUser()">Войти / Зарегистрироваться</button>
+      </div>
+      
+      <!-- Данные профиля -->
+      <div id="profile-view" style="display: none;">
+        <div class="profile-header">
+          <div class="avatar" id="user-avatar">⛏️</div>
+          <div class="profile-info">
+            <div class="profile-email" id="user-email">user@gmail.com</div>
+            <div class="profile-stats">
+              <span>Кликов: <span id="stat-clicks">0</span></span>
+              <span>Золота всего: <span id="stat-gold">0</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="section-title" style="margin-bottom: 5px;">Выберите аватар:</div>
+        <div class="avatar-selector" id="avatar-list">
+          <!-- Аватарки генерируются через JS -->
+        </div>
+      </div>
+    </div>
+
     <!-- Шапка (Клик) -->
     <div class="panel header" id="click-area">
-      <h1>⛏️ Шахта Глубинная 3.8</h1>
+      <h1>⛏️ Золотодобыча</h1>
       <p>Нажми сюда для ручной добычи</p>
     </div>
 
@@ -204,7 +230,7 @@
       <div class="item-desc" style="margin-bottom: 5px;">Нет артефактов. Ждите выпадения...</div>
       <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--muted);">
         <span>⏳ Следующий через: <span id="ui-art-timer">15</span>с</span>
-        <span>Шанс: <span id="ui-art-chance">15</span>%</span>
+        <span>Шанс: <span id="ui-art-chance">0.1</span>%</span>
       </div>
       <div class="progress-container"><div class="progress-bar purple" id="ui-art-bar"></div></div>
     </div>
@@ -224,7 +250,8 @@
   </div>
 
   <script>
-    // Инициализация состояния игры
+    const AVATARS = ['⛏️', '👤', '⛑️', '🧑‍🔧', '👑', '💎', '🦊', '🐺', '🐉', '👽'];
+
     let game = {
       ore: 0, gold: 0, prestige: 0, artifacts: 0,
       level: 1, totalOre: 0,
@@ -232,13 +259,11 @@
       skillsOre: { berserk: 0, luck: 0, economy: 0 },
       skillsPrestige: { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 },
       upgrades: { pick: 0, lamp: 0, cart: 0 },
-      artTimer: 15
+      artTimer: 15,
+      user: { email: '', avatar: '⛏️', totalClicks: 0, totalGold: 0 }
     };
 
-    // Форматирование чисел (1K, 1M)
     function fmt(n) { if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return (n/1e3).toFixed(2)+'K'; return Math.floor(n); }
-
-    // Функции расчета характеристик
     function getEcoDiscount() { return Math.min(0.8, (game.skillsOre.economy * 0.02) + (game.skillsPrestige.engineer * 0.05)); }
     function getCost(base, lvl, mult = 1.15) { return Math.floor(base * Math.pow(mult, lvl) * (1 - getEcoDiscount())); }
     
@@ -255,21 +280,60 @@
     }
 
     function getGoldChance() {
-      return 0.05 + (game.skillsOre.luck * 0.01) + (game.skillsPrestige.goldVein * 0.02); // Базовый 5%
+      return 0.05 + (game.skillsOre.luck * 0.01) + (game.skillsPrestige.goldVein * 0.02);
     }
 
+    // Шанс артефактов теперь 0.1% (0.001) + бонус от фортуны
     function getArtChance() {
-      return 0.15 + (game.skillsPrestige.fortune * 0.02); // Базовый 15%
+      return 0.001 + (game.skillsPrestige.fortune * 0.0005); 
+    }
+
+    // --- Профиль ---
+    function loginUser() {
+      let email = document.getElementById('login-email').value;
+      if(!email || !email.includes('@')) { alert('Введите корректный Gmail!'); return; }
+      game.user.email = email;
+      saveGame(false);
+      renderProfile();
+    }
+
+    function changeAvatar(emoji) {
+      game.user.avatar = emoji;
+      saveGame(false);
+      renderProfile();
+      updateUI();
+    }
+
+    function renderProfile() {
+      if(game.user.email) {
+        document.getElementById('login-view').style.display = 'none';
+        document.getElementById('profile-view').style.display = 'block';
+        document.getElementById('user-email').innerText = game.user.email;
+        
+        // Отрисовка аватарок
+        let html = '';
+        AVATARS.forEach(a => {
+          let active = a === game.user.avatar ? 'active' : '';
+          html += `<button class="avatar-btn ${active}" onclick="changeAvatar('${a}')">${a}</button>`;
+        });
+        document.getElementById('avatar-list').innerHTML = html;
+      } else {
+        document.getElementById('login-view').style.display = 'block';
+        document.getElementById('profile-view').style.display = 'none';
+      }
     }
 
     // Отрисовка интерфейса
     function updateUI() {
-      // Ресурсы
       document.getElementById('ui-ore').innerText = fmt(game.ore);
       document.getElementById('ui-gold').innerText = fmt(game.gold);
       document.getElementById('ui-ore-sec').innerText = fmt(getOrePerSec()) + '/сек';
       
-      // Верхняя панель
+      // Данные профиля
+      document.getElementById('user-avatar').innerText = game.user.avatar;
+      document.getElementById('stat-clicks').innerText = fmt(game.user.totalClicks);
+      document.getElementById('stat-gold').innerText = fmt(game.user.totalGold);
+
       document.getElementById('ui-art').innerText = game.artifacts;
       document.getElementById('ui-lvl').innerText = game.level;
       document.getElementById('ui-prestige').innerText = game.prestige;
@@ -308,7 +372,7 @@
         if(s==='master') document.getElementById('eff-master').innerText = game.skillsPrestige[s]*10;
         if(s==='goldVein') document.getElementById('eff-goldVein').innerText = game.skillsPrestige[s]*2;
         if(s==='engineer') document.getElementById('eff-engineer').innerText = game.skillsPrestige[s]*5;
-        if(s==='fortune') document.getElementById('eff-fortune').innerText = game.skillsPrestige[s]*2;
+        if(s==='fortune') document.getElementById('eff-fortune').innerText = (game.skillsPrestige[s]*0.05).toFixed(2); // Теперь прибавка в %
         if(s==='speed') document.getElementById('eff-speed').innerText = game.skillsPrestige[s]*1;
       });
 
@@ -324,7 +388,7 @@
       // Артефакты
       document.getElementById('ui-art-timer').innerText = game.artTimer;
       document.getElementById('ui-art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
-      document.getElementById('ui-art-chance').innerText = Math.floor(getArtChance()*100);
+      document.getElementById('ui-art-chance').innerText = (getArtChance() * 100).toFixed(2);
 
       // Прогресс уровня
       let reqOre = game.level * 5;
@@ -339,7 +403,12 @@
       let amount = getClickPower();
       game.ore += amount;
       game.totalOre += amount;
-      if(Math.random() < getGoldChance()) game.gold += 1;
+      game.user.totalClicks++; // Статистика кликов
+      
+      if(Math.random() < getGoldChance()) { 
+        game.gold += 1; 
+        game.user.totalGold++; // Статистика золота
+      }
       checkLevel();
       updateUI();
     });
@@ -377,7 +446,6 @@
         if(confirm("Вы уверены? Руда, улучшения и наемники сбросятся, но вы получите 1⭐ престижа.")) {
           game.gold -= 100;
           game.prestige += 1;
-          // Сброс
           game.ore = 0; game.totalOre = 0; game.level = 1;
           game.clickPowerLvl = 0; game.hireLvl = 0;
           game.upgrades = { pick: 0, lamp: 0, cart: 0 };
@@ -393,28 +461,30 @@
       if(game.totalOre >= reqOre) {
         game.level++;
         game.totalOre -= reqOre;
-        game.gold += 1; // Награда за уровень
+        game.gold += 1; 
+        game.user.totalGold++;
       }
     }
 
     // Игровой цикл
     setInterval(() => {
-      // Пассивная добыча
       let income = getOrePerSec();
       if(income > 0) {
         game.ore += income;
         game.totalOre += income;
-        if(Math.random() < getGoldChance() * (income / 10)) game.gold += 1;
+        if(Math.random() < getGoldChance() * (income / 10)) {
+           game.gold += 1;
+           game.user.totalGold++;
+        }
         checkLevel();
       }
 
-      // Таймер артефактов
       game.artTimer--;
       if(game.artTimer <= 0) {
         game.artTimer = 15;
         if(Math.random() < getArtChance()) {
           game.artifacts++;
-          alert("✨ Вы нашли артефакт! (+бонус к добыче)");
+          alert("✨ Невероятная удача! Вы нашли артефакт!");
         }
       }
       updateUI();
@@ -424,20 +494,23 @@
     setInterval(() => { saveGame(false); }, 5000);
 
     function saveGame(showAlert) {
-      localStorage.setItem('mineGameV3_8', JSON.stringify(game));
+      localStorage.setItem('zolotodobycha_save', JSON.stringify(game));
       if(showAlert) alert('Игра сохранена!');
     }
 
     function loadGame() {
-      let saved = localStorage.getItem('mineGameV3_8');
+      let saved = localStorage.getItem('zolotodobycha_save');
       if(saved) {
-        game = JSON.parse(saved);
-        if(!game.skillsPrestige) game.skillsPrestige = { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 };
+        let parsed = JSON.parse(saved);
+        // Проверка на наличие новых полей (защита от старых сохранений)
+        if(!parsed.user) parsed.user = { email: '', avatar: '⛏️', totalClicks: 0, totalGold: 0 };
+        game = parsed;
       }
+      renderProfile();
       updateUI();
     }
 
     loadGame();
   </script>
 </body>
-            </html>
+</html>
