@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Шахта Глубинная</title>
+  <style>
+    :root { --bg-color: #14141c; --panel-bg: #1e1e28; --text-main: #fff; --text-muted: #888; --accent-green: #4caf50; --accent-gold: #ffd700; }
+    * { box-sizing: border-box; font-family: Arial, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 10px; display: flex; justify-content: center; }
+    .app-container { width: 100%; max-width: 400px; }
+    .panel { background: var(--panel-bg); border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+    .header { text-align: center; margin-bottom: 15px; }
+    .header h1 { margin: 0; font-size: 22px; color: var(--accent-gold); cursor: pointer; }
+    .header p { font-size: 12px; color: var(--text-muted); margin: 5px 0 0 0; }
+    .stats-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin-bottom: 10px; }
+    .stats-row:last-child { margin-bottom: 0; }
+    .upgrade-item { display: flex; align-items: center; justify-content: space-between; background: #272733; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
+    .upgrade-info { display: flex; flex-direction: column; }
+    .upgrade-title { font-weight: bold; font-size: 14px; }
+    .upgrade-cost { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    button { background: #333344; color: white; border: none; border-radius: 8px; padding: 8px 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button.buy-btn { background: var(--accent-green); }
+    button:disabled { background: #2a2a35; color: #555; cursor: not-allowed; }
+    button:active:not(:disabled) { transform: scale(0.95); }
+    .progress-container { background: #111; border-radius: 10px; height: 16px; overflow: hidden; margin-top: 10px; position: relative; }
+    .progress-bar { background: var(--accent-green); height: 100%; width: 0%; transition: width 0.1s linear; }
+    .section-title { color: var(--accent-gold); font-size: 14px; margin: 0 0 10px 0; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="panel header">
+      <h1 id="click-area">⛏️ Шахта Глубинная</h1>
+      <p>Нажми на название, чтобы добыть руду</p>
+    </div>
+    <div class="panel">
+      <div class="stats-row"><span>💎 Руда:</span><span id="ore">0</span></div>
+      <div class="stats-row"><span>⚡ Добыча:</span><span id="ore-sec">0 / сек</span></div>
+    </div>
+    <div class="panel">
+      <div class="section-title">🔧 Улучшения</div>
+      <div class="upgrade-item">
+        <div class="upgrade-info">
+          <span class="upgrade-title">⛏️ Кирка (Ур. <span id="lvl-pick">0</span>)</span>
+          <span class="upgrade-cost">+1 к добыче. Цена: <span id="cost-pick">15</span> 💎</span>
+        </div>
+        <button class="buy-btn" id="btn-pick" onclick="buyUpgrade('pick')">Купить</button>
+      </div>
+      <div class="upgrade-item">
+        <div class="upgrade-info">
+          <span class="upgrade-title">💡 Фонарь (Ур. <span id="lvl-lamp">0</span>)</span>
+          <span class="upgrade-cost">+3 к добыче. Цена: <span id="cost-lamp">50</span> 💎</span>
+        </div>
+        <button class="buy-btn" id="btn-lamp" onclick="buyUpgrade('lamp')">Купить</button>
+      </div>
+      <div class="upgrade-item">
+        <div class="upgrade-info">
+          <span class="upgrade-title">🛒 Вагонетка (Ур. <span id="lvl-cart">0</span>)</span>
+          <span class="upgrade-cost">+10 к добыче. Цена: <span id="cost-cart">150</span> 💎</span>
+        </div>
+        <button class="buy-btn" id="btn-cart" onclick="buyUpgrade('cart')">Купить</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="stats-row" style="font-size: 14px;">
+        <span>📈 Прогресс уровня</span>
+        <span id="lvl-progress-text">0 / 100</span>
+      </div>
+      <div class="progress-container"><div class="progress-bar" id="lvl-progress-bar"></div></div>
+    </div>
+    <button style="width: 100%; padding: 15px; background: #2a2a35; margin-bottom: 20px;" onclick="saveGame()">💾 Сохранить</button>
+  </div>
+  <script>
+    let game = { ore: 0, pick: { level: 0, cost: 15, baseCost: 15, multiplier: 1.15 }, lamp: { level: 0, cost: 50, baseCost: 50, multiplier: 1.15 }, cart: { level: 0, cost: 150, baseCost: 150, multiplier: 1.15 }, totalOreMined: 0, level: 1 };
+    function formatNumber(num) { if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M'; if (num >= 1000) return (num / 1000).toFixed(2) + 'K'; return Math.floor(num); }
+    function getOrePerSec() { return (game.pick.level * 1) + (game.lamp.level * 3) + (game.cart.level * 10); }
+    function updateUI() {
+      document.getElementById('ore').innerText = formatNumber(game.ore);
+      document.getElementById('ore-sec').innerText = formatNumber(getOrePerSec()) + ' / сек';
+      ['pick', 'lamp', 'cart'].forEach(type => {
+        document.getElementById(`lvl-${type}`).innerText = game[type].level;
+        document.getElementById(`cost-${type}`).innerText = formatNumber(game[type].cost);
+        document.getElementById(`btn-${type}`).disabled = game.ore < game[type].cost;
+      });
+      let nextLevelReq = game.level * 100;
+      let progressPercent = (game.totalOreMined / nextLevelReq) * 100;
+      if (game.totalOreMined >= nextLevelReq) { game.level++; game.totalOreMined = 0; }
+      document.getElementById('lvl-progress-text').innerText = `${formatNumber(game.totalOreMined)} / ${formatNumber(nextLevelReq)}`;
+      document.getElementById('lvl-progress-bar').style.width = Math.min(progressPercent, 100) + '%';
+    }
+    document.getElementById('click-area').addEventListener('click', () => { game.ore += 1; game.totalOreMined += 1; updateUI(); });
+    function buyUpgrade(type) { let item = game[type]; if (game.ore >= item.cost) { game.ore -= item.cost; item.level++; item.cost = Math.floor(item.baseCost * Math.pow(item.multiplier, item.level)); updateUI(); } }
+    setInterval(() => { let income = getOrePerSec(); if (income > 0) { game.ore += income; game.totalOreMined += income; updateUI(); } }, 1000);
+    function saveGame() { localStorage.setItem('mineGameSave', JSON.stringify(game)); alert('Игра сохранена!'); }
+    function loadGame() { let saved = localStorage.getItem('mineGameSave'); if (saved) { game = JSON.parse(saved); updateUI(); } }
+    loadGame(); updateUI();
+  </script>
+</body>
+  </html>
