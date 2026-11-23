@@ -57,9 +57,6 @@
     .file-btn { position: relative; overflow: hidden; display: inline-block; background: var(--purple-dark); padding: 10px 20px; border-radius: 8px; border: 1px solid var(--purple-light); cursor: pointer; }
     .file-btn input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
     
-    .save-area { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-    .save-textarea { width: 100%; height: 60px; background: #111; color: #aaa; border: 1px solid #444; border-radius: 6px; padding: 8px; font-size: 10px; resize: none; }
-
     .stats-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-bottom: 8px; }
     .top-bar { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 10px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
     .main-buttons { display: flex; gap: 5px; margin-bottom: 5px; }
@@ -82,7 +79,6 @@
     .save-btn { width: 100%; padding: 12px; background: var(--purple-dark); border: 1px solid var(--purple-main); margin-bottom: 20px; font-size: 14px; }
     .btn-logout { width: 100%; padding: 12px; background: var(--red); border: none; border-radius: 8px; color: white; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
-    /* Стили для топа */
     .lb-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; background: var(--panel-solid); border-radius: 6px; margin-bottom: 5px; border-left: 3px solid #555; }
     .lb-row.me { border-left-color: var(--purple-bright); background: rgba(156, 39, 176, 0.2); }
     .lb-rank { font-weight: bold; width: 25px; color: var(--purple-light); }
@@ -98,7 +94,7 @@
     <div class="login-box">
       <input type="email" id="login-email" class="login-input" placeholder="Ваш Gmail">
       <input type="password" id="login-password" class="login-input" placeholder="Пароль (любой)">
-      <button class="btn-login" onclick="login()">Войти</button>
+      <button class="btn-login" onclick="login()">Войти в облако</button>
     </div>
   </div>
 
@@ -171,7 +167,7 @@
         </div>
         <div class="progress-container"><div class="progress-bar" id="ui-lvl-bar"></div></div>
       </div>
-      <button class="save-btn" onclick="saveGame(true)">💾 Сохранить</button>
+      <button class="save-btn" onclick="saveGame(true)">💾 Сохранить в облако</button>
     </div>
 
     <div id="view-profile" class="tab-content">
@@ -195,19 +191,8 @@
         <div class="stats-row"><span>Добыто золота:</span><span id="stat-gold">0</span></div>
         <div class="stats-row"><span>Найдено артефактов:</span><span id="stat-arts">0</span></div>
       </div>
-
-      <div class="panel">
-        <div class="section-title">📲 Перенос на другое устройство</div>
-        <div class="item-desc" style="margin-bottom: 8px;">Нажми «Экспорт», скопируй код и отправь себе. На новом телефоне войди в аккаунт, вставь код и нажми «Импорт».</div>
-        <div class="save-area">
-          <button class="buy" onclick="exportSave()">📤 Экспорт (получить код)</button>
-          <textarea id="save-code-area" class="save-textarea" placeholder="Вставьте сюда код для импорта..."></textarea>
-          <button class="btn-hire" onclick="importSave()">📥 Импорт (загрузить код)</button>
-        </div>
-      </div>
     </div>
 
-    <!-- ВКЛАДКА ТОП -->
     <div id="view-leaderboard" class="tab-content">
       <div class="panel">
         <div class="section-title">🏆 Топ-20 игроков по золоту</div>
@@ -227,12 +212,10 @@
   </div>
 
   <script type="module">
-    // === ИМПОРТЫ FIREBASE ===
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // ТВОИ КЛЮЧИ FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyCSLP9qMEKj98ZN-GJtqlAOFM4seacfVtU",
       authDomain: "zolotodobycha-game.firebaseapp.com",
@@ -242,19 +225,15 @@
       appId: "1:655483018237:web:6a8af9e44445a396cb5794"
     };
 
-    // Инициализация Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Анонимный вход
-    signInAnonymously(auth).catch((error) => {
-      console.error("Ошибка анонимного входа:", error);
-    });
+    signInAnonymously(auth).catch((error) => console.error("Auth error:", error));
 
-    // === ЛОГИКА ИГРЫ ===
     let currentEmail = '';
     let game = {};
+    let isSaving = false; // Защита от спама сохранений
 
     function getDefaultGame() {
       return {
@@ -269,29 +248,49 @@
       };
     }
 
-    function login() {
+    // === ВХОД В ОБЛАКО ===
+    async function login() {
       let email = document.getElementById('login-email').value.trim().toLowerCase();
       let pass = document.getElementById('login-password').value.trim();
       if(!email || !email.includes('@')) { alert('Введите корректный Gmail!'); return; }
       if(!pass) { alert('Введите пароль!'); return; }
 
+      document.querySelector('.btn-login').innerText = 'Загрузка...';
+      
       currentEmail = email;
       localStorage.setItem('activeUserEmail', email);
-      let saved = localStorage.getItem('zolotodobycha_acc_' + email);
-      if(saved) {
-        game = JSON.parse(saved);
-      } else {
-        game = getDefaultGame();
-        alert('Аккаунт создан!');
+
+      try {
+        const docRef = doc(db, "users", currentEmail);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          game = docSnap.data();
+          // Восстанавливаем недостающие поля, если обновлялась версия
+          let def = getDefaultGame();
+          if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
+          if(!game.user) game.user = def.user;
+        } else {
+          game = getDefaultGame();
+          await setDoc(docRef, game);
+          alert('Аккаунт создан в облаке!');
+        }
+
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        document.getElementById('bottom-nav').style.display = 'flex';
+        document.getElementById('profile-email').innerText = currentEmail;
+        
+        renderHeader();
+        updateUI();
+        switchTab('game');
+        loadLeaderboard();
+      } catch(e) {
+        console.error(e);
+        alert("Ошибка подключения к серверу. Проверьте интернет.");
+      } finally {
+        document.querySelector('.btn-login').innerText = 'Войти в облако';
       }
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('main-app').style.display = 'block';
-      document.getElementById('bottom-nav').style.display = 'flex';
-      document.getElementById('profile-email').innerText = currentEmail;
-      renderHeader();
-      updateUI();
-      switchTab('game');
-      loadLeaderboard(); 
     }
 
     function logout() {
@@ -307,20 +306,25 @@
       }
     }
 
-    function checkAutoLogin() {
+    async function checkAutoLogin() {
       let savedEmail = localStorage.getItem('activeUserEmail');
       if(savedEmail) {
         currentEmail = savedEmail;
-        let saved = localStorage.getItem('zolotodobycha_acc_' + currentEmail);
-        if(saved) {
-          game = JSON.parse(saved);
-          document.getElementById('login-screen').style.display = 'none';
-          document.getElementById('main-app').style.display = 'block';
-          document.getElementById('bottom-nav').style.display = 'flex';
-          document.getElementById('profile-email').innerText = currentEmail;
-          renderHeader();
-          updateUI();
-          loadLeaderboard();
+        try {
+          const docRef = doc(db, "users", currentEmail);
+          const docSnap = await getDoc(docRef);
+          if(docSnap.exists()) {
+            game = docSnap.data();
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('bottom-nav').style.display = 'flex';
+            document.getElementById('profile-email').innerText = currentEmail;
+            renderHeader();
+            updateUI();
+            loadLeaderboard();
+          }
+        } catch(e) {
+          console.log("Auto-login failed, offline?", e);
         }
       }
     }
@@ -346,7 +350,22 @@
       }
     }
 
-    // === ОТПРАВКА И ЗАГРУЗКА ТОПА ===
+    // === СОХРАНЕНИЕ В ОБЛАКО ===
+    async function saveGame(showAlert) {
+      if(!currentEmail || isSaving) return;
+      isSaving = true;
+      try {
+        await setDoc(doc(db, "users", currentEmail), game);
+        if(showAlert) alert('Прогресс сохранен в облако! ☁️');
+      } catch (e) {
+        console.error("Save error:", e);
+        if(showAlert) alert('Ошибка сохранения. Проверьте интернет.');
+      } finally {
+        isSaving = false;
+      }
+    }
+
+    // === ТОП ===
     async function submitScore() {
       if(!game.user.nick) { alert('Сначала сохраните профиль с никнеймом!'); return; }
       try {
@@ -361,7 +380,7 @@
         loadLeaderboard();
       } catch (e) {
         console.error("Ошибка отправки:", e);
-        alert("Не удалось отправить результат. Проверьте правила Firestore (Rules).");
+        alert("Не удалось отправить. Проверьте правила Firestore.");
       }
     }
 
@@ -388,40 +407,11 @@
         if(html === '') html = '<div style="text-align: center; color: var(--muted); font-size: 12px;">Пока нет результатов</div>';
         listDiv.innerHTML = html;
       } catch (e) {
-        console.error("Ошибка загрузки:", e);
-        listDiv.innerHTML = '<div style="text-align: center; color: var(--red); font-size: 12px;">Ошибка загрузки топа</div>';
+        listDiv.innerHTML = '<div style="text-align: center; color: var(--red); font-size: 12px;">Ошибка загрузки</div>';
       }
     }
 
-    // === ЭКСПОРТ / ИМПОРТ ===
-    function exportSave() {
-      saveGame(false);
-      let jsonStr = JSON.stringify(game);
-      let encoded = btoa(encodeURIComponent(jsonStr)); 
-      document.getElementById('save-code-area').value = encoded;
-      alert('Код в поле. Скопируйте его.');
-    }
-
-    function importSave() {
-      let code = document.getElementById('save-code-area').value.trim();
-      if(!code) return alert('Вставьте код!');
-      try {
-        let decodedStr = decodeURIComponent(atob(code));
-        let parsedGame = JSON.parse(decodedStr);
-        if(parsedGame.user && parsedGame.upgrades) {
-          if(confirm('Заменить текущий прогресс?')){
-            game = parsedGame;
-            saveGame(false);
-            renderHeader();
-            updateUI();
-            alert('Прогресс загружен!');
-            switchTab('game');
-          }
-        } else { alert('Неверный код.'); }
-      } catch(e) { alert('Ошибка кода.'); }
-    }
-
-    // === АВАТАРКА ===
+    // === АВАТАРКА И ПРОФИЛЬ ===
     function handleAvatarUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -451,7 +441,7 @@
       if(newNick) game.user.nick = newNick;
       saveGame(false);
       renderHeader();
-      alert('Профиль сохранен!');
+      alert('Профиль сохранен в облако!');
       switchTab('game');
     }
 
@@ -592,13 +582,8 @@
       updateUI();
     }, 1000);
 
-    setInterval(() => { if(currentEmail) saveGame(false); }, 5000);
-
-    function saveGame(showAlert) {
-      if(!currentEmail) return;
-      localStorage.setItem('zolotodobycha_acc_' + currentEmail, JSON.stringify(game));
-      if(showAlert) alert('Сохранено для ' + currentEmail);
-    }
+    // Автосохранение в облако каждые 10 секунд (чтобы не спамить базу)
+    setInterval(() => { if(currentEmail) saveGame(false); }, 10000);
 
     // Глобальные функции для HTML
     window.login = login;
@@ -606,8 +591,6 @@
     window.switchTab = switchTab;
     window.submitScore = submitScore;
     window.loadLeaderboard = loadLeaderboard;
-    window.exportSave = exportSave;
-    window.importSave = importSave;
     window.handleAvatarUpload = handleAvatarUpload;
     window.saveProfile = saveProfile;
     window.hire = hire;
@@ -621,4 +604,4 @@
     checkAutoLogin();
   </script>
 </body>
-  </html>
+</html>
