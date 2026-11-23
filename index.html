@@ -3,61 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Шахта Глубинная 2.0</title>
+  <title>Шахта Глубинная 3.8</title>
   <style>
     :root {
-      --bg: #121212; --panel: #1e1e24; --panel-light: #2a2a35;
-      --text: #fff; --text-muted: #888; --green: #4caf50; --gold: #ffd700; --purple: #9c27b0;
+      /* Установлен ваш фон с легким затемнением */
+      --bg-image: linear-gradient(rgba(10, 10, 15, 0.6), rgba(10, 10, 15, 0.8)), url('https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg');
+      
+      --bg-color: #14141c;
+      --panel-bg: rgba(25, 25, 35, 0.9); /* Панели стали чуть плотнее для читаемости */
+      --panel-solid: #2a2a35;
+      --text: #fff;
+      --muted: #aaa;
+      
+      /* Фиолетовая палитра */
+      --purple-dark: #6a1b9a;
+      --purple-main: #9c27b0;
+      --purple-light: #ba68c8;
+      --purple-bright: #e040fb;
+      --gold: #ffd700;
     }
+    
     * { box-sizing: border-box; font-family: Arial, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; }
+    
+    body {
+      background-color: var(--bg-color);
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text);
+      margin: 0;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+    }
+    
     .app { width: 100%; max-width: 400px; }
-    .panel { background: var(--panel); border-radius: 12px; padding: 15px; margin-bottom: 10px; border: 1px solid #333; }
-    .header { text-align: center; }
-    .header h1 { margin: 0; font-size: 20px; color: var(--gold); cursor: pointer; }
-    .header p { font-size: 12px; color: var(--text-muted); margin: 5px 0 0 0; }
+    .panel { background: var(--panel-bg); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid rgba(156, 39, 176, 0.3); backdrop-filter: blur(8px); }
     
-    .stats-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: bold; margin-bottom: 8px; }
-    .stats-row:last-child { margin-bottom: 0; }
+    /* Шапка */
+    .header { text-align: center; cursor: pointer; border-color: rgba(156, 39, 176, 0.6); }
+    .header h1 { margin: 0; font-size: 20px; color: var(--purple-bright); text-shadow: 0 0 10px rgba(224, 64, 251, 0.5); }
+    .header p { font-size: 11px; color: var(--muted); margin: 4px 0 0 0; }
     
-    .top-bar { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; background: #111; padding: 8px; border-radius: 8px; }
+    /* Статы */
+    .stats-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-bottom: 8px; }
+    .top-bar { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 10px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
     
-    .section-title { color: var(--gold); font-size: 14px; margin: 0 0 10px 0; font-weight: bold; display: flex; justify-content: space-between; }
+    /* Кнопки действий */
+    .main-buttons { display: flex; gap: 5px; margin-bottom: 5px; }
+    .main-buttons button { flex: 1; padding: 10px 2px; font-size: 11px; }
+    .btn-hire { background: var(--purple-dark); border: 1px solid var(--purple-main); }
+    .btn-buy { background: var(--purple-main); border: 1px solid var(--purple-light); }
+    .btn-prestige { background: var(--purple-bright); border: 1px solid #ff80ab; color: #000; text-shadow: none; }
     
-    .item { display: flex; align-items: center; justify-content: space-between; background: var(--panel-light); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; }
-    .item-info { display: flex; flex-direction: column; }
-    .item-title { font-weight: bold; font-size: 13px; }
-    .item-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    /* Списки улучшений */
+    .section-title { color: var(--purple-light); font-size: 13px; margin: 0 0 10px 0; font-weight: bold; border-bottom: 1px solid rgba(156, 39, 176, 0.3); padding-bottom: 4px; }
+    .item { display: flex; align-items: center; justify-content: space-between; background: var(--panel-solid); padding: 6px 8px; border-radius: 6px; margin-bottom: 6px; border-left: 3px solid var(--purple-main); }
+    .item-info { display: flex; flex-direction: column; flex: 1; }
+    .item-title { font-weight: bold; font-size: 12px; }
+    .item-desc { font-size: 10px; color: var(--muted); margin-top: 2px; display: flex; gap: 5px; flex-wrap: wrap; }
     
-    button { background: #3a3a4a; color: white; border: none; border-radius: 6px; padding: 6px 10px; font-weight: bold; font-size: 12px; cursor: pointer; }
-    button.buy { background: var(--green); }
-    button.prestige-btn { background: var(--purple); width: 100%; padding: 10px; margin-top: 10px; }
-    button:disabled { background: #2a2a35; color: #555; cursor: not-allowed; }
+    button { background: #3a3a4a; color: white; border: 1px solid #555; border-radius: 6px; padding: 6px 10px; font-weight: bold; font-size: 11px; cursor: pointer; white-space: nowrap; transition: 0.1s; }
+    button.buy { background: var(--purple-main); border: 1px solid var(--purple-light); }
+    button:disabled { background: #222; color: #555; border-color: #333; cursor: not-allowed; }
     button:active:not(:disabled) { transform: scale(0.95); }
     
-    .progress-container { background: #111; border-radius: 10px; height: 14px; overflow: hidden; margin-top: 5px; position: relative; }
-    .progress-bar { background: var(--green); height: 100%; width: 0%; transition: width 0.1s linear; }
-    .progress-bar.purple { background: var(--purple); }
+    /* Прогресс-бары */
+    .progress-container { background: #111; border-radius: 10px; height: 12px; overflow: hidden; margin-top: 4px; position: relative; border: 1px solid rgba(156, 39, 176, 0.2); }
+    .progress-bar { background: var(--purple-main); height: 100%; width: 0%; transition: width 0.1s linear; }
+    .progress-bar.purple { background: var(--purple-bright); box-shadow: 0 0 10px var(--purple-bright); }
+    
+    .save-btn { width: 100%; padding: 12px; background: var(--purple-dark); border: 1px solid var(--purple-main); margin-bottom: 20px; font-size: 14px; }
+    .auto-save { text-align: center; font-size: 10px; color: #aaa; margin-top: -10px; }
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="panel header">
-      <h1 id="click-area">⛏️ Шахта Глубинная</h1>
-      <p>Нажми на название для ручной добычи</p>
+    <!-- Шапка (Клик) -->
+    <div class="panel header" id="click-area">
+      <h1>⛏️ Шахта Глубинная 3.8</h1>
+      <p>Нажми сюда для ручной добычи</p>
     </div>
 
-    <!-- Ресурсы -->
+    <!-- Основные ресурсы -->
     <div class="panel">
-      <div class="stats-row"><span>💎 Руда:</span><span id="ore">0</span></div>
-      <div class="stats-row"><span>⚡ Добыча:</span><span id="ore-sec">0 / сек</span></div>
-      <div class="stats-row"><span>🥇 Золото:</span><span id="gold">0</span></div>
+      <div class="stats-row"><span>💎 Руда:</span><span id="ui-ore">0</span></div>
+      <div class="stats-row"><span>🥇 Золото:</span><span id="ui-gold">0</span></div>
+      <div class="stats-row"><span>⚡ Добыча:</span><span id="ui-ore-sec">0 / сек</span></div>
+      
       <div class="top-bar">
-        <span>Ур. <span id="level">1</span></span>
-        <span>⭐ Престиж: <span id="prestige">0</span></span>
-        <span>Бонус: +0%</span>
+        <span>✨ Арт: <span id="ui-art">0</span> шт.</span>
+        <span>📈 Ур: <span id="ui-lvl">1</span></span>
+        <span>⭐ Прест: <span id="ui-prestige">0</span></span>
+        <span>🎁 Бонус: +<span id="ui-bonus">0</span>%</span>
       </div>
-      <button class="prestige-btn" onclick="doPrestige()">Сделать Престиж (100 🥇)</button>
+
+      <div class="main-buttons">
+        <button class="btn-hire" id="btn-hire" onclick="hire()">Нанять (<span id="cost-hire">10</span>💎)</button>
+        <button class="btn-buy" id="btn-buy" onclick="buyClick()">Улучшить (<span id="cost-buy">5</span>💎)</button>
+        <button class="btn-prestige" id="btn-prestige" onclick="prestige()">Престиж (100🥇)</button>
+      </div>
     </div>
 
     <!-- Навыки за руду -->
@@ -65,17 +111,64 @@
       <div class="section-title">🎯 Навыки (за руду)</div>
       <div class="item">
         <div class="item-info">
-          <span class="item-title">⚡ Берсерк (Ур. <span id="lvl-berserk">0</span>)</span>
-          <span class="item-desc">+5% к добыче. Цена: <span id="cost-berserk">10</span> 🥇</span>
+          <span class="item-title">⚡ Берсерк Ур. <span id="lvl-berserk">0</span></span>
+          <div class="item-desc"><span>+<span id="eff-berserk">0</span>% к добыче</span> <span>Стоит: <span id="cost-berserk">10</span> 🥇</span></div>
         </div>
-        <button class="buy" id="btn-berserk" onclick="buySkill('berserk')">Купить</button>
+        <button class="buy" id="btn-berserk" onclick="buySkillOre('berserk')">⬆️</button>
       </div>
       <div class="item">
         <div class="item-info">
-          <span class="item-title">🍀 Удача (Ур. <span id="lvl-luck">0</span>)</span>
-          <span class="item-desc">+1% к шансу золота. Цена: <span id="cost-luck">8</span> 🥇</span>
+          <span class="item-title">🍀 Удача Ур. <span id="lvl-luck">0</span></span>
+          <div class="item-desc"><span>+<span id="eff-luck">0</span>% к шансу золота</span> <span>Стоит: <span id="cost-luck">8</span> 🥇</span></div>
         </div>
-        <button class="buy" id="btn-luck" onclick="buySkill('luck')">Купить</button>
+        <button class="buy" id="btn-luck" onclick="buySkillOre('luck')">⬆️</button>
+      </div>
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">🏗️ Экономия Ур. <span id="lvl-economy">0</span></span>
+          <div class="item-desc"><span>-<span id="eff-economy">0</span>% к стоимости</span> <span>Стоит: <span id="cost-economy">12</span> 🥇</span></div>
+        </div>
+        <button class="buy" id="btn-economy" onclick="buySkillOre('economy')">⬆️</button>
+      </div>
+    </div>
+
+    <!-- Навыки за Престиж -->
+    <div class="panel">
+      <div class="section-title">⭐ Навыки (тратят уровень престижа)</div>
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">🏆 Мастер Шахтёр Ур. <span id="lvl-master">0</span></span>
+          <div class="item-desc"><span>+<span id="eff-master">0</span>% к добыче</span> <span>Стоит: <span id="cost-master">5</span> ⭐</span></div>
+        </div>
+        <button class="buy" id="btn-master" onclick="buySkillPrestige('master')">⬆️</button>
+      </div>
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">💰 Золотая Жила Ур. <span id="lvl-goldVein">0</span></span>
+          <div class="item-desc"><span>+<span id="eff-goldVein">0</span>% к шансу золота</span> <span>Стоит: <span id="cost-goldVein">8</span> ⭐</span></div>
+        </div>
+        <button class="buy" id="btn-goldVein" onclick="buySkillPrestige('goldVein')">⬆️</button>
+      </div>
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">🛠️ Инженер Ур. <span id="lvl-engineer">0</span></span>
+          <div class="item-desc"><span>-<span id="eff-engineer">0</span>% к стоимости</span> <span>Стоит: <span id="cost-engineer">10</span> ⭐</span></div>
+        </div>
+        <button class="buy" id="btn-engineer" onclick="buySkillPrestige('engineer')">⬆️</button>
+      </div>
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">🎲 Фортуна Ур. <span id="lvl-fortune">0</span></span>
+          <div class="item-desc"><span>+<span id="eff-fortune">0</span>% к шансу артефактов</span> <span>Стоит: <span id="cost-fortune">15</span> ⭐</span></div>
+        </div>
+        <button class="buy" id="btn-fortune" onclick="buySkillPrestige('fortune')">⬆️</button>
+      </div>
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">🚀 Ускорение Ур. <span id="lvl-speed">0</span></span>
+          <div class="item-desc"><span>+<span id="eff-speed">0</span> к скорости добычи</span> <span>Стоит: <span id="cost-speed">20</span> ⭐</span></div>
+        </div>
+        <button class="buy" id="btn-speed" onclick="buySkillPrestige('speed')">⬆️</button>
       </div>
     </div>
 
@@ -84,175 +177,267 @@
       <div class="section-title">🔧 Улучшения (бесконечные)</div>
       <div class="item">
         <div class="item-info">
-          <span class="item-title">⛏️ Кирка (Ур. <span id="lvl-pick">0</span>)</span>
-          <span class="item-desc">+1 к добыче. Цена: <span id="cost-pick">15</span> 💎</span>
+          <span class="item-title">⛏️ Кирка Ур. <span id="lvl-pick">0</span></span>
+          <div class="item-desc">Стоит: <span id="cost-pick">15</span> 💎</div>
         </div>
-        <button class="buy" id="btn-pick" onclick="buyUpgrade('pick')">Купить</button>
+        <button class="buy" id="btn-pick" onclick="buyUpgrade('pick')">⬆️</button>
       </div>
       <div class="item">
         <div class="item-info">
-          <span class="item-title">💡 Фонарь (Ур. <span id="lvl-lamp">0</span>)</span>
-          <span class="item-desc">+3 к добыче. Цена: <span id="cost-lamp">50</span> 💎</span>
+          <span class="item-title">💡 Фонарь Ур. <span id="lvl-lamp">0</span></span>
+          <div class="item-desc">Стоит: <span id="cost-lamp">20</span> 💎</div>
         </div>
-        <button class="buy" id="btn-lamp" onclick="buyUpgrade('lamp')">Купить</button>
+        <button class="buy" id="btn-lamp" onclick="buyUpgrade('lamp')">⬆️</button>
       </div>
       <div class="item">
         <div class="item-info">
-          <span class="item-title">🛒 Вагонетка (Ур. <span id="lvl-cart">0</span>)</span>
-          <span class="item-desc">+10 к добыче. Цена: <span id="cost-cart">150</span> 💎</span>
+          <span class="item-title">🛒 Вагонетка Ур. <span id="lvl-cart">0</span></span>
+          <div class="item-desc">Стоит: <span id="cost-cart">25</span> 💎</div>
         </div>
-        <button class="buy" id="btn-cart" onclick="buyUpgrade('cart')">Купить</button>
+        <button class="buy" id="btn-cart" onclick="buyUpgrade('cart')">⬆️</button>
       </div>
     </div>
 
     <!-- Артефакты -->
     <div class="panel">
-      <div class="section-title">✨ Артефакты</div>
-      <div class="item-desc" style="margin-bottom: 5px;">Найдено артефактов: <span id="artifacts">0</span></div>
-      <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px;">
-        <span>Следующий через: <span id="art-timer">15</span> сек</span>
-        <span>Шанс: 15%</span>
+      <div class="section-title">✨ Артефакты (бесконечные)</div>
+      <div class="item-desc" style="margin-bottom: 5px;">Нет артефактов. Ждите выпадения...</div>
+      <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--muted);">
+        <span>⏳ Следующий через: <span id="ui-art-timer">15</span>с</span>
+        <span>Шанс: <span id="ui-art-chance">15</span>%</span>
       </div>
-      <div class="progress-container"><div class="progress-bar purple" id="art-bar"></div></div>
+      <div class="progress-container"><div class="progress-bar purple" id="ui-art-bar"></div></div>
     </div>
 
-    <button style="width: 100%; padding: 12px; background: #2a2a35; margin-bottom: 20px;" onclick="saveGame()">💾 Сохранить игру</button>
+    <!-- Прогресс уровня -->
+    <div class="panel">
+      <div class="section-title">📈 Прогресс уровня</div>
+      <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span>Следующий уровень: <span id="ui-next-lvl">5</span>💎</span>
+        <span id="ui-lvl-percent">0%</span>
+      </div>
+      <div class="progress-container"><div class="progress-bar" id="ui-lvl-bar"></div></div>
+    </div>
+
+    <button class="save-btn" onclick="saveGame(true)">💾 Сохранить</button>
+    <div class="auto-save">Автосохранение каждые 5 сек</div>
   </div>
 
   <script>
-    // Состояние игры
+    // Инициализация состояния игры
     let game = {
-      ore: 0, gold: 0, prestige: 0, level: 1, artifacts: 0,
-      totalOreMined: 0,
-      upgrades: { pick: {lvl:0, cost:15, base:15}, lamp: {lvl:0, cost:50, base:50}, cart: {lvl:0, cost:150, base:150} },
-      skills: { berserk: {lvl:0, cost:10, base:10}, luck: {lvl:0, cost:8, base:8} },
+      ore: 0, gold: 0, prestige: 0, artifacts: 0,
+      level: 1, totalOre: 0,
+      clickPowerLvl: 0, hireLvl: 0,
+      skillsOre: { berserk: 0, luck: 0, economy: 0 },
+      skillsPrestige: { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 },
+      upgrades: { pick: 0, lamp: 0, cart: 0 },
       artTimer: 15
     };
 
-    function fmt(num) { if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'; if (num >= 1000) return (num / 1000).toFixed(1) + 'K'; return Math.floor(num); }
+    // Форматирование чисел (1K, 1M)
+    function fmt(n) { if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return (n/1e3).toFixed(2)+'K'; return Math.floor(n); }
 
-    // Расчет добычи
+    // Функции расчета характеристик
+    function getEcoDiscount() { return Math.min(0.8, (game.skillsOre.economy * 0.02) + (game.skillsPrestige.engineer * 0.05)); }
+    function getCost(base, lvl, mult = 1.15) { return Math.floor(base * Math.pow(mult, lvl) * (1 - getEcoDiscount())); }
+    
     function getOrePerSec() {
-      let base = (game.upgrades.pick.lvl * 1) + (game.upgrades.lamp.lvl * 3) + (game.upgrades.cart.lvl * 10);
-      let mult = 1 + (game.skills.berserk.lvl * 0.05); // Берсерк дает +5% за уровень
+      let base = (game.hireLvl * 1) + (game.skillsPrestige.speed * 1);
+      let mult = 1 + (game.skillsOre.berserk * 0.05) + (game.skillsPrestige.master * 0.10);
+      return base * mult;
+    }
+    
+    function getClickPower() {
+      let base = 1 + game.clickPowerLvl;
+      let mult = 1 + (game.skillsOre.berserk * 0.05) + (game.skillsPrestige.master * 0.10);
       return base * mult;
     }
 
-    // Расчет шанса золота
     function getGoldChance() {
-      return 0.05 + (game.skills.luck.lvl * 0.01); // Базовый 5% + 1% за уровень удачи
+      return 0.05 + (game.skillsOre.luck * 0.01) + (game.skillsPrestige.goldVein * 0.02); // Базовый 5%
     }
 
-    // Обновление интерфейса
+    function getArtChance() {
+      return 0.15 + (game.skillsPrestige.fortune * 0.02); // Базовый 15%
+    }
+
+    // Отрисовка интерфейса
     function updateUI() {
-      document.getElementById('ore').innerText = fmt(game.ore);
-      document.getElementById('gold').innerText = fmt(game.gold);
-      document.getElementById('ore-sec').innerText = fmt(getOrePerSec()) + ' / сек';
-      document.getElementById('prestige').innerText = game.prestige;
-      document.getElementById('level').innerText = game.level;
-      document.getElementById('artifacts').innerText = game.artifacts;
+      // Ресурсы
+      document.getElementById('ui-ore').innerText = fmt(game.ore);
+      document.getElementById('ui-gold').innerText = fmt(game.gold);
+      document.getElementById('ui-ore-sec').innerText = fmt(getOrePerSec()) + '/сек';
+      
+      // Верхняя панель
+      document.getElementById('ui-art').innerText = game.artifacts;
+      document.getElementById('ui-lvl').innerText = game.level;
+      document.getElementById('ui-prestige').innerText = game.prestige;
+      let bonus = (game.skillsOre.berserk*5) + (game.skillsPrestige.master*10);
+      document.getElementById('ui-bonus').innerText = bonus;
+
+      // Кнопки
+      let hireCost = getCost(10, game.hireLvl);
+      document.getElementById('cost-hire').innerText = fmt(hireCost);
+      document.getElementById('btn-hire').disabled = game.ore < hireCost;
+
+      let clickCost = getCost(5, game.clickPowerLvl);
+      document.getElementById('cost-buy').innerText = fmt(clickCost);
+      document.getElementById('btn-buy').disabled = game.ore < clickCost;
+
+      document.getElementById('btn-prestige').disabled = game.gold < 100;
+
+      // Навыки (Руда)
+      ['berserk', 'luck', 'economy'].forEach(s => {
+        let cost = getCost(s === 'luck' ? 8 : (s === 'berserk' ? 10 : 12), game.skillsOre[s], 1.5);
+        document.getElementById(`lvl-${s}`).innerText = game.skillsOre[s];
+        document.getElementById(`cost-${s}`).innerText = fmt(cost);
+        document.getElementById(`btn-${s}`).disabled = game.gold < cost;
+        if(s==='berserk') document.getElementById('eff-berserk').innerText = game.skillsOre[s]*5;
+        if(s==='luck') document.getElementById('eff-luck').innerText = game.skillsOre[s]*1;
+        if(s==='economy') document.getElementById('eff-economy').innerText = game.skillsOre[s]*2;
+      });
+
+      // Навыки (Престиж)
+      ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach(s => {
+        let baseCost = s==='master'?5 : s==='goldVein'?8 : s==='engineer'?10 : s==='fortune'?15 : 20;
+        let cost = Math.floor(baseCost * Math.pow(1.5, game.skillsPrestige[s]));
+        document.getElementById(`lvl-${s}`).innerText = game.skillsPrestige[s];
+        document.getElementById(`cost-${s}`).innerText = fmt(cost);
+        document.getElementById(`btn-${s}`).disabled = game.prestige < cost;
+        if(s==='master') document.getElementById('eff-master').innerText = game.skillsPrestige[s]*10;
+        if(s==='goldVein') document.getElementById('eff-goldVein').innerText = game.skillsPrestige[s]*2;
+        if(s==='engineer') document.getElementById('eff-engineer').innerText = game.skillsPrestige[s]*5;
+        if(s==='fortune') document.getElementById('eff-fortune').innerText = game.skillsPrestige[s]*2;
+        if(s==='speed') document.getElementById('eff-speed').innerText = game.skillsPrestige[s]*1;
+      });
 
       // Улучшения
+      let basePrices = { pick: 15, lamp: 20, cart: 25 };
       ['pick', 'lamp', 'cart'].forEach(u => {
-        document.getElementById(`lvl-${u}`).innerText = game.upgrades[u].lvl;
-        document.getElementById(`cost-${u}`).innerText = fmt(game.upgrades[u].cost);
-        document.getElementById(`btn-${u}`).disabled = game.ore < game.upgrades[u].cost;
+        let cost = getCost(basePrices[u], game.upgrades[u]);
+        document.getElementById(`lvl-${u}`).innerText = game.upgrades[u];
+        document.getElementById(`cost-${u}`).innerText = fmt(cost);
+        document.getElementById(`btn-${u}`).disabled = game.ore < cost;
       });
 
-      // Навыки
-      ['berserk', 'luck'].forEach(s => {
-        document.getElementById(`lvl-${s}`).innerText = game.skills[s].lvl;
-        document.getElementById(`cost-${s}`).innerText = fmt(game.skills[s].cost);
-        document.getElementById(`btn-${s}`).disabled = game.gold < game.skills[s].cost;
-      });
+      // Артефакты
+      document.getElementById('ui-art-timer').innerText = game.artTimer;
+      document.getElementById('ui-art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
+      document.getElementById('ui-art-chance').innerText = Math.floor(getArtChance()*100);
+
+      // Прогресс уровня
+      let reqOre = game.level * 5;
+      let percent = (game.totalOre / reqOre) * 100;
+      document.getElementById('ui-next-lvl').innerText = reqOre;
+      document.getElementById('ui-lvl-percent').innerText = Math.floor(Math.min(percent, 100)) + '%';
+      document.getElementById('ui-lvl-bar').style.width = Math.min(percent, 100) + '%';
     }
 
-    // Клик
+    // Действия
     document.getElementById('click-area').addEventListener('click', () => {
-      let amount = 1 * (1 + (game.skills.berserk.lvl * 0.05));
+      let amount = getClickPower();
       game.ore += amount;
-      game.totalOreMined += amount;
-      if (Math.random() < getGoldChance()) game.gold += 1; // Шанс дропа золота
+      game.totalOre += amount;
+      if(Math.random() < getGoldChance()) game.gold += 1;
+      checkLevel();
       updateUI();
     });
 
-    // Покупка улучшений за руду
+    function hire() {
+      let cost = getCost(10, game.hireLvl);
+      if(game.ore >= cost) { game.ore -= cost; game.hireLvl++; updateUI(); }
+    }
+
+    function buyClick() {
+      let cost = getCost(5, game.clickPowerLvl);
+      if(game.ore >= cost) { game.ore -= cost; game.clickPowerLvl++; updateUI(); }
+    }
+
+    function buySkillOre(skill) {
+      let baseCost = skill === 'luck' ? 8 : (skill === 'berserk' ? 10 : 12);
+      let cost = getCost(baseCost, game.skillsOre[skill], 1.5);
+      if(game.gold >= cost) { game.gold -= cost; game.skillsOre[skill]++; updateUI(); }
+    }
+
+    function buySkillPrestige(skill) {
+      let baseCost = skill==='master'?5 : skill==='goldVein'?8 : skill==='engineer'?10 : skill==='fortune'?15 : 20;
+      let cost = Math.floor(baseCost * Math.pow(1.5, game.skillsPrestige[skill]));
+      if(game.prestige >= cost) { game.prestige -= cost; game.skillsPrestige[skill]++; updateUI(); }
+    }
+
     function buyUpgrade(type) {
-      let item = game.upgrades[type];
-      if (game.ore >= item.cost) {
-        game.ore -= item.cost;
-        item.lvl++;
-        item.cost = Math.floor(item.base * Math.pow(1.15, item.lvl));
-        updateUI();
-      }
+      let basePrices = { pick: 15, lamp: 20, cart: 25 };
+      let cost = getCost(basePrices[type], game.upgrades[type]);
+      if(game.ore >= cost) { game.ore -= cost; game.upgrades[type]++; updateUI(); }
     }
 
-    // Покупка навыков за золото
-    function buySkill(type) {
-      let item = game.skills[type];
-      if (game.gold >= item.cost) {
-        game.gold -= item.cost;
-        item.lvl++;
-        item.cost = Math.floor(item.base * Math.pow(1.5, item.lvl)); // Дорожают быстрее
-        updateUI();
-      }
-    }
-
-    // Престиж (Сброс прогресса)
-    function doPrestige() {
-      if (game.gold >= 100) {
-        if(confirm("Вы уверены? Вы потеряете руду и улучшения, но получите уровень престижа!")) {
+    function prestige() {
+      if(game.gold >= 100) {
+        if(confirm("Вы уверены? Руда, улучшения и наемники сбросятся, но вы получите 1⭐ престижа.")) {
           game.gold -= 100;
           game.prestige += 1;
-          game.ore = 0;
-          game.level = 1;
-          // Сброс улучшений
-          game.upgrades = { pick: {lvl:0, cost:15, base:15}, lamp: {lvl:0, cost:50, base:50}, cart: {lvl:0, cost:150, base:150} };
-          alert("Престиж получен! Постоянный бонус к добыче увеличен.");
+          // Сброс
+          game.ore = 0; game.totalOre = 0; game.level = 1;
+          game.clickPowerLvl = 0; game.hireLvl = 0;
+          game.upgrades = { pick: 0, lamp: 0, cart: 0 };
+          game.skillsOre = { berserk: 0, luck: 0, economy: 0 };
+          saveGame(false);
           updateUI();
         }
-      } else {
-        alert("Нужно 100 золота для престижа!");
       }
     }
 
-    // Игровой цикл (каждую секунду)
+    function checkLevel() {
+      let reqOre = game.level * 5;
+      if(game.totalOre >= reqOre) {
+        game.level++;
+        game.totalOre -= reqOre;
+        game.gold += 1; // Награда за уровень
+      }
+    }
+
+    // Игровой цикл
     setInterval(() => {
+      // Пассивная добыча
       let income = getOrePerSec();
-      if (income > 0) {
+      if(income > 0) {
         game.ore += income;
-        game.totalOreMined += income;
-        
-        // Проверка на выпадение золота при пассивной добыче
-        if (Math.random() < getGoldChance() * (income / 10)) { // Шанс зависит от дохода
-           game.gold += 1;
-        }
+        game.totalOre += income;
+        if(Math.random() < getGoldChance() * (income / 10)) game.gold += 1;
+        checkLevel();
       }
 
       // Таймер артефактов
       game.artTimer--;
-      document.getElementById('art-timer').innerText = game.artTimer;
-      document.getElementById('art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
-
-      if (game.artTimer <= 0) {
+      if(game.artTimer <= 0) {
         game.artTimer = 15;
-        if (Math.random() < 0.15) { // 15% шанс
+        if(Math.random() < getArtChance()) {
           game.artifacts++;
-          alert("✨ Вы нашли артефакт!");
+          alert("✨ Вы нашли артефакт! (+бонус к добыче)");
         }
       }
-      
       updateUI();
     }, 1000);
 
-    // Сохранение/Загрузка
-    function saveGame() { localStorage.setItem('mineGameV2', JSON.stringify(game)); alert('Игра сохранена!'); }
-    function loadGame() {
-      let saved = localStorage.getItem('mineGameV2');
-      if (saved) { game = JSON.parse(saved); updateUI(); }
+    // Автосохранение
+    setInterval(() => { saveGame(false); }, 5000);
+
+    function saveGame(showAlert) {
+      localStorage.setItem('mineGameV3_8', JSON.stringify(game));
+      if(showAlert) alert('Игра сохранена!');
     }
-    
-    loadGame(); updateUI();
+
+    function loadGame() {
+      let saved = localStorage.getItem('mineGameV3_8');
+      if(saved) {
+        game = JSON.parse(saved);
+        if(!game.skillsPrestige) game.skillsPrestige = { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 };
+      }
+      updateUI();
+    }
+
+    loadGame();
   </script>
 </body>
-          </html>
+            </html>
