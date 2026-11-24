@@ -70,10 +70,10 @@
     .stats-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
     .btn-logout { width: 100%; padding: 12px; background: var(--red); border: none; border-radius: 8px; color: white; font-weight: bold; margin-top: 10px; }
 
-    /* Топ */
+    /* Топ и Друзья */
     .lb-row { display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--solid); border-radius: 6px; margin-bottom: 5px; border-left: 3px solid #555; }
     .lb-row.me { border-left-color: var(--bright); background: rgba(156, 39, 176, 0.2); }
-    .lb-avatar { width: 25px; height: 25px; border-radius: 50%; background: #222; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    .lb-avatar { width: 28px; height: 28px; border-radius: 50%; background: #222; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 1px solid #444; }
     .lb-rank { font-weight: bold; width: 20px; color: var(--light); }
     .lb-name { flex: 1; font-size: 12px; font-weight: bold; }
     .lb-score { font-size: 12px; color: var(--gold); font-weight: bold; }
@@ -153,7 +153,6 @@
         <div class="progress-container"><div class="progress-bar purple" id="ui-art-bar"></div></div>
       </div>
 
-      <!-- ПОЛОСКА УРОВНЯ -->
       <div class="panel">
         <div class="section-title">📈 Прогресс уровня</div>
         <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px;">
@@ -302,9 +301,25 @@
     let unsubscribeChat = null;
     let unsubscribeClanChat = null;
 
-    // Генератор случайного ID (6 символов)
     function generateGameId() {
       return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    // УЛУЧШЕННОЕ ФОРМАТИРОВАНИЕ БОЛЬШИХ ЧИСЕЛ
+    function fmt(n) { 
+      if(n === Infinity) return '∞';
+      if(n >= 1e33) return (n/1e33).toFixed(1)+'Dc';
+      if(n >= 1e30) return (n/1e30).toFixed(1)+'No';
+      if(n >= 1e27) return (n/1e27).toFixed(1)+'Oc';
+      if(n >= 1e24) return (n/1e24).toFixed(1)+'Sp';
+      if(n >= 1e21) return (n/1e21).toFixed(1)+'Sx';
+      if(n >= 1e18) return (n/1e18).toFixed(1)+'Qi';
+      if(n >= 1e15) return (n/1e15).toFixed(1)+'Qa';
+      if(n >= 1e12) return (n/1e12).toFixed(1)+'T';
+      if(n >= 1e9) return (n/1e9).toFixed(1)+'B';
+      if(n >= 1e6) return (n/1e6).toFixed(1)+'M';
+      if(n >= 1e3) return (n/1e3).toFixed(1)+'K';
+      return Math.floor(n); 
     }
 
     function getDefaultGame() {
@@ -315,7 +330,7 @@
         upgrades: { pick: 0, lamp: 0, cart: 0 },
         isBanned: false, playTime: 0, createdAt: new Date().toISOString(),
         clanId: null, friends: [], artTimer: 15,
-        gameId: generateGameId(), // НОВОЕ: Уникальный ID
+        gameId: generateGameId(),
         user: { nick: 'Игрок', avatarImg: '', totalClicks: 0, totalGold: 0 }
       };
     }
@@ -340,12 +355,7 @@
           let def = getDefaultGame();
           game = { ...def, ...data };
           
-          // Если у старого аккаунта нет ID, генерируем его
-          if(!game.gameId) {
-            game.gameId = generateGameId();
-            await setDoc(docRef, game);
-          }
-
+          if(!game.gameId) { game.gameId = generateGameId(); await setDoc(docRef, game); }
           if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
           if(!game.upgrades) game.upgrades = def.upgrades;
           if(!game.user) game.user = def.user;
@@ -353,7 +363,6 @@
           if(!game.friends) game.friends = [];
           if(!game.playTime) game.playTime = 0;
           if(!game.artTimer) game.artTimer = 15;
-
         } else {
           game = getDefaultGame();
           await setDoc(docRef, game);
@@ -362,7 +371,7 @@
         initGameUI();
       } catch(e) { 
         console.error(e);
-        alert("Ошибка подключения."); 
+        alert("Ошибка подключения. Проверьте интернет."); 
         document.querySelector('.btn-login').innerText = 'Войти в облако'; 
       }
     }
@@ -374,6 +383,9 @@
       document.getElementById('profile-email').innerText = currentEmail;
       if(currentEmail === ADMIN_EMAIL) document.getElementById('nav-btn-admin').style.display = 'block';
       
+      // Принудительно обновляем все данные при входе
+      document.getElementById('input-nick').value = game.user.nick;
+      document.getElementById('profile-game-id').innerText = game.gameId;
       renderHeader();
       updateUI();
       switchTab('game');
@@ -418,7 +430,10 @@
 
             initGameUI();
           }
-        } catch(e) { console.log(e); }
+        } catch(e) { 
+          console.log("Ошибка автовхода", e); 
+          localStorage.removeItem('activeUserEmail'); // Сбрасываем, чтобы не было цикла ошибок
+        }
       }
     }
 
@@ -429,9 +444,11 @@
       document.getElementById('view-' + tab).classList.add('active');
       document.getElementById('nav-btn-' + tab).classList.add('active');
 
+      // ПРИНУДИТЕЛЬНОЕ ОБНОВЛЕНИЕ ПРИ ПЕРЕХОДЕ НА ВКЛАДКУ
       if(tab === 'profile') { 
         document.getElementById('input-nick').value = game.user.nick; 
         document.getElementById('profile-game-id').innerText = game.gameId;
+        renderHeader(); // Жестко перерисовываем аватарку
         updateProfileStats(); 
       }
       if(tab === 'top') { loadTop(currentTopType); }
@@ -482,7 +499,7 @@
           let scoreText = '';
           if(type==='gold') scoreText = `🥇 ${fmt(data.gold)}`;
           if(type==='time') scoreText = `⏳ ${Math.floor((data.playTime||0)/3600)}ч`;
-          if(type==='prestige') scoreText = `⭐ ${data.prestige}`;
+          if(type==='prestige') scoreText = `⭐ ${fmt(data.prestige)}`;
           if(type==='speed') scoreText = `⚡ ${fmt(data.orePerSec||0)}/с`;
 
           html += `
@@ -620,7 +637,6 @@
       if(friendId === game.gameId) return alert('Это ваш ID!');
 
       try {
-        // Ищем игрока по gameId
         const q = query(collection(db, "users"), where("gameId", "==", friendId));
         const snap = await getDocs(q);
         
@@ -648,12 +664,16 @@
         if(snap.exists()) {
           let data = snap.data();
           if(!data.user) continue;
+          
+          // ИСПРАВЛЕНО: Аватарка теперь точно вписывается
           let avStyle = data.user.avatarImg ? `background-image:url(${data.user.avatarImg});` : '';
+          let avText = data.user.avatarImg ? '' : '⛏️';
+          
           html += `
             <div class="lb-row">
-              <div class="lb-avatar" style="${avStyle}">⛏️</div>
+              <div class="lb-avatar" style="${avStyle}">${avText}</div>
               <span class="lb-name">${data.user.nick} <br><span style="font-size:10px;color:#888">ID: ${data.gameId || '???'}</span></span>
-              <span class="lb-score">🥇 ${data.gold}</span>
+              <span class="lb-score">🥇 ${fmt(data.gold)}</span>
             </div>
           `;
         }
@@ -674,7 +694,7 @@
           html += `
             <div class="admin-card">
               <div style="font-size:12px;color:var(--gold)">${doc.id} (ID: ${data.gameId || '???'})</div>
-              <div style="font-size:11px;margin:4px 0;">Золото: ${data.gold} | Престиж: ${data.prestige}</div>
+              <div style="font-size:11px;margin:4px 0;">Золото: ${fmt(data.gold)} | Престиж: ${fmt(data.prestige)}</div>
               <div class="admin-actions">
                 ${banBtn}
                 <button onclick="adminGive('${doc.id}', 'gold')">+Золото</button>
@@ -728,8 +748,7 @@
           canvas.width = w; canvas.height = h;
           ctx.drawImage(img, 0, 0, w, h);
           game.user.avatarImg = canvas.toDataURL('image/jpeg', 0.8);
-          document.getElementById('profile-avatar-preview').style.backgroundImage = `url(${game.user.avatarImg})`;
-          document.getElementById('profile-avatar-preview').innerText = '';
+          renderHeader(); // Принудительно обновляем после загрузки
         };
         img.src = e.target.result;
       };
@@ -745,11 +764,13 @@
       switchTab('game');
     }
 
+    // ИСПРАВЛЕНО: Жесткое обновление аватарки
     function renderHeader() {
       document.getElementById('header-nick').innerText = game.user.nick;
       let ha = document.getElementById('header-avatar');
       let pa = document.getElementById('profile-avatar-preview');
-      if (game.user.avatarImg) {
+      
+      if (game.user.avatarImg && game.user.avatarImg.length > 10) {
         ha.style.backgroundImage = `url(${game.user.avatarImg})`; ha.innerText = '';
         pa.style.backgroundImage = `url(${game.user.avatarImg})`; pa.innerText = '';
       } else {
@@ -758,7 +779,6 @@
       }
     }
 
-    function fmt(n) { if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return (n/1e3).toFixed(2)+'K'; return Math.floor(n); }
     function getEcoDiscount() { return Math.min(0.8, (game.skillsPrestige.engineer * 0.05)); }
     function getCost(base, lvl, mult = 1.15) { return Math.floor(base * Math.pow(mult, lvl) * (1 - getEcoDiscount())); }
     function getOrePerSec() { return ((game.hireLvl * 1) + (game.skillsPrestige.speed * 1)) * (1 + (game.skillsPrestige.master * 0.10)); }
@@ -773,9 +793,9 @@
       document.getElementById('ui-ore').innerText = fmt(game.ore);
       document.getElementById('ui-gold').innerText = fmt(game.gold);
       document.getElementById('ui-ore-sec').innerText = fmt(getOrePerSec()) + '/сек';
-      document.getElementById('ui-prestige').innerText = game.prestige;
-      document.getElementById('ui-art').innerText = game.artifacts;
-      document.getElementById('ui-lvl').innerText = game.level;
+      document.getElementById('ui-prestige').innerText = fmt(game.prestige);
+      document.getElementById('ui-art').innerText = fmt(game.artifacts);
+      document.getElementById('ui-lvl').innerText = fmt(game.level);
 
       let hc = getCost(10, game.hireLvl); document.getElementById('cost-hire').innerText = fmt(hc); document.getElementById('btn-hire').disabled = game.ore < hc;
       let cc = getCost(5, game.clickPowerLvl); document.getElementById('cost-buy').innerText = fmt(cc); document.getElementById('btn-buy').disabled = game.ore < cc;
@@ -786,9 +806,10 @@
 
       let skillHtml = '';
       ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach((s, i) => {
-        let bc = [5,8,10,15,20][i]; let cost = Math.floor(bc * Math.pow(1.5, game.skillsPrestige[s]));
+        let bc = [5,8,10,15,20][i]; 
+        let cost = Math.floor(bc * Math.pow(1.5, game.skillsPrestige[s]));
         let names = ['🏆 Мастер (+10%)', '💰 Жила (+2%)', '🛠️ Инженер (-5%)', '🎲 Фортуна (+0.05%)', '🚀 Ускорение (+1)'];
-        skillHtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${game.skillsPrestige[s]}</span></div><button class="buy" id="btn-sk-${s}" onclick="buySkillPrestige('${s}')" ${game.prestige < cost ? 'disabled' : ''}>⭐${cost}</button></div>`;
+        skillHtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${game.skillsPrestige[s]}</span></div><button class="buy" id="btn-sk-${s}" onclick="buySkillPrestige('${s}')" ${game.prestige < cost ? 'disabled' : ''}>⭐${fmt(cost)}</button></div>`;
       });
       document.getElementById('prestige-skills-list').innerHTML = skillHtml;
 
@@ -803,10 +824,9 @@
       document.getElementById('ui-art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
       document.getElementById('ui-art-chance').innerText = (getArtChance() * 100).toFixed(2);
 
-      // ПОЛОСКА УРОВНЯ
       let reqOre = game.level * 5;
       let percent = (game.totalOre / reqOre) * 100;
-      document.getElementById('ui-next-lvl').innerText = reqOre;
+      document.getElementById('ui-next-lvl').innerText = fmt(reqOre);
       document.getElementById('ui-lvl-percent').innerText = Math.floor(Math.min(percent, 100)) + '%';
       document.getElementById('ui-lvl-bar').style.width = Math.min(percent, 100) + '%';
     }
@@ -830,7 +850,7 @@
     function prestige() {
       let cost = getPrestigeCost();
       if(game.gold >= cost) {
-        if(confirm(`Сбросить прогресс за 1⭐? Следующий престиж будет стоить ${cost*2}🥇`)) {
+        if(confirm(`Сбросить прогресс за 1⭐? Следующий престиж будет стоить ${fmt(cost*2)}🥇`)) {
           game.gold -= cost; game.prestige += 1;
           game.ore = 0; game.totalOre = 0; game.level = 1; game.clickPowerLvl = 0; game.hireLvl = 0;
           game.upgrades = { pick: 0, lamp: 0, cart: 0 };
@@ -877,4 +897,4 @@
     checkAutoLogin();
   </script>
 </body>
-</html>
+  </html>
