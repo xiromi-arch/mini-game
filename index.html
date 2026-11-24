@@ -52,12 +52,13 @@
     .item { display: flex; align-items: center; justify-content: space-between; background: var(--solid); padding: 6px 8px; border-radius: 6px; margin-bottom: 6px; border-left: 3px solid var(--main); }
     .item-info { display: flex; flex-direction: column; flex: 1; }
     .item-title { font-weight: bold; font-size: 12px; }
-    .item-desc { font-size: 10px; color: var(--muted); margin-top: 2px; display: flex; gap: 5px; flex-wrap: wrap; }
     button { background: #3a3a4a; color: white; border: 1px solid #555; border-radius: 6px; padding: 6px 10px; font-weight: bold; font-size: 11px; cursor: pointer; }
     button.buy { background: var(--main); border: 1px solid var(--light); }
     button:disabled { background: #222; color: #555; border-color: #333; }
-    .progress-container { background: #111; border-radius: 10px; height: 12px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(156, 39, 176, 0.2); }
-    .progress-bar { background: var(--main); height: 100%; width: 0%; }
+    
+    /* Прогресс-бары */
+    .progress-container { background: #111; border-radius: 10px; height: 14px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(156, 39, 176, 0.2); position: relative; }
+    .progress-bar { background: var(--main); height: 100%; width: 0%; transition: width 0.2s linear; }
     .progress-bar.purple { background: var(--bright); }
     
     /* Профиль */
@@ -152,10 +153,11 @@
         <div class="progress-container"><div class="progress-bar purple" id="ui-art-bar"></div></div>
       </div>
 
+      <!-- ПОЛОСКА УРОВНЯ -->
       <div class="panel">
         <div class="section-title">📈 Прогресс уровня</div>
         <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px;">
-          <span>Следующий: <span id="ui-next-lvl">5</span>💎</span>
+          <span>Следующий уровень: <span id="ui-next-lvl">5</span>💎</span>
           <span id="ui-lvl-percent">0%</span>
         </div>
         <div class="progress-container"><div class="progress-bar" id="ui-lvl-bar"></div></div>
@@ -217,9 +219,9 @@
         </div>
 
         <div id="social-friends" class="social-tab" style="display: none;">
-          <p style="font-size: 12px; color: var(--muted);">Добавьте друга по его почте.</p>
+          <p style="font-size: 12px; color: var(--muted);">Введите ID друга, чтобы добавить его.</p>
           <div class="chat-input-area" style="margin-bottom: 15px;">
-            <input type="text" id="friend-email-input" class="chat-input" placeholder="Gmail друга">
+            <input type="text" id="friend-id-input" class="chat-input" placeholder="ID друга (например, A7X9B2)">
             <button class="buy" onclick="addFriend()">Добавить</button>
           </div>
           <div class="section-title">Мои друзья</div>
@@ -235,6 +237,10 @@
         <div class="profile-card">
           <div class="big-avatar" id="profile-avatar-preview">⛏️</div>
           <label class="file-btn">📷 Загрузить фото<input type="file" accept="image/*" onchange="handleAvatarUpload(event)"></label>
+          
+          <div style="font-size: 12px; margin-top: 5px; color: var(--muted);">Ваш ID для друзей:</div>
+          <div style="font-size: 18px; font-weight: bold; color: var(--gold); letter-spacing: 2px;" id="profile-game-id">-</div>
+
           <input type="text" id="input-nick" class="profile-input" placeholder="Ваш никнейм" maxlength="15">
           <button class="buy" style="width: 100%; padding: 10px;" onclick="saveProfile()">Сохранить</button>
           <button class="btn-logout" onclick="logout()">Выйти из аккаунта</button>
@@ -296,6 +302,11 @@
     let unsubscribeChat = null;
     let unsubscribeClanChat = null;
 
+    // Генератор случайного ID (6 символов)
+    function generateGameId() {
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
     function getDefaultGame() {
       return {
         ore: 0, gold: 0, prestige: 0, artifacts: 0, level: 1, totalOre: 0,
@@ -304,6 +315,7 @@
         upgrades: { pick: 0, lamp: 0, cart: 0 },
         isBanned: false, playTime: 0, createdAt: new Date().toISOString(),
         clanId: null, friends: [], artTimer: 15,
+        gameId: generateGameId(), // НОВОЕ: Уникальный ID
         user: { nick: 'Игрок', avatarImg: '', totalClicks: 0, totalGold: 0 }
       };
     }
@@ -325,9 +337,15 @@
           let data = docSnap.data();
           if(data.isBanned && currentEmail !== ADMIN_EMAIL) return alert("⛔ Вы забанены!");
           
-          // МИГРАЦИЯ: Объединяем старые данные с новыми дефолтными
           let def = getDefaultGame();
           game = { ...def, ...data };
+          
+          // Если у старого аккаунта нет ID, генерируем его
+          if(!game.gameId) {
+            game.gameId = generateGameId();
+            await setDoc(docRef, game);
+          }
+
           if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
           if(!game.upgrades) game.upgrades = def.upgrades;
           if(!game.user) game.user = def.user;
@@ -344,7 +362,7 @@
         initGameUI();
       } catch(e) { 
         console.error(e);
-        alert("Ошибка подключения. Проверьте интернет."); 
+        alert("Ошибка подключения."); 
         document.querySelector('.btn-login').innerText = 'Войти в облако'; 
       }
     }
@@ -388,6 +406,8 @@
             
             let def = getDefaultGame();
             game = { ...def, ...data };
+            
+            if(!game.gameId) { game.gameId = generateGameId(); await setDoc(docRef, game); }
             if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
             if(!game.upgrades) game.upgrades = def.upgrades;
             if(!game.user) game.user = def.user;
@@ -409,7 +429,11 @@
       document.getElementById('view-' + tab).classList.add('active');
       document.getElementById('nav-btn-' + tab).classList.add('active');
 
-      if(tab === 'profile') { document.getElementById('input-nick').value = game.user.nick; updateProfileStats(); }
+      if(tab === 'profile') { 
+        document.getElementById('input-nick').value = game.user.nick; 
+        document.getElementById('profile-game-id').innerText = game.gameId;
+        updateProfileStats(); 
+      }
       if(tab === 'top') { loadTop(currentTopType); }
       if(tab === 'social') { updateSocialUI(); }
       if(tab === 'admin') { loadAdminPanel(); }
@@ -449,7 +473,7 @@
         let html = ''; let rank = 1;
         snap.forEach((doc) => {
           let data = doc.data();
-          if(!data.user) return; // Пропускаем битые аккаунты
+          if(!data.user) return; 
           let isMe = doc.id === currentEmail ? 'me' : '';
           
           let avStyle = data.user.avatarImg ? `background-image:url(${data.user.avatarImg});` : '';
@@ -510,7 +534,6 @@
       const box = document.getElementById(type + '-chat-box');
       box.innerHTML = '';
       
-      // Упрощенный запрос БЕЗ требования сложных индексов Firebase
       let q = query(collection(db, "chat"), orderBy("time", "desc"), limit(50));
 
       const unsub = onSnapshot(q, (snapshot) => {
@@ -521,7 +544,6 @@
           else if (type === 'clan' && m.clanId === game.clanId) msgs.push(m);
         });
         
-        // Сортируем по времени (старые сверху)
         msgs.sort((a,b) => new Date(a.time) - new Date(b.time));
         
         let html = '';
@@ -591,18 +613,30 @@
       }
     }
 
+    // === ДРУЗЬЯ ПО ID ===
     async function addFriend() {
-      const email = document.getElementById('friend-email-input').value.trim().toLowerCase();
-      if(!email || email === currentEmail) return;
-      if(game.friends.includes(email)) return alert('Уже в друзьях');
+      const friendId = document.getElementById('friend-id-input').value.trim().toUpperCase();
+      if(!friendId) return;
+      if(friendId === game.gameId) return alert('Это ваш ID!');
+
       try {
-        const docSnap = await getDoc(doc(db, "users", email));
-        if(!docSnap.exists()) return alert('Игрок не найден');
-        game.friends.push(email);
+        // Ищем игрока по gameId
+        const q = query(collection(db, "users"), where("gameId", "==", friendId));
+        const snap = await getDocs(q);
+        
+        if(snap.empty) return alert('Игрок с таким ID не найден');
+        
+        const friendDoc = snap.docs[0];
+        const friendEmail = friendDoc.id;
+
+        if(game.friends.includes(friendEmail)) return alert('Уже в друзьях');
+
+        game.friends.push(friendEmail);
         await saveGame(false);
-        document.getElementById('friend-email-input').value = '';
+        document.getElementById('friend-id-input').value = '';
         loadFriends();
-      } catch(e) { alert('Ошибка'); }
+        alert('Друг добавлен!');
+      } catch(e) { console.error(e); alert('Ошибка добавления'); }
     }
 
     async function loadFriends() {
@@ -618,7 +652,7 @@
           html += `
             <div class="lb-row">
               <div class="lb-avatar" style="${avStyle}">⛏️</div>
-              <span class="lb-name">${data.user.nick} <br><span style="font-size:10px;color:#888">${email}</span></span>
+              <span class="lb-name">${data.user.nick} <br><span style="font-size:10px;color:#888">ID: ${data.gameId || '???'}</span></span>
               <span class="lb-score">🥇 ${data.gold}</span>
             </div>
           `;
@@ -639,7 +673,7 @@
           let banBtn = data.isBanned ? `<button class="btn-unban" onclick="toggleBan('${doc.id}', false)">Разбан</button>` : `<button class="btn-ban" onclick="toggleBan('${doc.id}', true)">Бан</button>`;
           html += `
             <div class="admin-card">
-              <div style="font-size:12px;color:var(--gold)">${doc.id}</div>
+              <div style="font-size:12px;color:var(--gold)">${doc.id} (ID: ${data.gameId || '???'})</div>
               <div style="font-size:11px;margin:4px 0;">Золото: ${data.gold} | Престиж: ${data.prestige}</div>
               <div class="admin-actions">
                 ${banBtn}
@@ -769,6 +803,7 @@
       document.getElementById('ui-art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
       document.getElementById('ui-art-chance').innerText = (getArtChance() * 100).toFixed(2);
 
+      // ПОЛОСКА УРОВНЯ
       let reqOre = game.level * 5;
       let percent = (game.totalOre / reqOre) * 100;
       document.getElementById('ui-next-lvl').innerText = reqOre;
@@ -842,4 +877,4 @@
     checkAutoLogin();
   </script>
 </body>
-  </html>
+</html>
