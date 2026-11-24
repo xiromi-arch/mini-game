@@ -37,7 +37,7 @@
     .nav-btn { flex: 1; padding: 12px 5px; text-align: center; font-size: 11px; font-weight: bold; color: var(--muted); background: none; border: none; }
     .nav-btn.active { color: var(--bright); border-top: 2px solid var(--bright); }
 
-    /* Суб-вкладки (для топа и соцсетей) */
+    /* Суб-вкладки */
     .sub-tabs { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; }
     .sub-tab { flex: 1; padding: 8px; background: var(--solid); border: 1px solid #444; border-radius: 6px; text-align: center; font-size: 11px; font-weight: bold; color: var(--muted); white-space: nowrap; }
     .sub-tab.active { background: var(--main); color: white; border-color: var(--light); }
@@ -69,7 +69,7 @@
     .stats-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
     .btn-logout { width: 100%; padding: 12px; background: var(--red); border: none; border-radius: 8px; color: white; font-weight: bold; margin-top: 10px; }
 
-    /* Топ и Соцсети */
+    /* Топ */
     .lb-row { display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--solid); border-radius: 6px; margin-bottom: 5px; border-left: 3px solid #555; }
     .lb-row.me { border-left-color: var(--bright); background: rgba(156, 39, 176, 0.2); }
     .lb-avatar { width: 25px; height: 25px; border-radius: 50%; background: #222; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 12px; }
@@ -117,22 +117,50 @@
         <div class="stats-row"><span>💎 Руда:</span><span id="ui-ore">0</span></div>
         <div class="stats-row"><span>🥇 Золото:</span><span id="ui-gold">0</span></div>
         <div class="stats-row"><span>⚡ Добыча:</span><span id="ui-ore-sec">0 / сек</span></div>
-        <div class="main-buttons" style="margin-top: 10px;">
+        
+        <div style="display:flex; justify-content:space-between; font-size:11px; margin: 10px 0; background:rgba(0,0,0,0.5); padding:8px; border-radius:6px;">
+          <span>✨ Арт: <span id="ui-art">0</span></span>
+          <span>📈 Ур: <span id="ui-lvl">1</span></span>
+          <span>⭐ Прест: <span id="ui-prestige">0</span></span>
+        </div>
+
+        <div class="main-buttons">
           <button class="btn-hire" id="btn-hire" onclick="hire()">Нанять (<span id="cost-hire">10</span>💎)</button>
           <button class="btn-buy" id="btn-buy" onclick="buyClick()">Улучшить (<span id="cost-buy">5</span>💎)</button>
           <button class="btn-prestige" id="btn-prestige" onclick="prestige()">Престиж (<span id="cost-prestige">100</span>🥇)</button>
         </div>
       </div>
+      
       <div class="panel">
-        <div class="section-title">⭐ Навыки Престижа (Ваши ⭐: <span id="ui-prestige">0</span>)</div>
+        <div class="section-title">⭐ Навыки Престижа</div>
         <div id="prestige-skills-list"></div>
       </div>
+
       <div class="panel">
         <div class="section-title">🔧 Улучшения</div>
         <div class="item"><div class="item-info"><span class="item-title">⛏️ Кирка Ур. <span id="lvl-pick">0</span></span></div><button class="buy" id="btn-pick" onclick="buyUpgrade('pick')">⬆️ <span id="cost-pick">15</span>💎</button></div>
         <div class="item"><div class="item-info"><span class="item-title">💡 Фонарь Ур. <span id="lvl-lamp">0</span></span></div><button class="buy" id="btn-lamp" onclick="buyUpgrade('lamp')">⬆️ <span id="cost-lamp">20</span>💎</button></div>
         <div class="item"><div class="item-info"><span class="item-title">🛒 Вагонетка Ур. <span id="lvl-cart">0</span></span></div><button class="buy" id="btn-cart" onclick="buyUpgrade('cart')">⬆️ <span id="cost-cart">25</span>💎</button></div>
       </div>
+
+      <div class="panel">
+        <div class="section-title">✨ Артефакты</div>
+        <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--muted);">
+          <span>⏳ Следующий: <span id="ui-art-timer">15</span>с</span>
+          <span>Шанс: <span id="ui-art-chance">0.1</span>%</span>
+        </div>
+        <div class="progress-container"><div class="progress-bar purple" id="ui-art-bar"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">📈 Прогресс уровня</div>
+        <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px;">
+          <span>Следующий: <span id="ui-next-lvl">5</span>💎</span>
+          <span id="ui-lvl-percent">0%</span>
+        </div>
+        <div class="progress-container"><div class="progress-bar" id="ui-lvl-bar"></div></div>
+      </div>
+
       <button class="btn-hire" style="width: 100%; padding: 12px;" onclick="saveGame(true)">💾 Сохранить в облако</button>
     </div>
 
@@ -150,7 +178,7 @@
       </div>
     </div>
 
-    <!-- СОЦИАЛКА (Чат, Кланы, Друзья) -->
+    <!-- СОЦИАЛКА -->
     <div id="view-social" class="tab-content">
       <div class="panel">
         <div class="sub-tabs">
@@ -159,7 +187,6 @@
           <button class="sub-tab" id="tab-btn-friends" onclick="switchSocial('friends')">👥 Друзья</button>
         </div>
 
-        <!-- Глобальный чат -->
         <div id="social-global" class="social-tab">
           <div class="chat-box" id="global-chat-box"></div>
           <div class="chat-input-area">
@@ -168,17 +195,14 @@
           </div>
         </div>
 
-        <!-- Кланы -->
         <div id="social-clan" class="social-tab" style="display: none;">
           <div id="clan-not-in">
             <p style="font-size: 12px; color: var(--muted);">Вы не в клане. Создайте свой за 500🥇 или вступите по ID.</p>
-            <input type="text" id="clan-name-input" class="profile-input" placeholder="Название клана (для создания)" style="margin-bottom: 5px;">
+            <input type="text" id="clan-name-input" class="profile-input" placeholder="Название клана" style="margin-bottom: 5px;">
             <button class="buy" style="width: 100%; margin-bottom: 10px;" onclick="createClan()">Создать клан (500🥇)</button>
-            
             <input type="text" id="clan-join-input" class="profile-input" placeholder="ID клана" style="margin-bottom: 5px;">
             <button class="btn-hire" style="width: 100%;" onclick="joinClan()">Вступить</button>
           </div>
-          
           <div id="clan-in" style="display: none;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
               <span>Клан: <b id="my-clan-name" style="color: var(--light);"></b></span>
@@ -192,7 +216,6 @@
           </div>
         </div>
 
-        <!-- Друзья -->
         <div id="social-friends" class="social-tab" style="display: none;">
           <p style="font-size: 12px; color: var(--muted);">Добавьте друга по его почте.</p>
           <div class="chat-input-area" style="margin-bottom: 15px;">
@@ -202,7 +225,6 @@
           <div class="section-title">Мои друзья</div>
           <div id="friends-list" style="min-height: 50px;">Загрузка...</div>
         </div>
-
       </div>
     </div>
 
@@ -223,7 +245,7 @@
         <div class="stats-row"><span>Всего кликов:</span><span id="stat-clicks">0</span></div>
         <div class="stats-row"><span>Добыто золота:</span><span id="stat-gold">0</span></div>
         <div class="stats-row"><span>Время в игре:</span><span id="stat-playtime" style="color: var(--green);">0ч 0м</span></div>
-        <div class="stats-row"><span>Дата регистрации:</span><span id="stat-created" style="color: var(--purple-light);">-</span></div>
+        <div class="stats-row"><span>Дата регистрации:</span><span id="stat-created" style="color: var(--light);">-</span></div>
       </div>
     </div>
 
@@ -248,7 +270,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, where, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSLP9qMEKj98ZN-GJtqlAOFM4seacfVtU",
@@ -277,11 +299,11 @@
     function getDefaultGame() {
       return {
         ore: 0, gold: 0, prestige: 0, artifacts: 0, level: 1, totalOre: 0,
-        clickPowerLvl: 0, hireLvl: 0,
+        clickPowerLvl: 0, hireLvl: 0, orePerSec: 0,
         skillsPrestige: { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 },
         upgrades: { pick: 0, lamp: 0, cart: 0 },
         isBanned: false, playTime: 0, createdAt: new Date().toISOString(),
-        clanId: null, friends: [],
+        clanId: null, friends: [], artTimer: 15,
         user: { nick: 'Игрок', avatarImg: '', totalClicks: 0, totalGold: 0 }
       };
     }
@@ -302,16 +324,29 @@
         if (docSnap.exists()) {
           let data = docSnap.data();
           if(data.isBanned && currentEmail !== ADMIN_EMAIL) return alert("⛔ Вы забанены!");
-          game = data;
+          
+          // МИГРАЦИЯ: Объединяем старые данные с новыми дефолтными
+          let def = getDefaultGame();
+          game = { ...def, ...data };
+          if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
+          if(!game.upgrades) game.upgrades = def.upgrades;
+          if(!game.user) game.user = def.user;
           if(!game.clanId) game.clanId = null;
           if(!game.friends) game.friends = [];
+          if(!game.playTime) game.playTime = 0;
+          if(!game.artTimer) game.artTimer = 15;
+
         } else {
           game = getDefaultGame();
           await setDoc(docRef, game);
         }
         
         initGameUI();
-      } catch(e) { alert("Ошибка сети."); document.querySelector('.btn-login').innerText = 'Войти в облако'; }
+      } catch(e) { 
+        console.error(e);
+        alert("Ошибка подключения. Проверьте интернет."); 
+        document.querySelector('.btn-login').innerText = 'Войти в облако'; 
+      }
     }
 
     function initGameUI() {
@@ -350,12 +385,20 @@
           if(docSnap.exists()) {
             let data = docSnap.data();
             if(data.isBanned && currentEmail !== ADMIN_EMAIL) return;
-            game = data;
+            
+            let def = getDefaultGame();
+            game = { ...def, ...data };
+            if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
+            if(!game.upgrades) game.upgrades = def.upgrades;
+            if(!game.user) game.user = def.user;
             if(!game.clanId) game.clanId = null;
             if(!game.friends) game.friends = [];
+            if(!game.playTime) game.playTime = 0;
+            if(!game.artTimer) game.artTimer = 15;
+
             initGameUI();
           }
-        } catch(e) {}
+        } catch(e) { console.log(e); }
       }
     }
 
@@ -377,10 +420,10 @@
       if(!currentEmail || isSaving) return;
       isSaving = true;
       try {
-        game.orePerSec = getOrePerSec(); // Сохраняем скорость для топа
+        game.orePerSec = getOrePerSec(); 
         await setDoc(doc(db, "users", currentEmail), game);
         if(showAlert) alert('Сохранено!');
-      } catch (e) {} finally { isSaving = false; }
+      } catch (e) { console.error(e); } finally { isSaving = false; }
     }
 
     function switchTop(type) {
@@ -406,6 +449,7 @@
         let html = ''; let rank = 1;
         snap.forEach((doc) => {
           let data = doc.data();
+          if(!data.user) return; // Пропускаем битые аккаунты
           let isMe = doc.id === currentEmail ? 'me' : '';
           
           let avStyle = data.user.avatarImg ? `background-image:url(${data.user.avatarImg});` : '';
@@ -413,7 +457,7 @@
 
           let scoreText = '';
           if(type==='gold') scoreText = `🥇 ${fmt(data.gold)}`;
-          if(type==='time') scoreText = `⏳ ${Math.floor(data.playTime/3600)}ч`;
+          if(type==='time') scoreText = `⏳ ${Math.floor((data.playTime||0)/3600)}ч`;
           if(type==='prestige') scoreText = `⭐ ${data.prestige}`;
           if(type==='speed') scoreText = `⚡ ${fmt(data.orePerSec||0)}/с`;
 
@@ -428,10 +472,13 @@
           rank++;
         });
         listDiv.innerHTML = html || '<div style="text-align:center;color:var(--muted)">Пусто</div>';
-      } catch (e) { listDiv.innerHTML = 'Ошибка загрузки'; }
+      } catch (e) { 
+        console.error(e);
+        listDiv.innerHTML = 'Ошибка загрузки топа'; 
+      }
     }
 
-    // === СОЦИАЛКА (ЧАТ, КЛАНЫ, ДРУЗЬЯ) ===
+    // === СОЦИАЛКА ===
     function switchSocial(tab) {
       currentSocialTab = tab;
       document.querySelectorAll('#view-social .sub-tab').forEach(el => el.classList.remove('active'));
@@ -456,7 +503,6 @@
       }
     }
 
-    // Чат (Реальное время)
     function initChat(type) {
       if(unsubscribeChat) unsubscribeChat();
       if(unsubscribeClanChat) unsubscribeClanChat();
@@ -464,18 +510,19 @@
       const box = document.getElementById(type + '-chat-box');
       box.innerHTML = '';
       
-      let q = query(collection(db, "chat"), orderBy("time", "desc"), limit(30));
-      if(type === 'clan') {
-        if(!game.clanId) return;
-        q = query(collection(db, "chat"), where("clanId", "==", game.clanId), orderBy("time", "desc"), limit(30));
-      } else {
-        q = query(collection(db, "chat"), where("clanId", "==", null), orderBy("time", "desc"), limit(30));
-      }
+      // Упрощенный запрос БЕЗ требования сложных индексов Firebase
+      let q = query(collection(db, "chat"), orderBy("time", "desc"), limit(50));
 
       const unsub = onSnapshot(q, (snapshot) => {
         let msgs = [];
-        snapshot.forEach(doc => msgs.push(doc.data()));
-        msgs.reverse(); // Старые сверху
+        snapshot.forEach(doc => {
+          let m = doc.data();
+          if(type === 'global' && !m.clanId) msgs.push(m);
+          else if (type === 'clan' && m.clanId === game.clanId) msgs.push(m);
+        });
+        
+        // Сортируем по времени (старые сверху)
+        msgs.sort((a,b) => new Date(a.time) - new Date(b.time));
         
         let html = '';
         msgs.forEach(m => {
@@ -499,7 +546,6 @@
       const input = document.getElementById(type + '-chat-input');
       const text = input.value.trim();
       if(!text) return;
-      
       if(type === 'clan' && !game.clanId) return alert('Вы не в клане!');
 
       input.value = '';
@@ -508,26 +554,22 @@
           email: currentEmail,
           nick: game.user.nick,
           text: text,
-          time: new Date(),
+          time: new Date().toISOString(),
           clanId: type === 'clan' ? game.clanId : null
         });
       } catch(e) { alert('Ошибка отправки'); }
     }
 
-    // Кланы
     async function createClan() {
       const name = document.getElementById('clan-name-input').value.trim();
-      if(!name) return alert('Введите название клана!');
+      if(!name) return alert('Введите название!');
       if(game.gold < 500) return alert('Нужно 500 золота!');
-      
-      try {
-        game.gold -= 500;
-        game.clanId = name;
-        await saveGame(false);
-        updateSocialUI();
-        initChat('clan');
-        alert('Клан создан!');
-      } catch(e) { alert('Ошибка'); }
+      game.gold -= 500;
+      game.clanId = name;
+      await saveGame(false);
+      updateSocialUI();
+      initChat('clan');
+      alert('Клан создан!');
     }
 
     async function joinClan() {
@@ -549,32 +591,29 @@
       }
     }
 
-    // Друзья
     async function addFriend() {
       const email = document.getElementById('friend-email-input').value.trim().toLowerCase();
       if(!email || email === currentEmail) return;
       if(game.friends.includes(email)) return alert('Уже в друзьях');
-
       try {
         const docSnap = await getDoc(doc(db, "users", email));
         if(!docSnap.exists()) return alert('Игрок не найден');
-        
         game.friends.push(email);
         await saveGame(false);
         document.getElementById('friend-email-input').value = '';
         loadFriends();
-      } catch(e) { alert('Ошибка добавления'); }
+      } catch(e) { alert('Ошибка'); }
     }
 
     async function loadFriends() {
       const list = document.getElementById('friends-list');
       if(game.friends.length === 0) { list.innerHTML = 'У вас пока нет друзей.'; return; }
-      
       let html = '';
       for(let email of game.friends) {
         const snap = await getDoc(doc(db, "users", email));
         if(snap.exists()) {
           let data = snap.data();
+          if(!data.user) continue;
           let avStyle = data.user.avatarImg ? `background-image:url(${data.user.avatarImg});` : '';
           html += `
             <div class="lb-row">
@@ -691,6 +730,7 @@
     function getOrePerSec() { return ((game.hireLvl * 1) + (game.skillsPrestige.speed * 1)) * (1 + (game.skillsPrestige.master * 0.10)); }
     function getClickPower() { return (1 + game.clickPowerLvl) * (1 + (game.skillsPrestige.master * 0.10)); }
     function getGoldChance() { return 0.05 + (game.skillsPrestige.goldVein * 0.02); }
+    function getArtChance() { return 0.001 + (game.skillsPrestige.fortune * 0.0005); }
 
     function getPrestigeCost() { return 100 * Math.pow(2, game.prestige); }
 
@@ -700,6 +740,8 @@
       document.getElementById('ui-gold').innerText = fmt(game.gold);
       document.getElementById('ui-ore-sec').innerText = fmt(getOrePerSec()) + '/сек';
       document.getElementById('ui-prestige').innerText = game.prestige;
+      document.getElementById('ui-art').innerText = game.artifacts;
+      document.getElementById('ui-lvl').innerText = game.level;
 
       let hc = getCost(10, game.hireLvl); document.getElementById('cost-hire').innerText = fmt(hc); document.getElementById('btn-hire').disabled = game.ore < hc;
       let cc = getCost(5, game.clickPowerLvl); document.getElementById('cost-buy').innerText = fmt(cc); document.getElementById('btn-buy').disabled = game.ore < cc;
@@ -708,7 +750,6 @@
       document.getElementById('cost-prestige').innerText = fmt(pCost);
       document.getElementById('btn-prestige').disabled = game.gold < pCost;
 
-      // Навыки
       let skillHtml = '';
       ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach((s, i) => {
         let bc = [5,8,10,15,20][i]; let cost = Math.floor(bc * Math.pow(1.5, game.skillsPrestige[s]));
@@ -723,13 +764,23 @@
         document.getElementById(`cost-${u}`).innerText = fmt(cost);
         document.getElementById(`btn-${u}`).disabled = game.ore < cost;
       });
+
+      document.getElementById('ui-art-timer').innerText = game.artTimer;
+      document.getElementById('ui-art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
+      document.getElementById('ui-art-chance').innerText = (getArtChance() * 100).toFixed(2);
+
+      let reqOre = game.level * 5;
+      let percent = (game.totalOre / reqOre) * 100;
+      document.getElementById('ui-next-lvl').innerText = reqOre;
+      document.getElementById('ui-lvl-percent').innerText = Math.floor(Math.min(percent, 100)) + '%';
+      document.getElementById('ui-lvl-bar').style.width = Math.min(percent, 100) + '%';
     }
 
     document.getElementById('click-area').addEventListener('click', () => {
       if(!currentEmail) return;
       game.ore += getClickPower(); game.totalOre += getClickPower(); game.user.totalClicks++;
       if(Math.random() < getGoldChance()) { game.gold++; game.user.totalGold++; }
-      updateUI();
+      checkLevel(); updateUI();
     });
 
     function hire() { let c = getCost(10, game.hireLvl); if(game.ore >= c) { game.ore -= c; game.hireLvl++; updateUI(); } }
@@ -753,6 +804,11 @@
       }
     }
 
+    function checkLevel() {
+      let req = game.level * 5;
+      if(game.totalOre >= req) { game.level++; game.totalOre -= req; game.gold++; game.user.totalGold++; }
+    }
+
     setInterval(() => {
       if(!currentEmail) return;
       game.playTime++;
@@ -760,14 +816,21 @@
       if(inc > 0) {
         game.ore += inc; game.totalOre += inc;
         if(Math.random() < getGoldChance() * (inc / 10)) { game.gold++; game.user.totalGold++; }
+        checkLevel();
       }
+      
+      game.artTimer--;
+      if(game.artTimer <= 0) {
+        game.artTimer = 15;
+        if(Math.random() < getArtChance()) { game.artifacts++; alert("✨ Артефакт!"); }
+      }
+
       updateUI();
       if(document.getElementById('view-profile').classList.contains('active')) updateProfileStats();
     }, 1000);
 
     setInterval(() => { if(currentEmail) saveGame(false); }, 10000);
 
-    // Экспорт
     window.login = login; window.logout = logout; window.switchTab = switchTab;
     window.switchTop = switchTop; window.switchSocial = switchSocial;
     window.saveProfile = saveProfile; window.handleAvatarUpload = handleAvatarUpload;
@@ -779,4 +842,4 @@
     checkAutoLogin();
   </script>
 </body>
-</html>
+  </html>
