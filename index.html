@@ -19,6 +19,7 @@
       --green: #4caf50;
       --red: #f44336;
       --gold: #ffd700;
+      --blue: #2196f3;
     }
     
     * { box-sizing: border-box; font-family: Arial, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -30,6 +31,7 @@
     .app { width: 100%; max-width: 400px; }
     .panel { background: var(--panel-bg); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid rgba(156, 39, 176, 0.3); backdrop-filter: blur(8px); }
     
+    /* Вход */
     #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 80vh; text-align: center; }
     #login-screen h1 { color: var(--purple-bright); font-size: 28px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(224, 64, 251, 0.5); }
     #login-screen p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
@@ -37,6 +39,7 @@
     .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #555; background: #111; color: white; font-size: 14px; }
     .btn-login { width: 100%; padding: 12px; background: var(--purple-main); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
+    /* Основное */
     .header { text-align: center; cursor: pointer; border-color: rgba(156, 39, 176, 0.6); position: relative; }
     .header h1 { margin: 0; font-size: 20px; color: var(--purple-bright); text-shadow: 0 0 10px rgba(224, 64, 251, 0.5); }
     .header p { font-size: 11px; color: var(--muted); margin: 4px 0 0 0; }
@@ -47,18 +50,23 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 30, 0.95); display: flex; border-top: 1px solid rgba(156, 39, 176, 0.5); backdrop-filter: blur(10px); z-index: 100; }
-    .nav-btn { flex: 1; padding: 15px 0; text-align: center; font-size: 12px; font-weight: bold; color: var(--muted); background: none; border: none; cursor: pointer; transition: 0.2s; }
+    /* Навигация */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 30, 0.95); display: flex; border-top: 1px solid rgba(156, 39, 176, 0.5); backdrop-filter: blur(10px); z-index: 100; overflow-x: auto; }
+    .nav-btn { flex: 1; min-width: 60px; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: bold; color: var(--muted); background: none; border: none; cursor: pointer; transition: 0.2s; white-space: nowrap; }
     .nav-btn.active { color: var(--purple-bright); border-top: 2px solid var(--purple-bright); margin-top: -1px; }
 
+    /* Профиль */
     .profile-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 0; }
     .big-avatar { width: 100px; height: 100px; border-radius: 50%; background: #222; border: 3px solid var(--purple-bright); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 0 15px rgba(224, 64, 251, 0.3); }
     .profile-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--purple-main); background: #111; color: white; font-size: 14px; text-align: center; }
     .file-btn { position: relative; overflow: hidden; display: inline-block; background: var(--purple-dark); padding: 10px 20px; border-radius: 8px; border: 1px solid var(--purple-light); cursor: pointer; }
     .file-btn input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-    
-    .stats-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; margin-bottom: 8px; }
+
+    /* Статы */
+    .stats-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
     .top-bar { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 10px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+    
+    /* Кнопки */
     .main-buttons { display: flex; gap: 5px; margin-bottom: 5px; }
     .main-buttons button { flex: 1; padding: 10px 2px; font-size: 11px; }
     .btn-hire { background: var(--purple-dark); border: 1px solid var(--purple-main); }
@@ -69,21 +77,35 @@
     .item-info { display: flex; flex-direction: column; flex: 1; }
     .item-title { font-weight: bold; font-size: 12px; }
     .item-desc { font-size: 10px; color: var(--muted); margin-top: 2px; display: flex; gap: 5px; flex-wrap: wrap; }
+    
     button { background: #3a3a4a; color: white; border: 1px solid #555; border-radius: 6px; padding: 6px 10px; font-weight: bold; font-size: 11px; cursor: pointer; white-space: nowrap; transition: 0.1s; }
     button.buy { background: var(--purple-main); border: 1px solid var(--purple-light); }
     button:disabled { background: #222; color: #555; border-color: #333; cursor: not-allowed; }
     button:active:not(:disabled) { transform: scale(0.95); }
+
+    /* Прогресс-бары */
     .progress-container { background: #111; border-radius: 10px; height: 12px; overflow: hidden; margin-top: 4px; position: relative; border: 1px solid rgba(156, 39, 176, 0.2); }
     .progress-bar { background: var(--purple-main); height: 100%; width: 0%; transition: width 0.1s linear; }
     .progress-bar.purple { background: var(--purple-bright); box-shadow: 0 0 10px var(--purple-bright); }
     .save-btn { width: 100%; padding: 12px; background: var(--purple-dark); border: 1px solid var(--purple-main); margin-bottom: 20px; font-size: 14px; }
     .btn-logout { width: 100%; padding: 12px; background: var(--red); border: none; border-radius: 8px; color: white; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
+    /* Топ */
     .lb-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; background: var(--panel-solid); border-radius: 6px; margin-bottom: 5px; border-left: 3px solid #555; }
     .lb-row.me { border-left-color: var(--purple-bright); background: rgba(156, 39, 176, 0.2); }
     .lb-rank { font-weight: bold; width: 25px; color: var(--purple-light); }
     .lb-name { flex: 1; font-size: 12px; font-weight: bold; }
     .lb-score { font-size: 12px; color: var(--gold); font-weight: bold; }
+
+    /* Админка */
+    .admin-card { background: var(--panel-solid); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--red); }
+    .admin-email { font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 4px; }
+    .admin-stats { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+    .admin-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+    .admin-actions button { font-size: 10px; padding: 4px 6px; }
+    .btn-ban { background: var(--red); border-color: #ff5252; }
+    .btn-unban { background: var(--green); border-color: #81c784; }
+    .btn-give { background: var(--blue); border-color: #64b5f6; }
   </style>
 </head>
 <body>
@@ -100,6 +122,7 @@
 
   <div id="main-app" class="app" style="display: none;">
     
+    <!-- ВКЛАДКА ИГРА -->
     <div id="view-game" class="tab-content active">
       <div class="panel header" id="click-area">
         <div class="mini-profile">
@@ -170,6 +193,7 @@
       <button class="save-btn" onclick="saveGame(true)">💾 Сохранить в облако</button>
     </div>
 
+    <!-- ВКЛАДКА ПРОФИЛЬ -->
     <div id="view-profile" class="tab-content">
       <div class="panel">
         <div class="section-title">👤 Аккаунт</div>
@@ -180,7 +204,6 @@
           <div style="font-size: 11px; color: var(--muted); margin-top: 5px;">Никнейм (видят другие):</div>
           <input type="text" id="input-nick" class="profile-input" placeholder="Ваш никнейм" maxlength="15">
           <button class="buy" style="width: 100%; padding: 12px;" onclick="saveProfile()">Сохранить профиль</button>
-          <button class="btn-hire" style="width: 100%; margin-top: 10px;" onclick="submitScore()">🏆 Отправить результат в Топ</button>
           <button class="btn-logout" onclick="logout()">Выйти из аккаунта</button>
         </div>
       </div>
@@ -190,9 +213,12 @@
         <div class="stats-row"><span>Всего кликов:</span><span id="stat-clicks">0</span></div>
         <div class="stats-row"><span>Добыто золота:</span><span id="stat-gold">0</span></div>
         <div class="stats-row"><span>Найдено артефактов:</span><span id="stat-arts">0</span></div>
+        <div class="stats-row" style="margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;"><span>Время в игре:</span><span id="stat-playtime" style="color: var(--green);">0ч 0м</span></div>
+        <div class="stats-row"><span>Дата регистрации:</span><span id="stat-created" style="color: var(--purple-light);">-</span></div>
       </div>
     </div>
 
+    <!-- ВКЛАДКА ТОП -->
     <div id="view-leaderboard" class="tab-content">
       <div class="panel">
         <div class="section-title">🏆 Топ-20 игроков по золоту</div>
@@ -203,18 +229,31 @@
       </div>
     </div>
 
+    <!-- ВКЛАДКА АДМИНКА -->
+    <div id="view-admin" class="tab-content">
+      <div class="panel">
+        <div class="section-title" style="color: var(--red);">🛡️ Панель разработчика</div>
+        <div class="item-desc" style="margin-bottom: 10px;">Здесь вы можете управлять игроками.</div>
+        <div id="admin-list" style="min-height: 100px;">
+          <div style="text-align: center; color: var(--muted); font-size: 12px;">Загрузка...</div>
+        </div>
+        <button class="buy" style="width: 100%; margin-top: 10px;" onclick="loadAdminPanel()">🔄 Обновить список</button>
+      </div>
+    </div>
+
   </div>
 
   <div class="bottom-nav" id="bottom-nav" style="display: none;">
     <button class="nav-btn active" id="nav-btn-game" onclick="switchTab('game')">⛏️ Игра</button>
     <button class="nav-btn" id="nav-btn-leaderboard" onclick="switchTab('leaderboard')">🏆 Топ</button>
     <button class="nav-btn" id="nav-btn-profile" onclick="switchTab('profile')">👤 Профиль</button>
+    <button class="nav-btn" id="nav-btn-admin" onclick="switchTab('admin')" style="display: none; color: var(--red);">🛡️ Админ</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSLP9qMEKj98ZN-GJtqlAOFM4seacfVtU",
@@ -229,11 +268,14 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Почта разработчика (Админа)
+    const ADMIN_EMAIL = "admin@mail.com";
+
     signInAnonymously(auth).catch((error) => console.error("Auth error:", error));
 
     let currentEmail = '';
     let game = {};
-    let isSaving = false; // Защита от спама сохранений
+    let isSaving = false;
 
     function getDefaultGame() {
       return {
@@ -244,11 +286,14 @@
         skillsPrestige: { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 },
         upgrades: { pick: 0, lamp: 0, cart: 0 },
         artTimer: 15,
+        isBanned: false,
+        playTime: 0,
+        createdAt: new Date().toISOString(),
         user: { nick: 'Игрок', avatarImg: '', totalClicks: 0, totalGold: 0 }
       };
     }
 
-    // === ВХОД В ОБЛАКО ===
+    // === ВХОД ===
     async function login() {
       let email = document.getElementById('login-email').value.trim().toLowerCase();
       let pass = document.getElementById('login-password').value.trim();
@@ -256,7 +301,6 @@
       if(!pass) { alert('Введите пароль!'); return; }
 
       document.querySelector('.btn-login').innerText = 'Загрузка...';
-      
       currentEmail = email;
       localStorage.setItem('activeUserEmail', email);
 
@@ -265,11 +309,18 @@
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          game = docSnap.data();
-          // Восстанавливаем недостающие поля, если обновлялась версия
-          let def = getDefaultGame();
-          if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
-          if(!game.user) game.user = def.user;
+          let data = docSnap.data();
+          if(data.isBanned && currentEmail !== ADMIN_EMAIL) {
+            alert("⛔ Ваш аккаунт заблокирован администратором!");
+            localStorage.removeItem('activeUserEmail');
+            document.querySelector('.btn-login').innerText = 'Войти в облако';
+            return;
+          }
+          game = data;
+          if(!game.skillsPrestige) game.skillsPrestige = getDefaultGame().skillsPrestige;
+          if(!game.user) game.user = getDefaultGame().user;
+          if(game.playTime === undefined) game.playTime = 0;
+          if(!game.createdAt) game.createdAt = new Date().toISOString();
         } else {
           game = getDefaultGame();
           await setDoc(docRef, game);
@@ -281,13 +332,23 @@
         document.getElementById('bottom-nav').style.display = 'flex';
         document.getElementById('profile-email').innerText = currentEmail;
         
+        if(currentEmail === ADMIN_EMAIL) {
+          document.getElementById('nav-btn-admin').style.display = 'block';
+        } else {
+          document.getElementById('nav-btn-admin').style.display = 'none';
+        }
+
         renderHeader();
         updateUI();
         switchTab('game');
         loadLeaderboard();
+        
+        // Принудительно обновляем топ сразу после входа
+        updateLeaderboardScore();
+
       } catch(e) {
         console.error(e);
-        alert("Ошибка подключения к серверу. Проверьте интернет.");
+        alert("Ошибка подключения к серверу.");
       } finally {
         document.querySelector('.btn-login').innerText = 'Войти в облако';
       }
@@ -314,73 +375,76 @@
           const docRef = doc(db, "users", currentEmail);
           const docSnap = await getDoc(docRef);
           if(docSnap.exists()) {
-            game = docSnap.data();
+            let data = docSnap.data();
+            if(data.isBanned && currentEmail !== ADMIN_EMAIL) {
+              localStorage.removeItem('activeUserEmail');
+              return;
+            }
+            game = data;
+            if(game.playTime === undefined) game.playTime = 0;
+            if(!game.createdAt) game.createdAt = new Date().toISOString();
+            
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('bottom-nav').style.display = 'flex';
             document.getElementById('profile-email').innerText = currentEmail;
+            
+            if(currentEmail === ADMIN_EMAIL) document.getElementById('nav-btn-admin').style.display = 'block';
+            
             renderHeader();
             updateUI();
             loadLeaderboard();
+            updateLeaderboardScore(); // Автообновление при заходе
           }
-        } catch(e) {
-          console.log("Auto-login failed, offline?", e);
-        }
+        } catch(e) { console.log("Auto-login failed"); }
       }
     }
 
     function switchTab(tab) {
-      document.getElementById('view-game').classList.remove('active');
-      document.getElementById('view-leaderboard').classList.remove('active');
-      document.getElementById('view-profile').classList.remove('active');
-      document.getElementById('nav-btn-game').classList.remove('active');
-      document.getElementById('nav-btn-leaderboard').classList.remove('active');
-      document.getElementById('nav-btn-profile').classList.remove('active');
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById('view-' + tab).classList.add('active');
+      document.getElementById('nav-btn-' + tab).classList.add('active');
 
-      if(tab === 'game') {
-        document.getElementById('view-game').classList.add('active');
-        document.getElementById('nav-btn-game').classList.add('active');
-      } else if(tab === 'leaderboard') {
-        document.getElementById('view-leaderboard').classList.add('active');
-        document.getElementById('nav-btn-leaderboard').classList.add('active');
-      } else {
-        document.getElementById('view-profile').classList.add('active');
-        document.getElementById('nav-btn-profile').classList.add('active');
+      if(tab === 'profile') {
         document.getElementById('input-nick').value = game.user.nick;
+        updateProfileStats();
+      } else if(tab === 'admin') {
+        loadAdminPanel();
       }
     }
 
-    // === СОХРАНЕНИЕ В ОБЛАКО ===
+    // === СОХРАНЕНИЕ И АВТОТОП ===
     async function saveGame(showAlert) {
       if(!currentEmail || isSaving) return;
       isSaving = true;
       try {
         await setDoc(doc(db, "users", currentEmail), game);
+        await updateLeaderboardScore(); // Автоматически обновляем топ при каждом сохранении
         if(showAlert) alert('Прогресс сохранен в облако! ☁️');
       } catch (e) {
         console.error("Save error:", e);
-        if(showAlert) alert('Ошибка сохранения. Проверьте интернет.');
+        if(showAlert) alert('Ошибка сохранения.');
       } finally {
         isSaving = false;
       }
     }
 
-    // === ТОП ===
-    async function submitScore() {
-      if(!game.user.nick) { alert('Сначала сохраните профиль с никнеймом!'); return; }
+    // Обновление записи в топе (перезаписывает старую)
+    async function updateLeaderboardScore() {
+      if(!game.user.nick || !currentEmail) return;
       try {
-        await addDoc(collection(db, "leaderboard"), {
-          nick: game.user.nick,
-          gold: game.gold,
-          level: game.level,
+        // Используем setDoc с ID = currentEmail, чтобы не создавать дубликаты
+        await setDoc(doc(db, "leaderboard", currentEmail), {
+          nick: game.user.nick, 
+          gold: game.gold, 
+          level: game.level, 
           email: currentEmail, 
           timestamp: new Date()
         });
-        alert("Результат отправлен в топ!");
-        loadLeaderboard();
       } catch (e) {
-        console.error("Ошибка отправки:", e);
-        alert("Не удалось отправить. Проверьте правила Firestore.");
+        console.error("Ошибка автообновления топа:", e);
       }
     }
 
@@ -390,28 +454,104 @@
       try {
         const q = query(collection(db, "leaderboard"), orderBy("gold", "desc"), limit(20));
         const querySnapshot = await getDocs(q);
-        let html = '';
-        let rank = 1;
+        let html = ''; let rank = 1;
         querySnapshot.forEach((doc) => {
           let data = doc.data();
           let isMe = data.email === currentEmail ? 'me' : '';
-          html += `
-            <div class="lb-row ${isMe}">
-              <span class="lb-rank">${rank}.</span>
-              <span class="lb-name">${data.nick || 'Безымянный'}</span>
-              <span class="lb-score">🥇 ${data.gold}</span>
-            </div>
-          `;
+          html += `<div class="lb-row ${isMe}"><span class="lb-rank">${rank}.</span><span class="lb-name">${data.nick || 'Безымянный'}</span><span class="lb-score">🥇 ${data.gold}</span></div>`;
           rank++;
         });
         if(html === '') html = '<div style="text-align: center; color: var(--muted); font-size: 12px;">Пока нет результатов</div>';
         listDiv.innerHTML = html;
-      } catch (e) {
-        listDiv.innerHTML = '<div style="text-align: center; color: var(--red); font-size: 12px;">Ошибка загрузки</div>';
+      } catch (e) { listDiv.innerHTML = '<div style="text-align: center; color: var(--red); font-size: 12px;">Ошибка загрузки</div>'; }
+    }
+
+    // === АДМИН ПАНЕЛЬ ===
+    async function loadAdminPanel() {
+      if(currentEmail !== ADMIN_EMAIL) return;
+      const listDiv = document.getElementById('admin-list');
+      listDiv.innerHTML = '<div style="text-align: center; color: var(--muted); font-size: 12px;">Загрузка...</div>';
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        let html = '';
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          let email = doc.id;
+          let banBtn = data.isBanned 
+            ? `<button class="btn-unban" onclick="toggleBan('${email}', false)">Разбанить</button>` 
+            : `<button class="btn-ban" onclick="toggleBan('${email}', true)">Забанить</button>`;
+          
+          let date = data.createdAt ? new Date(data.createdAt).toLocaleDateString('ru-RU') : 'Неизвестно';
+          
+          html += `
+            <div class="admin-card">
+              <div class="admin-email">${email}</div>
+              <div class="admin-stats">
+                Ник: ${data.user?.nick || 'Нет'}<br>
+                Золото: 🥇 ${data.gold} | Руда: 💎 ${data.ore} | Престиж: ⭐ ${data.prestige}<br>
+                Регистрация: ${date}
+              </div>
+              <div class="admin-actions">
+                ${banBtn}
+                <button class="btn-give" onclick="adminGive('${email}', 'gold')">+Золото</button>
+                <button class="btn-give" onclick="adminGive('${email}', 'prestige')">+Престиж</button>
+              </div>
+            </div>
+          `;
+        });
+        if(html === '') html = '<div style="text-align: center; color: var(--muted);">Нет игроков</div>';
+        listDiv.innerHTML = html;
+      } catch (e) { 
+        console.error(e);
+        listDiv.innerHTML = '<div style="text-align: center; color: var(--red);">Ошибка загрузки (проверьте Rules)</div>'; 
       }
     }
 
-    // === АВАТАРКА И ПРОФИЛЬ ===
+    async function toggleBan(email, isBanned) {
+      try {
+        const docRef = doc(db, "users", email);
+        await updateDoc(docRef, { isBanned: isBanned });
+        alert(isBanned ? `Игрок ${email} забанен!` : `Игрок ${email} разбанен!`);
+        loadAdminPanel();
+      } catch(e) { alert("Ошибка изменения статуса"); }
+    }
+
+    async function adminGive(email, type) {
+      let amount = prompt(`Сколько ${type === 'gold' ? 'золота' : 'престижа'} выдать игроку ${email}?`, "1000");
+      if(amount && !isNaN(amount)) {
+        try {
+          const docRef = doc(db, "users", email);
+          const docSnap = await getDoc(docRef);
+          if(docSnap.exists()) {
+            let data = docSnap.data();
+            data[type] = (data[type] || 0) + Number(amount);
+            await setDoc(docRef, data);
+            alert("Выдано!");
+            loadAdminPanel();
+          }
+        } catch(e) { alert("Ошибка выдачи"); }
+      }
+    }
+
+    // === ПРОФИЛЬ ===
+    function updateProfileStats() {
+      document.getElementById('stat-clicks').innerText = fmt(game.user.totalClicks);
+      document.getElementById('stat-gold').innerText = fmt(game.user.totalGold);
+      document.getElementById('stat-arts').innerText = game.artifacts;
+      
+      let totalMins = Math.floor(game.playTime / 60);
+      let hours = Math.floor(totalMins / 60);
+      let mins = totalMins % 60;
+      document.getElementById('stat-playtime').innerText = `${hours}ч ${mins}м`;
+
+      if(game.createdAt) {
+        let d = new Date(game.createdAt);
+        document.getElementById('stat-created').innerText = d.toLocaleDateString('ru-RU');
+      } else {
+        document.getElementById('stat-created').innerText = "Сегодня";
+      }
+    }
+
     function handleAvatarUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -441,7 +581,7 @@
       if(newNick) game.user.nick = newNick;
       saveGame(false);
       renderHeader();
-      alert('Профиль сохранен в облако!');
+      alert('Профиль сохранен!');
       switchTab('game');
     }
 
@@ -462,7 +602,7 @@
       }
     }
 
-    // === ИГРОВАЯ ЛОГИКА ===
+    // === ЛОГИКА ИГРЫ ===
     function fmt(n) { if(n>=1e6) return (n/1e6).toFixed(2)+'M'; if(n>=1e3) return (n/1e3).toFixed(2)+'K'; return Math.floor(n); }
     function getEcoDiscount() { return Math.min(0.8, (game.skillsOre.economy * 0.02) + (game.skillsPrestige.engineer * 0.05)); }
     function getCost(base, lvl, mult = 1.15) { return Math.floor(base * Math.pow(mult, lvl) * (1 - getEcoDiscount())); }
@@ -476,9 +616,6 @@
       document.getElementById('ui-ore').innerText = fmt(game.ore);
       document.getElementById('ui-gold').innerText = fmt(game.gold);
       document.getElementById('ui-ore-sec').innerText = fmt(getOrePerSec()) + '/сек';
-      document.getElementById('stat-clicks').innerText = fmt(game.user.totalClicks);
-      document.getElementById('stat-gold').innerText = fmt(game.user.totalGold);
-      document.getElementById('stat-arts').innerText = game.artifacts;
       document.getElementById('ui-art').innerText = game.artifacts;
       document.getElementById('ui-lvl').innerText = game.level;
       document.getElementById('ui-prestige').innerText = game.prestige;
@@ -566,8 +703,13 @@
       if(game.totalOre >= req) { game.level++; game.totalOre -= req; game.gold++; game.user.totalGold++; }
     }
 
+    // Игровой цикл (раз в секунду)
     setInterval(() => {
       if(!currentEmail) return;
+      
+      if(game.playTime === undefined) game.playTime = 0;
+      game.playTime++;
+
       let inc = getOrePerSec();
       if(inc > 0) {
         game.ore += inc; game.totalOre += inc;
@@ -580,16 +722,19 @@
         if(Math.random() < getArtChance()) { game.artifacts++; alert("✨ Артефакт!"); }
       }
       updateUI();
+      
+      if(document.getElementById('view-profile').classList.contains('active')) {
+        updateProfileStats();
+      }
     }, 1000);
 
-    // Автосохранение в облако каждые 10 секунд (чтобы не спамить базу)
+    // Автосохранение и автообновление топа каждые 10 секунд
     setInterval(() => { if(currentEmail) saveGame(false); }, 10000);
 
-    // Глобальные функции для HTML
+    // Экспорт в window
     window.login = login;
     window.logout = logout;
     window.switchTab = switchTab;
-    window.submitScore = submitScore;
     window.loadLeaderboard = loadLeaderboard;
     window.handleAvatarUpload = handleAvatarUpload;
     window.saveProfile = saveProfile;
@@ -600,8 +745,11 @@
     window.buyUpgrade = buyUpgrade;
     window.prestige = prestige;
     window.saveGame = saveGame;
+    window.loadAdminPanel = loadAdminPanel;
+    window.toggleBan = toggleBan;
+    window.adminGive = adminGive;
 
     checkAutoLogin();
   </script>
 </body>
-</html>
+  </html>
