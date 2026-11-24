@@ -204,6 +204,7 @@
           <div style="font-size: 11px; color: var(--muted); margin-top: 5px;">Никнейм (видят другие):</div>
           <input type="text" id="input-nick" class="profile-input" placeholder="Ваш никнейм" maxlength="15">
           <button class="buy" style="width: 100%; padding: 12px;" onclick="saveProfile()">Сохранить профиль</button>
+          <button class="btn-hire" style="width: 100%; margin-top: 10px;" onclick="submitScore()">🏆 Отправить результат в Топ</button>
           <button class="btn-logout" onclick="logout()">Выйти из аккаунта</button>
         </div>
       </div>
@@ -229,7 +230,7 @@
       </div>
     </div>
 
-    <!-- ВКЛАДКА АДМИНКА -->
+    <!-- ВКЛАДКА АДМИНКА (скрыта по умолчанию) -->
     <div id="view-admin" class="tab-content">
       <div class="panel">
         <div class="section-title" style="color: var(--red);">🛡️ Панель разработчика</div>
@@ -253,7 +254,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSLP9qMEKj98ZN-GJtqlAOFM4seacfVtU",
@@ -332,6 +333,7 @@
         document.getElementById('bottom-nav').style.display = 'flex';
         document.getElementById('profile-email').innerText = currentEmail;
         
+        // Если это админ, показываем кнопку админки
         if(currentEmail === ADMIN_EMAIL) {
           document.getElementById('nav-btn-admin').style.display = 'block';
         } else {
@@ -342,10 +344,6 @@
         updateUI();
         switchTab('game');
         loadLeaderboard();
-        
-        // Принудительно обновляем топ сразу после входа
-        updateLeaderboardScore();
-
       } catch(e) {
         console.error(e);
         alert("Ошибка подключения к серверу.");
@@ -394,7 +392,6 @@
             renderHeader();
             updateUI();
             loadLeaderboard();
-            updateLeaderboardScore(); // Автообновление при заходе
           }
         } catch(e) { console.log("Auto-login failed"); }
       }
@@ -415,13 +412,12 @@
       }
     }
 
-    // === СОХРАНЕНИЕ И АВТОТОП ===
+    // === СОХРАНЕНИЕ ===
     async function saveGame(showAlert) {
       if(!currentEmail || isSaving) return;
       isSaving = true;
       try {
         await setDoc(doc(db, "users", currentEmail), game);
-        await updateLeaderboardScore(); // Автоматически обновляем топ при каждом сохранении
         if(showAlert) alert('Прогресс сохранен в облако! ☁️');
       } catch (e) {
         console.error("Save error:", e);
@@ -431,21 +427,16 @@
       }
     }
 
-    // Обновление записи в топе (перезаписывает старую)
-    async function updateLeaderboardScore() {
-      if(!game.user.nick || !currentEmail) return;
+    // === ТОП ===
+    async function submitScore() {
+      if(!game.user.nick) { alert('Сначала сохраните профиль!'); return; }
       try {
-        // Используем setDoc с ID = currentEmail, чтобы не создавать дубликаты
-        await setDoc(doc(db, "leaderboard", currentEmail), {
-          nick: game.user.nick, 
-          gold: game.gold, 
-          level: game.level, 
-          email: currentEmail, 
-          timestamp: new Date()
+        await addDoc(collection(db, "leaderboard"), {
+          nick: game.user.nick, gold: game.gold, level: game.level, email: currentEmail, timestamp: new Date()
         });
-      } catch (e) {
-        console.error("Ошибка автообновления топа:", e);
-      }
+        alert("Результат отправлен в топ!");
+        loadLeaderboard();
+      } catch (e) { alert("Ошибка отправки."); }
     }
 
     async function loadLeaderboard() {
@@ -539,11 +530,13 @@
       document.getElementById('stat-gold').innerText = fmt(game.user.totalGold);
       document.getElementById('stat-arts').innerText = game.artifacts;
       
+      // Время
       let totalMins = Math.floor(game.playTime / 60);
       let hours = Math.floor(totalMins / 60);
       let mins = totalMins % 60;
       document.getElementById('stat-playtime').innerText = `${hours}ч ${mins}м`;
 
+      // Дата
       if(game.createdAt) {
         let d = new Date(game.createdAt);
         document.getElementById('stat-created').innerText = d.toLocaleDateString('ru-RU');
@@ -707,6 +700,7 @@
     setInterval(() => {
       if(!currentEmail) return;
       
+      // Считаем время в игре
       if(game.playTime === undefined) game.playTime = 0;
       game.playTime++;
 
@@ -723,18 +717,20 @@
       }
       updateUI();
       
+      // Если открыт профиль, обновляем статы
       if(document.getElementById('view-profile').classList.contains('active')) {
         updateProfileStats();
       }
     }, 1000);
 
-    // Автосохранение и автообновление топа каждые 10 секунд
+    // Автосохранение
     setInterval(() => { if(currentEmail) saveGame(false); }, 10000);
 
-    // Экспорт в window
+    // Экспорт в window для HTML
     window.login = login;
     window.logout = logout;
     window.switchTab = switchTab;
+    window.submitScore = submitScore;
     window.loadLeaderboard = loadLeaderboard;
     window.handleAvatarUpload = handleAvatarUpload;
     window.saveProfile = saveProfile;
@@ -752,4 +748,4 @@
     checkAutoLogin();
   </script>
 </body>
-</html>
+  </html>
