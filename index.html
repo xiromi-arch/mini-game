@@ -53,7 +53,6 @@
     
     .progress-container { background: #111; border-radius: 10px; height: 14px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(156, 39, 176, 0.2); position: relative; }
     .progress-bar { background: var(--main); height: 100%; width: 0%; transition: width 0.2s linear; }
-    .progress-bar.purple { background: var(--bright); }
     
     .profile-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 0; }
     .big-avatar { width: 80px; height: 80px; border-radius: 50%; background: #222; border: 3px solid var(--bright); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 30px; }
@@ -109,7 +108,6 @@
         <div class="stats-row"><span>⚡ Добыча:</span><span id="ui-ore-sec">0 / сек</span></div>
         
         <div style="display:flex; justify-content:space-between; font-size:11px; margin: 10px 0; background:rgba(0,0,0,0.5); padding:8px; border-radius:6px;">
-          <span>✨ Арт: <span id="ui-art">0</span></span>
           <span>📈 Ур: <span id="ui-lvl">1</span></span>
           <span>⭐ Прест: <span id="ui-prestige">0</span></span>
         </div>
@@ -131,15 +129,6 @@
         <div class="item"><div class="item-info"><span class="item-title">⛏️ Кирка Ур. <span id="lvl-pick">0</span></span></div><button class="buy" id="btn-pick" onclick="buyUpgrade('pick')">⬆️ <span id="cost-pick">15</span>💎</button></div>
         <div class="item"><div class="item-info"><span class="item-title">💡 Фонарь Ур. <span id="lvl-lamp">0</span></span></div><button class="buy" id="btn-lamp" onclick="buyUpgrade('lamp')">⬆️ <span id="cost-lamp">20</span>💎</button></div>
         <div class="item"><div class="item-info"><span class="item-title">🛒 Вагонетка Ур. <span id="lvl-cart">0</span></span></div><button class="buy" id="btn-cart" onclick="buyUpgrade('cart')">⬆️ <span id="cost-cart">25</span>💎</button></div>
-      </div>
-
-      <div class="panel">
-        <div class="section-title">✨ Артефакты</div>
-        <div style="font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--muted);">
-          <span>⏳ Следующий: <span id="ui-art-timer">15</span>с</span>
-          <span>Шанс: <span id="ui-art-chance">0.1</span>%</span>
-        </div>
-        <div class="progress-container"><div class="progress-bar purple" id="ui-art-bar"></div></div>
       </div>
 
       <div class="panel">
@@ -285,17 +274,25 @@
     let unsubscribeChat = null;
     let unsubscribeClanChat = null;
 
-    // Очистка чисел от бесконечности перед сохранением в базу
-    function sanitizeNumber(n) {
-      if (typeof n !== 'number' || !isFinite(n)) return 0;
-      return Math.floor(n);
+    // Очистка игры от багов (Infinity, NaN)
+    function sanitizeGameData(data) {
+      if (!data) return data;
+      if (!isFinite(data.ore)) data.ore = 0;
+      if (!isFinite(data.gold)) data.gold = 0;
+      if (!isFinite(data.prestige)) data.prestige = 0;
+      if (!isFinite(data.level)) data.level = 1;
+      if (!isFinite(data.totalOre)) data.totalOre = 0;
+      if (data.user) {
+        if (!isFinite(data.user.totalClicks)) data.user.totalClicks = 0;
+        if (!isFinite(data.user.totalGold)) data.user.totalGold = 0;
+      }
+      return data;
     }
 
     function generateGameId() {
       return Math.random().toString(36).substring(2, 8).toUpperCase();
     }
 
-    // Форматирование ОГРОМНЫХ чисел
     function fmt(n) { 
       if(n === Infinity || n > 1e300) return '∞';
       if(n >= 1e33) return (n/1e33).toFixed(1)+'Dc';
@@ -314,12 +311,12 @@
 
     function getDefaultGame() {
       return {
-        ore: 0, gold: 0, prestige: 0, artifacts: 0, level: 1, totalOre: 0,
+        ore: 0, gold: 0, prestige: 0, level: 1, totalOre: 0,
         clickPowerLvl: 0, hireLvl: 0, orePerSec: 0,
         skillsPrestige: { master: 0, goldVein: 0, engineer: 0, fortune: 0, speed: 0 },
         upgrades: { pick: 0, lamp: 0, cart: 0 },
         isBanned: false, playTime: 0, createdAt: new Date().toISOString(),
-        clanId: null, friends: [], artTimer: 15,
+        clanId: null, friends: [], 
         gameId: generateGameId(),
         user: { nick: 'Игрок', avatarImg: '', totalClicks: 0, totalGold: 0 }
       };
@@ -344,6 +341,7 @@
           
           let def = getDefaultGame();
           game = { ...def, ...data };
+          game = sanitizeGameData(game); // Очищаем от бесконечностей
           
           if(!game.gameId) { game.gameId = generateGameId(); }
           if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
@@ -352,9 +350,8 @@
           if(game.clanId === undefined) game.clanId = null;
           if(!game.friends) game.friends = [];
           if(!game.playTime) game.playTime = 0;
-          if(!game.artTimer) game.artTimer = 15;
           
-          await setDoc(docRef, game); // Сразу обновляем структуру в базе
+          await setDoc(docRef, game);
         } else {
           game = getDefaultGame();
           await setDoc(docRef, game);
@@ -372,15 +369,14 @@
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-app').style.display = 'block';
       document.getElementById('bottom-nav').style.display = 'flex';
-      document.getElementById('profile-email').innerText = currentEmail;
       
-      // Проверка на админа
       if(currentEmail === ADMIN_EMAIL) {
         document.getElementById('nav-btn-admin').style.display = 'block';
       } else {
         document.getElementById('nav-btn-admin').style.display = 'none';
       }
       
+      // Мгновенно прогружаем профиль
       document.getElementById('input-nick').value = game.user.nick;
       document.getElementById('profile-game-id').innerText = game.gameId;
       
@@ -416,6 +412,7 @@
             
             let def = getDefaultGame();
             game = { ...def, ...data };
+            game = sanitizeGameData(game);
             
             if(!game.gameId) { game.gameId = generateGameId(); }
             if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
@@ -424,7 +421,6 @@
             if(game.clanId === undefined) game.clanId = null;
             if(!game.friends) game.friends = [];
             if(!game.playTime) game.playTime = 0;
-            if(!game.artTimer) game.artTimer = 15;
 
             initGameUI();
           }
@@ -457,18 +453,15 @@
       if(!currentEmail || isSaving) return;
       isSaving = true;
       
-      // Чистим игру от Infinity и NaN перед отправкой
-      game.ore = sanitizeNumber(game.ore);
-      game.gold = sanitizeNumber(game.gold);
-      game.prestige = sanitizeNumber(game.prestige);
-      game.orePerSec = sanitizeNumber(getOrePerSec()); 
+      game = sanitizeGameData(game); // Чистим перед отправкой
+      game.orePerSec = Math.floor(getOrePerSec()); 
       
       try {
         await setDoc(doc(db, "users", currentEmail), game);
         if(showAlert) alert('Сохранено!');
       } catch (e) { 
         console.error("Save Error:", e); 
-        if(showAlert) alert('Ошибка сохранения: ' + e.message);
+        if(showAlert) alert('Ошибка сохранения');
       } finally { 
         isSaving = false; 
       }
@@ -786,15 +779,13 @@
 
     function getEcoDiscount() { return Math.min(0.8, (game.skillsPrestige.engineer * 0.05)); }
     function getCost(base, lvl, mult = 1.15) { 
-      let safeLvl = Math.min(lvl, 500); // Защита от бесконечности
+      let safeLvl = Math.min(lvl, 500); 
       return Math.floor(base * Math.pow(mult, safeLvl) * (1 - getEcoDiscount())); 
     }
     function getOrePerSec() { return ((game.hireLvl * 1) + (game.skillsPrestige.speed * 1)) * (1 + (game.skillsPrestige.master * 0.10)); }
     function getClickPower() { return (1 + game.clickPowerLvl) * (1 + (game.skillsPrestige.master * 0.10)); }
     function getGoldChance() { return 0.05 + (game.skillsPrestige.goldVein * 0.02); }
-    function getArtChance() { return 0.001 + (game.skillsPrestige.fortune * 0.0005); }
     
-    // ЗАЩИТА ОТ БЕСКОНЕЧНОСТИ В ПРЕСТИЖЕ
     function getPrestigeCost() { 
       let safePrestige = Math.min(game.prestige, 60); 
       return 100 * Math.pow(2, safePrestige); 
@@ -806,7 +797,6 @@
       document.getElementById('ui-gold').innerText = fmt(game.gold);
       document.getElementById('ui-ore-sec').innerText = fmt(getOrePerSec()) + '/сек';
       document.getElementById('ui-prestige').innerText = fmt(game.prestige);
-      document.getElementById('ui-art').innerText = fmt(game.artifacts);
       document.getElementById('ui-lvl').innerText = fmt(game.level);
 
       let hc = getCost(10, game.hireLvl); document.getElementById('cost-hire').innerText = fmt(hc); document.getElementById('btn-hire').disabled = game.ore < hc;
@@ -829,14 +819,10 @@
       ['pick', 'lamp', 'cart'].forEach(u => {
         let bp = { pick: 15, lamp: 20, cart: 25 }[u];
         let cost = getCost(bp, game.upgrades[u]);
-        document.getElementById(`lvl-${u}`).innerText = fmt(game.upgrades[u]); // ВОТ ТУТ ОБНОВЛЯЕТСЯ УРОВЕНЬ
+        document.getElementById(`lvl-${u}`).innerText = fmt(game.upgrades[u]);
         document.getElementById(`cost-${u}`).innerText = fmt(cost);
         document.getElementById(`btn-${u}`).disabled = game.ore < cost;
       });
-
-      document.getElementById('ui-art-timer').innerText = game.artTimer;
-      document.getElementById('ui-art-bar').style.width = ((15 - game.artTimer) / 15 * 100) + '%';
-      document.getElementById('ui-art-chance').innerText = (getArtChance() * 100).toFixed(2);
 
       let reqOre = game.level * 5;
       let percent = (game.totalOre / reqOre) * 100;
@@ -888,12 +874,6 @@
         if(Math.random() < getGoldChance() * (inc / 10)) { game.gold++; game.user.totalGold++; }
         checkLevel();
       }
-      
-      game.artTimer--;
-      if(game.artTimer <= 0) {
-        game.artTimer = 15;
-        if(Math.random() < getArtChance()) { game.artifacts++; alert("✨ Артефакт!"); }
-      }
 
       updateUI();
       if(document.getElementById('view-profile').classList.contains('active')) updateProfileStats();
@@ -912,4 +892,4 @@
     checkAutoLogin();
   </script>
 </body>
-</html>
+  </html>
