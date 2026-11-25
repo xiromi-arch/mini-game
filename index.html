@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Золотодобыча</title>
+  <!-- Иконка для браузера (кирка) -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2312/2312986.png">
+  
   <style>
     :root {
       --bg-image: linear-gradient(rgba(10, 10, 15, 0.7), rgba(10, 10, 15, 0.9)), url('https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg');
@@ -14,30 +17,36 @@
     * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); background-image: var(--bg-image); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
     
-    .app { width: 100%; max-width: 450px; padding: 10px; padding-top: 0; }
+    .app { width: 100%; max-width: 450px; padding: 10px; padding-top: 75px; }
     
-    /* ВЕРХНЕЕ МЕНЮ */
+    /* ВЕРХНЕЕ МЕНЮ (ИСПРАВЛЕНО) */
     .top-nav {
-      position: sticky; top: 0; width: 100%; max-width: 450px;
-      background: rgba(15, 15, 25, 0.95); display: flex; overflow-x: auto;
+      position: fixed; top: 0; left: 0; width: 100%; 
+      background: rgba(15, 15, 25, 0.98); 
+      display: flex; flex-wrap: nowrap; overflow-x: auto;
       border-bottom: 2px solid rgba(156, 39, 176, 0.5); z-index: 1000;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      margin-bottom: 10px;
+      scrollbar-width: none; /* Убираем скроллбар для Firefox */
     }
-    .top-nav::-webkit-scrollbar { display: none; }
+    .top-nav::-webkit-scrollbar { display: none; } /* Убираем скроллбар для Chrome/Safari */
+    
     .nav-btn {
-      flex: 1; min-width: 70px; padding: 15px 10px; text-align: center; font-size: 12px; font-weight: bold;
+      flex: 0 0 auto; /* Кнопки не сжимаются, а занимают нужное место */
+      padding: 15px 20px; text-align: center; font-size: 13px; font-weight: bold;
       color: var(--muted); background: none; border: none; white-space: nowrap; cursor: pointer;
-      transition: 0.2s;
+      transition: 0.2s; border-bottom: 3px solid transparent;
     }
-    .nav-btn.active { color: var(--bright); border-bottom: 3px solid var(--bright); background: rgba(156, 39, 176, 0.1); }
+    .nav-btn.active { color: var(--bright); border-bottom: 3px solid var(--bright); background: rgba(156, 39, 176, 0.15); }
 
     /* ПАНЕЛИ */
     .panel { background: var(--panel); border-radius: 16px; padding: 15px; margin-bottom: 12px; border: 1px solid rgba(156, 39, 176, 0.3); box-shadow: 0 4px 10px rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
-    .header { text-align: center; cursor: pointer; background: linear-gradient(135deg, rgba(106,27,154,0.5) 0%, rgba(30,30,45,0.9) 100%); }
-    .header h1 { margin: 0; font-size: 22px; color: var(--bright); text-shadow: 0 0 10px rgba(224, 64, 251, 0.5); }
-    .mini-profile { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
-    .mini-avatar { width: 35px; height: 35px; border-radius: 50%; background: #222; border: 2px solid var(--main); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    
+    /* ШАПКА */
+    .header { text-align: center; cursor: pointer; background: linear-gradient(135deg, rgba(106,27,154,0.6) 0%, rgba(30,30,45,0.9) 100%); padding: 20px 15px; border: 2px solid var(--main); position: relative; overflow: hidden; }
+    .header img.bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.2; z-index: 0; }
+    .header h1 { margin: 0; font-size: 24px; color: var(--bright); text-shadow: 0 0 10px rgba(224, 64, 251, 0.8); position: relative; z-index: 1; }
+    .mini-profile { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; position: relative; z-index: 1; }
+    .mini-avatar { width: 35px; height: 35px; border-radius: 50%; background: #222; border: 2px solid var(--light); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     
     /* ЭКРАН ВХОДА */
     #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; width: 100%; max-width: 400px; padding: 20px; }
@@ -110,7 +119,7 @@
     .art-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .art-title { font-size: 15px; font-weight: bold; color: var(--bright); }
     .art-count { background: var(--main); padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
-    .art-desc { font-size: 12px; color: #ccc; margin-bottom: 10px; }
+    .art-desc { font-size: 12px; color: #ccc; margin-bottom: 10px; line-height: 1.4; }
     
     /* АДМИНКА */
     .admin-card { background: var(--solid); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 3px solid var(--red); }
@@ -118,8 +127,8 @@
     .admin-actions button { font-size: 10px; padding: 6px 8px; }
 
     /* ПОМОЩЬ */
-    .help-text { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
-    .help-text b { color: var(--bright); }
+    .help-text { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; border-left: 3px solid var(--main); }
+    .help-text b { color: var(--bright); display: block; margin-bottom: 5px; font-size: 14px;}
   </style>
 </head>
 <body>
@@ -148,12 +157,13 @@
     <!-- ИГРА -->
     <div id="view-game" class="tab-content active">
       <div class="panel header" id="click-area">
+        <img src="https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg" class="bg-img">
         <div class="mini-profile">
           <div class="mini-avatar" id="header-avatar">⛏️</div>
           <div class="mini-nick" id="header-nick">Игрок</div>
         </div>
         <h1>Золотодобыча</h1>
-        <p style="font-size:11px; color:var(--muted); margin-top:5px;">Нажми для ручной добычи</p>
+        <p style="font-size:11px; color:var(--muted); margin-top:5px; position:relative; z-index:1;">Нажми для ручной добычи</p>
       </div>
       
       <div class="panel">
@@ -313,31 +323,32 @@
     <!-- ПОМОЩЬ -->
     <div id="view-help" class="tab-content">
       <div class="panel">
-        <div class="section-title">❓ Правила и Помощь</div>
+        <div class="section-title">❓ Энциклопедия игры</div>
         
         <div class="help-text">
-          <b>⛏️ Основы игры</b><br>
-          Нажимай на заголовок «Золотодобыча», чтобы добывать руду (💎) вручную. Покупай «Улучшить клик», чтобы за один тап получать больше руды.
+          <b>⛏️ Как зарабатывать руду?</b>
+          Тыкай пальцем по большой плашке с надписью «Золотодобыча». Каждый клик дает тебе руду (💎). Кнопка «Улучшить клик» увеличивает количество руды за одно нажатие. Кнопки «Кирка», «Фонарь» и «Вагонетка» дают пассивный доход (руда капает сама каждую секунду).
         </div>
 
         <div class="help-text">
-          <b>⚙️ Пассивная добыча</b><br>
-          Кнопка «Нанять» и улучшения «Кирка», «Фонарь», «Вагонетка» дают тебе пассивный доход руды в секунду. Чем выше уровень — тем дороже покупка, но и доход растет.
+          <b>🥇 Где брать золото и зачем оно нужно?</b>
+          Золото падает случайно (базовый шанс 5%) при добыче руды. Оно нужно для улучшения артефактов, создания клана (500🥇) и для совершения Престижа.
         </div>
 
         <div class="help-text">
-          <b>🥇 Золото и Престиж</b><br>
-          При добыче руды с шансом 5% падает золото. Когда накопишь нужную сумму золота, можешь сделать <b>Престиж</b>. Это сбросит руду, клики и улучшения, но выдаст Звезду Престижа (⭐). Звезды тратятся на мощные постоянные навыки (например, +10% ко всей добыче навсегда).
+          <b>⭐ Что такое Престиж?</b>
+          Это «перерождение». Нажми на кнопку Престижа, если накопил нужную сумму золота. Игра сбросит твою руду, клики и купленные кирки, но выдаст тебе <b>Звезду Престижа (⭐)</b>. Звезды дают вечные бонусы (например, +10% ко всей добыче). Каждый следующий Престиж стоит в 2 раза дороже.
         </div>
 
         <div class="help-text">
-          <b>✨ Артефакты</b><br>
-          Раз в 30 секунд игра пытается найти артефакт (базовый шанс 1%). Артефакты дают очень сильные бонусы. Их можно улучшать за золото во вкладке «Артефакты». Там же можно повысить шанс выпадения артефактов.
+          <b>✨ Артефакты</b>
+          Раз в 30 секунд игра пытается найти артефакт (базовый шанс всего 1%, но его можно улучшить за золото). Артефакты нужно собирать в коллекцию. Каждый артефакт можно улучшить за золото, чтобы его бонус стал сильнее. 
+          <br><i>Например: Кирка Древних дает процент к силе клика, а Часы Хроноса уменьшают время поиска следующих артефактов.</i>
         </div>
 
         <div class="help-text">
-          <b>👥 Друзья и Кланы</b><br>
-          Твой уникальный ID написан в профиле. Дай его другу, чтобы он тебя добавил. Создав клан за 500 золота, ты получишь закрытый чат для общения только с участниками твоего клана.
+          <b>👥 Друзья и Кланы</b>
+          В профиле есть твой уникальный ID (например, XM7C3L). Дай его другу, чтобы он тебя добавил. Создав клан, ты получишь отдельный чат для общения с соклановцами.
         </div>
 
         <button class="buy" style="width: 100%; padding: 12px;" onclick="switchTab('profile')">Назад в профиль</button>
@@ -460,11 +471,10 @@
           let def = getDefaultGame();
           game = { ...def, ...data };
           
-          // Миграция старых сохранений
           if(!game.artifacts) game.artifacts = def.artifacts;
           if(!game.artChanceLvl) game.artChanceLvl = 0;
           if(game.artTimer === undefined) game.artTimer = 30;
-          if(!game.clickLvl) game.clickLvl = data.clickPowerLvl || 0; // Костыль для старых сейвов
+          if(!game.clickLvl) game.clickLvl = data.clickPowerLvl || 0;
 
           game = sanitizeGameData(game);
           if(!game.gameId) game.gameId = generateGameId();
@@ -486,7 +496,12 @@
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-app').style.display = 'block';
       
-      if(currentEmail === ADMIN_EMAIL) document.getElementById('nav-btn-admin').style.display = 'block';
+      // ЖЕСТКАЯ ПРОВЕРКА НА АДМИНА
+      if(currentEmail.trim().toLowerCase() === ADMIN_EMAIL) {
+        document.getElementById('nav-btn-admin').style.display = 'block';
+      } else {
+        document.getElementById('nav-btn-admin').style.display = 'none';
+      }
       
       document.getElementById('input-nick').value = game.user.nick;
       document.getElementById('profile-game-id').innerText = game.gameId;
@@ -504,6 +519,10 @@
         if(unsubscribeClanChat) unsubscribeClanChat();
         localStorage.removeItem('activeUserEmail');
         currentEmail = ''; game = {};
+        
+        // СКРЫВАЕМ АДМИНКУ ПРИ ВЫХОДЕ
+        document.getElementById('nav-btn-admin').style.display = 'none';
+        
         document.getElementById('login-screen').style.display = 'flex';
         document.getElementById('main-app').style.display = 'none';
       }
@@ -537,6 +556,11 @@
     }
 
     function switchTab(tab) {
+      // БЛОКИРОВКА ВКЛАДКИ АДМИНА
+      if (tab === 'admin' && currentEmail.trim().toLowerCase() !== ADMIN_EMAIL) {
+        return alert("Доступ запрещен. Вы не администратор.");
+      }
+
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
       
@@ -596,13 +620,13 @@
     }
 
     function getArtChance() {
-      return 0.01 + (game.artChanceLvl * 0.005) + (game.skillsPrestige.fortune * 0.001); // 1% базовый
+      return 0.01 + (game.artChanceLvl * 0.005) + (game.skillsPrestige.fortune * 0.001);
     }
 
     function getMaxArtTimer() {
       let base = 30;
       let reduce = game.artifacts.clock.level * 0.5;
-      return Math.max(5, base - reduce); // Минимум 5 секунд
+      return Math.max(5, base - reduce);
     }
 
     function getEcoDiscount() { return Math.min(0.8, (game.skillsPrestige.engineer * 0.05)); }
@@ -643,7 +667,6 @@
       document.getElementById('ui-prestige').innerText = fmt(game.prestige);
       document.getElementById('ui-lvl').innerText = fmt(game.level);
 
-      // Кнопки
       let hc = getCost(10, game.hireLvl); document.getElementById('cost-hire').innerText = fmt(hc); document.getElementById('btn-hire').disabled = game.ore < hc;
       let cc = getCost(5, game.clickLvl); document.getElementById('cost-buy').innerText = fmt(cc); document.getElementById('btn-buy').disabled = game.ore < cc;
       
@@ -651,7 +674,6 @@
       document.getElementById('cost-prestige').innerText = fmt(pCost);
       document.getElementById('btn-prestige').disabled = game.gold < pCost;
 
-      // Улучшения
       ['pick', 'lamp', 'cart'].forEach(u => {
         let bp = { pick: 15, lamp: 50, cart: 150 }[u];
         let cost = getCost(bp, game.upgrades[u]);
@@ -660,25 +682,22 @@
         document.getElementById(`btn-${u}`).disabled = game.ore < cost;
       });
 
-      // Прогресс уровня
       let reqOre = game.level * 5;
       let percent = (game.totalOre / reqOre) * 100;
       document.getElementById('ui-next-lvl').innerText = fmt(reqOre);
       document.getElementById('ui-lvl-percent').innerText = Math.floor(Math.min(percent, 100)) + '%';
       document.getElementById('ui-lvl-bar').style.width = Math.min(percent, 100) + '%';
 
-      // Артефакты (Таймер и шанс)
       document.getElementById('ui-art-timer').innerText = Math.floor(game.artTimer);
       document.getElementById('ui-art-chance').innerText = (getArtChance() * 100).toFixed(2);
       let maxTimer = getMaxArtTimer();
       let artPercent = ((maxTimer - game.artTimer) / maxTimer) * 100;
       document.getElementById('ui-art-bar').style.width = artPercent + '%';
 
-      // Навыки престижа
       let skillHtml = '';
       ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach((s, i) => {
         let bc = [10, 15, 20, 25, 30][i]; 
-        let cost = Math.floor(bc * Math.pow(1.8, game.skillsPrestige[s])); // Сложнее прокачка
+        let cost = Math.floor(bc * Math.pow(1.8, game.skillsPrestige[s]));
         let names = ['🏆 Мастер (+10%)', '💰 Жила (+2%)', '🛠️ Инженер (-5%)', '🎲 Фортуна (+0.1%)', '🚀 Ускорение (+5%)'];
         skillHtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${fmt(game.skillsPrestige[s])}</span></div><button class="buy" id="btn-sk-${s}" onclick="buySkillPrestige('${s}')" ${game.prestige < cost ? 'disabled' : ''}>⭐${fmt(cost)}</button></div>`;
       });
@@ -695,11 +714,11 @@
         let myArt = game.artifacts[key];
         let upgCost = Math.floor(type.baseCost * Math.pow(2.5, myArt.level));
         
-        // Расчет текущего бонуса
-        let effectVal = (type.effect * myArt.level).toFixed(2);
-        if(key === 'pick' || key === 'drill') effectVal = (type.effect * myArt.level * 100).toFixed(0) + '%';
-        if(key === 'coin') effectVal = (type.effect * myArt.level * 100).toFixed(0) + '%';
-        if(key === 'clock') effectVal = (type.effect * myArt.level).toFixed(1) + 'с';
+        let currentEffect = '';
+        if(key === 'pick') currentEffect = '+' + (myArt.level * 5) + '%';
+        if(key === 'drill') currentEffect = '+' + (myArt.level * 10) + '%';
+        if(key === 'coin') currentEffect = '+' + (myArt.level * 1) + '%';
+        if(key === 'clock') currentEffect = '-' + (myArt.level * 0.5) + 'с';
 
         html += `
           <div class="art-card">
@@ -707,12 +726,12 @@
               <span class="art-title">${type.name}</span>
               <span class="art-count">В наличии: ${myArt.count}</span>
             </div>
-            <div class="art-desc">${type.desc} (Сейчас дает: <b>+${effectVal}</b>)</div>
+            <div class="art-desc">${type.desc} <br> <span style="color:var(--green);">Текущий бонус: ${currentEffect}</span></div>
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; margin-bottom:8px;">
               <span>Уровень: ${myArt.level}</span>
             </div>
             <button class="buy" style="width:100%;" onclick="upgradeArtifact('${key}')" ${myArt.count === 0 ? 'disabled' : ''}>
-              Улучшить (Нужно: 1 шт. + ${fmt(upgCost)} 🥇)
+              Улучшить (1 шт. + ${fmt(upgCost)} 🥇)
             </button>
           </div>
         `;
@@ -787,7 +806,6 @@
         checkLevel();
       }
       
-      // Таймер артефактов
       game.artTimer -= 1;
       if(game.artTimer <= 0) {
         game.artTimer = getMaxArtTimer();
@@ -807,10 +825,7 @@
 
     setInterval(() => { if(currentEmail) saveGame(false); }, 10000);
 
-    // --- ОСТАЛЬНОЕ (ТОП, ЧАТ, ДРУЗЬЯ, АДМИНКА) ---
-    // (Этот код остается без изменений, чтобы не раздувать сообщение, 
-    // но я вставил его полностью для работы игры)
-
+    // --- ТОП, ЧАТ, ДРУЗЬЯ, АДМИНКА ---
     function switchTop(type) {
       currentTopType = type;
       document.querySelectorAll('#view-top .sub-tab').forEach((el, i) => {
@@ -982,9 +997,8 @@
       list.innerHTML = html;
     }
 
-    // --- АДМИНКА ---
     async function loadAdminPanel() {
-      if(currentEmail !== ADMIN_EMAIL) return;
+      if(currentEmail.trim().toLowerCase() !== ADMIN_EMAIL) return;
       const listDiv = document.getElementById('admin-list');
       try {
         const snap = await getDocs(collection(db, "users"));
@@ -1054,7 +1068,6 @@
       }
     }
 
-    // --- ЗАГРУЗКА АВАТАРКИ ---
     function handleAvatarUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -1082,7 +1095,6 @@
       saveGame(false); renderHeader(); alert('Сохранено!'); switchTab('game');
     }
 
-    // Экспорт
     window.login = login; window.logout = logout; window.switchTab = switchTab;
     window.switchTop = switchTop; window.switchSocial = switchSocial;
     window.saveProfile = saveProfile; window.handleAvatarUpload = handleAvatarUpload;
