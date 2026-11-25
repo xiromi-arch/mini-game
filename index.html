@@ -16,14 +16,12 @@
     .app { width: 100%; max-width: 400px; }
     .panel { background: var(--panel); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid rgba(156, 39, 176, 0.3); backdrop-filter: blur(8px); }
     
-    /* Вход */
     #login-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 80vh; text-align: center; }
     #login-screen h1 { color: var(--bright); font-size: 28px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(224, 64, 251, 0.5); }
     .login-box { width: 100%; background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid var(--main); }
     .login-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #555; background: #111; color: white; }
     .btn-login { width: 100%; padding: 12px; background: var(--main); color: white; border: none; border-radius: 8px; font-weight: bold; }
 
-    /* Игра */
     .header { text-align: center; cursor: pointer; }
     .header h1 { margin: 0; font-size: 20px; color: var(--bright); }
     .mini-profile { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px; }
@@ -32,17 +30,14 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Навигация */
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 20, 0.95); display: flex; border-top: 1px solid rgba(156, 39, 176, 0.5); z-index: 100; }
     .nav-btn { flex: 1; padding: 12px 5px; text-align: center; font-size: 11px; font-weight: bold; color: var(--muted); background: none; border: none; }
     .nav-btn.active { color: var(--bright); border-top: 2px solid var(--bright); }
 
-    /* Суб-вкладки */
     .sub-tabs { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; }
     .sub-tab { flex: 1; padding: 8px; background: var(--solid); border: 1px solid #444; border-radius: 6px; text-align: center; font-size: 11px; font-weight: bold; color: var(--muted); white-space: nowrap; }
     .sub-tab.active { background: var(--main); color: white; border-color: var(--light); }
 
-    /* Кнопки и списки */
     .main-buttons { display: flex; gap: 5px; margin-bottom: 5px; }
     .main-buttons button { flex: 1; padding: 10px 2px; font-size: 11px; }
     .btn-hire { background: #6a1b9a; border: 1px solid var(--main); }
@@ -56,12 +51,10 @@
     button.buy { background: var(--main); border: 1px solid var(--light); }
     button:disabled { background: #222; color: #555; border-color: #333; }
     
-    /* Прогресс-бары */
     .progress-container { background: #111; border-radius: 10px; height: 14px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(156, 39, 176, 0.2); position: relative; }
     .progress-bar { background: var(--main); height: 100%; width: 0%; transition: width 0.2s linear; }
     .progress-bar.purple { background: var(--bright); }
     
-    /* Профиль */
     .profile-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 0; }
     .big-avatar { width: 80px; height: 80px; border-radius: 50%; background: #222; border: 3px solid var(--bright); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 30px; }
     .profile-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--main); background: #111; color: white; text-align: center; }
@@ -70,7 +63,6 @@
     .stats-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
     .btn-logout { width: 100%; padding: 12px; background: var(--red); border: none; border-radius: 8px; color: white; font-weight: bold; margin-top: 10px; }
 
-    /* Топ и Друзья */
     .lb-row { display: flex; align-items: center; gap: 8px; padding: 8px; background: var(--solid); border-radius: 6px; margin-bottom: 5px; border-left: 3px solid #555; }
     .lb-row.me { border-left-color: var(--bright); background: rgba(156, 39, 176, 0.2); }
     .lb-avatar { width: 28px; height: 28px; border-radius: 50%; background: #222; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 1px solid #444; }
@@ -78,7 +70,6 @@
     .lb-name { flex: 1; font-size: 12px; font-weight: bold; }
     .lb-score { font-size: 12px; color: var(--gold); font-weight: bold; }
 
-    /* Чат */
     .chat-box { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-bottom: 10px; }
     .msg { background: var(--solid); padding: 8px; border-radius: 8px; border-left: 2px solid var(--main); max-width: 90%; font-size: 12px; }
     .msg.my { align-self: flex-end; border-left: none; border-right: 2px solid var(--bright); background: #3a2a40; }
@@ -87,7 +78,6 @@
     .chat-input-area { display: flex; gap: 5px; margin-top: 10px; }
     .chat-input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #555; background: #111; color: white; }
     
-    /* Админка */
     .admin-card { background: var(--solid); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--red); }
     .admin-actions { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
   </style>
@@ -105,7 +95,6 @@
 
   <div id="main-app" class="app" style="display: none;">
     
-    <!-- ИГРА -->
     <div id="view-game" class="tab-content active">
       <div class="panel header" id="click-area">
         <div class="mini-profile">
@@ -165,7 +154,6 @@
       <button class="btn-hire" style="width: 100%; padding: 12px;" onclick="saveGame(true)">💾 Сохранить в облако</button>
     </div>
 
-    <!-- ТОПЫ -->
     <div id="view-top" class="tab-content">
       <div class="panel">
         <div class="section-title">🏆 Таблица Лидеров</div>
@@ -179,7 +167,6 @@
       </div>
     </div>
 
-    <!-- СОЦИАЛКА -->
     <div id="view-social" class="tab-content">
       <div class="panel">
         <div class="sub-tabs">
@@ -229,7 +216,6 @@
       </div>
     </div>
 
-    <!-- ПРОФИЛЬ -->
     <div id="view-profile" class="tab-content">
       <div class="panel">
         <div class="section-title">👤 Профиль</div>
@@ -254,7 +240,6 @@
       </div>
     </div>
 
-    <!-- АДМИНКА -->
     <div id="view-admin" class="tab-content">
       <div class="panel">
         <div class="section-title" style="color: var(--red);">🛡️ Админ-панель</div>
@@ -297,17 +282,22 @@
     let game = {};
     let isSaving = false;
     let currentTopType = 'gold';
-    let currentSocialTab = 'global';
     let unsubscribeChat = null;
     let unsubscribeClanChat = null;
+
+    // Очистка чисел от бесконечности перед сохранением в базу
+    function sanitizeNumber(n) {
+      if (typeof n !== 'number' || !isFinite(n)) return 0;
+      return Math.floor(n);
+    }
 
     function generateGameId() {
       return Math.random().toString(36).substring(2, 8).toUpperCase();
     }
 
-    // УЛУЧШЕННОЕ ФОРМАТИРОВАНИЕ БОЛЬШИХ ЧИСЕЛ
+    // Форматирование ОГРОМНЫХ чисел
     function fmt(n) { 
-      if(n === Infinity) return '∞';
+      if(n === Infinity || n > 1e300) return '∞';
       if(n >= 1e33) return (n/1e33).toFixed(1)+'Dc';
       if(n >= 1e30) return (n/1e30).toFixed(1)+'No';
       if(n >= 1e27) return (n/1e27).toFixed(1)+'Oc';
@@ -355,14 +345,16 @@
           let def = getDefaultGame();
           game = { ...def, ...data };
           
-          if(!game.gameId) { game.gameId = generateGameId(); await setDoc(docRef, game); }
+          if(!game.gameId) { game.gameId = generateGameId(); }
           if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
           if(!game.upgrades) game.upgrades = def.upgrades;
           if(!game.user) game.user = def.user;
-          if(!game.clanId) game.clanId = null;
+          if(game.clanId === undefined) game.clanId = null;
           if(!game.friends) game.friends = [];
           if(!game.playTime) game.playTime = 0;
           if(!game.artTimer) game.artTimer = 15;
+          
+          await setDoc(docRef, game); // Сразу обновляем структуру в базе
         } else {
           game = getDefaultGame();
           await setDoc(docRef, game);
@@ -371,7 +363,7 @@
         initGameUI();
       } catch(e) { 
         console.error(e);
-        alert("Ошибка подключения. Проверьте интернет."); 
+        alert("Ошибка: " + e.message); 
         document.querySelector('.btn-login').innerText = 'Войти в облако'; 
       }
     }
@@ -381,11 +373,17 @@
       document.getElementById('main-app').style.display = 'block';
       document.getElementById('bottom-nav').style.display = 'flex';
       document.getElementById('profile-email').innerText = currentEmail;
-      if(currentEmail === ADMIN_EMAIL) document.getElementById('nav-btn-admin').style.display = 'block';
       
-      // Принудительно обновляем все данные при входе
+      // Проверка на админа
+      if(currentEmail === ADMIN_EMAIL) {
+        document.getElementById('nav-btn-admin').style.display = 'block';
+      } else {
+        document.getElementById('nav-btn-admin').style.display = 'none';
+      }
+      
       document.getElementById('input-nick').value = game.user.nick;
       document.getElementById('profile-game-id').innerText = game.gameId;
+      
       renderHeader();
       updateUI();
       switchTab('game');
@@ -419,11 +417,11 @@
             let def = getDefaultGame();
             game = { ...def, ...data };
             
-            if(!game.gameId) { game.gameId = generateGameId(); await setDoc(docRef, game); }
+            if(!game.gameId) { game.gameId = generateGameId(); }
             if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
             if(!game.upgrades) game.upgrades = def.upgrades;
             if(!game.user) game.user = def.user;
-            if(!game.clanId) game.clanId = null;
+            if(game.clanId === undefined) game.clanId = null;
             if(!game.friends) game.friends = [];
             if(!game.playTime) game.playTime = 0;
             if(!game.artTimer) game.artTimer = 15;
@@ -432,7 +430,6 @@
           }
         } catch(e) { 
           console.log("Ошибка автовхода", e); 
-          localStorage.removeItem('activeUserEmail'); // Сбрасываем, чтобы не было цикла ошибок
         }
       }
     }
@@ -444,11 +441,10 @@
       document.getElementById('view-' + tab).classList.add('active');
       document.getElementById('nav-btn-' + tab).classList.add('active');
 
-      // ПРИНУДИТЕЛЬНОЕ ОБНОВЛЕНИЕ ПРИ ПЕРЕХОДЕ НА ВКЛАДКУ
       if(tab === 'profile') { 
         document.getElementById('input-nick').value = game.user.nick; 
         document.getElementById('profile-game-id').innerText = game.gameId;
-        renderHeader(); // Жестко перерисовываем аватарку
+        renderHeader(); 
         updateProfileStats(); 
       }
       if(tab === 'top') { loadTop(currentTopType); }
@@ -456,17 +452,29 @@
       if(tab === 'admin') { loadAdminPanel(); }
     }
 
-    // === СОХРАНЕНИЕ И ТОПЫ ===
+    // === СОХРАНЕНИЕ ===
     async function saveGame(showAlert) {
       if(!currentEmail || isSaving) return;
       isSaving = true;
+      
+      // Чистим игру от Infinity и NaN перед отправкой
+      game.ore = sanitizeNumber(game.ore);
+      game.gold = sanitizeNumber(game.gold);
+      game.prestige = sanitizeNumber(game.prestige);
+      game.orePerSec = sanitizeNumber(getOrePerSec()); 
+      
       try {
-        game.orePerSec = getOrePerSec(); 
         await setDoc(doc(db, "users", currentEmail), game);
         if(showAlert) alert('Сохранено!');
-      } catch (e) { console.error(e); } finally { isSaving = false; }
+      } catch (e) { 
+        console.error("Save Error:", e); 
+        if(showAlert) alert('Ошибка сохранения: ' + e.message);
+      } finally { 
+        isSaving = false; 
+      }
     }
 
+    // === ТОПЫ ===
     function switchTop(type) {
       currentTopType = type;
       document.querySelectorAll('#view-top .sub-tab').forEach((el, i) => {
@@ -521,7 +529,6 @@
 
     // === СОЦИАЛКА ===
     function switchSocial(tab) {
-      currentSocialTab = tab;
       document.querySelectorAll('#view-social .sub-tab').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-btn-' + tab).classList.add('active');
       
@@ -630,7 +637,7 @@
       }
     }
 
-    // === ДРУЗЬЯ ПО ID ===
+    // === ДРУЗЬЯ ===
     async function addFriend() {
       const friendId = document.getElementById('friend-id-input').value.trim().toUpperCase();
       if(!friendId) return;
@@ -665,7 +672,6 @@
           let data = snap.data();
           if(!data.user) continue;
           
-          // ИСПРАВЛЕНО: Аватарка теперь точно вписывается
           let avStyle = data.user.avatarImg ? `background-image:url(${data.user.avatarImg});` : '';
           let avText = data.user.avatarImg ? '' : '⛏️';
           
@@ -713,7 +719,7 @@
 
     async function adminGive(email, type) {
       let amount = prompt("Сколько выдать?", "1000");
-      if(amount) {
+      if(amount && !isNaN(amount)) {
         const ref = doc(db, "users", email);
         const snap = await getDoc(ref);
         if(snap.exists()) {
@@ -748,7 +754,7 @@
           canvas.width = w; canvas.height = h;
           ctx.drawImage(img, 0, 0, w, h);
           game.user.avatarImg = canvas.toDataURL('image/jpeg', 0.8);
-          renderHeader(); // Принудительно обновляем после загрузки
+          renderHeader(); 
         };
         img.src = e.target.result;
       };
@@ -764,7 +770,6 @@
       switchTab('game');
     }
 
-    // ИСПРАВЛЕНО: Жесткое обновление аватарки
     function renderHeader() {
       document.getElementById('header-nick').innerText = game.user.nick;
       let ha = document.getElementById('header-avatar');
@@ -780,13 +785,20 @@
     }
 
     function getEcoDiscount() { return Math.min(0.8, (game.skillsPrestige.engineer * 0.05)); }
-    function getCost(base, lvl, mult = 1.15) { return Math.floor(base * Math.pow(mult, lvl) * (1 - getEcoDiscount())); }
+    function getCost(base, lvl, mult = 1.15) { 
+      let safeLvl = Math.min(lvl, 500); // Защита от бесконечности
+      return Math.floor(base * Math.pow(mult, safeLvl) * (1 - getEcoDiscount())); 
+    }
     function getOrePerSec() { return ((game.hireLvl * 1) + (game.skillsPrestige.speed * 1)) * (1 + (game.skillsPrestige.master * 0.10)); }
     function getClickPower() { return (1 + game.clickPowerLvl) * (1 + (game.skillsPrestige.master * 0.10)); }
     function getGoldChance() { return 0.05 + (game.skillsPrestige.goldVein * 0.02); }
     function getArtChance() { return 0.001 + (game.skillsPrestige.fortune * 0.0005); }
-
-    function getPrestigeCost() { return 100 * Math.pow(2, game.prestige); }
+    
+    // ЗАЩИТА ОТ БЕСКОНЕЧНОСТИ В ПРЕСТИЖЕ
+    function getPrestigeCost() { 
+      let safePrestige = Math.min(game.prestige, 60); 
+      return 100 * Math.pow(2, safePrestige); 
+    }
 
     function updateUI() {
       if(!currentEmail) return;
@@ -807,15 +819,17 @@
       let skillHtml = '';
       ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach((s, i) => {
         let bc = [5,8,10,15,20][i]; 
-        let cost = Math.floor(bc * Math.pow(1.5, game.skillsPrestige[s]));
+        let safeLvl = Math.min(game.skillsPrestige[s], 500);
+        let cost = Math.floor(bc * Math.pow(1.5, safeLvl));
         let names = ['🏆 Мастер (+10%)', '💰 Жила (+2%)', '🛠️ Инженер (-5%)', '🎲 Фортуна (+0.05%)', '🚀 Ускорение (+1)'];
-        skillHtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${game.skillsPrestige[s]}</span></div><button class="buy" id="btn-sk-${s}" onclick="buySkillPrestige('${s}')" ${game.prestige < cost ? 'disabled' : ''}>⭐${fmt(cost)}</button></div>`;
+        skillHtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${fmt(game.skillsPrestige[s])}</span></div><button class="buy" id="btn-sk-${s}" onclick="buySkillPrestige('${s}')" ${game.prestige < cost ? 'disabled' : ''}>⭐${fmt(cost)}</button></div>`;
       });
       document.getElementById('prestige-skills-list').innerHTML = skillHtml;
 
       ['pick', 'lamp', 'cart'].forEach(u => {
         let bp = { pick: 15, lamp: 20, cart: 25 }[u];
         let cost = getCost(bp, game.upgrades[u]);
+        document.getElementById(`lvl-${u}`).innerText = fmt(game.upgrades[u]); // ВОТ ТУТ ОБНОВЛЯЕТСЯ УРОВЕНЬ
         document.getElementById(`cost-${u}`).innerText = fmt(cost);
         document.getElementById(`btn-${u}`).disabled = game.ore < cost;
       });
@@ -842,7 +856,8 @@
     function buyClick() { let c = getCost(5, game.clickPowerLvl); if(game.ore >= c) { game.ore -= c; game.clickPowerLvl++; updateUI(); } }
     function buySkillPrestige(s) { 
       let i = ['master','goldVein','engineer','fortune','speed'].indexOf(s);
-      let c = Math.floor([5,8,10,15,20][i] * Math.pow(1.5, game.skillsPrestige[s]));
+      let safeLvl = Math.min(game.skillsPrestige[s], 500);
+      let c = Math.floor([5,8,10,15,20][i] * Math.pow(1.5, safeLvl));
       if(game.prestige >= c) { game.prestige -= c; game.skillsPrestige[s]++; updateUI(); } 
     }
     function buyUpgrade(t) { let c = getCost({ pick: 15, lamp: 20, cart: 25 }[t], game.upgrades[t]); if(game.ore >= c) { game.ore -= c; game.upgrades[t]++; updateUI(); } }
@@ -897,4 +912,4 @@
     checkAutoLogin();
   </script>
 </body>
-  </html>
+</html>
