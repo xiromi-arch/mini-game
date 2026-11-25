@@ -72,13 +72,19 @@
     .chat-box { height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-bottom: 10px; }
     .msg { background: var(--solid); padding: 8px; border-radius: 8px; border-left: 2px solid var(--main); max-width: 90%; font-size: 12px; }
     .msg.my { align-self: flex-end; border-left: none; border-right: 2px solid var(--bright); background: #3a2a40; }
-    .msg-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; font-size: 10px; color: var(--muted); }
+    .msg-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; font-size: 10px; color: var(--muted); }
     .msg-nick { color: var(--light); font-weight: bold; }
     .chat-input-area { display: flex; gap: 5px; margin-top: 10px; }
     .chat-input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #555; background: #111; color: white; }
     
+    /* Админка */
     .admin-card { background: var(--solid); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--red); }
     .admin-actions { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+    .admin-actions button { font-size: 10px; padding: 4px 6px; }
+
+    /* Помощь */
+    .help-text { font-size: 13px; color: #ccc; line-height: 1.5; margin-bottom: 15px; }
+    .help-text b { color: var(--light); }
   </style>
 </head>
 <body>
@@ -217,6 +223,10 @@
 
           <input type="text" id="input-nick" class="profile-input" placeholder="Ваш никнейм" maxlength="15">
           <button class="buy" style="width: 100%; padding: 10px;" onclick="saveProfile()">Сохранить</button>
+          
+          <!-- КНОПКА ПОМОЩИ -->
+          <button class="btn-hire" style="width: 100%; padding: 10px;" onclick="switchTab('help')">❓ Правила и Помощь</button>
+          
           <button class="btn-logout" onclick="logout()">Выйти из аккаунта</button>
         </div>
       </div>
@@ -226,6 +236,40 @@
         <div class="stats-row"><span>Добыто золота:</span><span id="stat-gold">0</span></div>
         <div class="stats-row"><span>Время в игре:</span><span id="stat-playtime" style="color: var(--green);">0ч 0м</span></div>
         <div class="stats-row"><span>Дата регистрации:</span><span id="stat-created" style="color: var(--light);">-</span></div>
+      </div>
+    </div>
+
+    <!-- НОВАЯ ВКЛАДКА: ПОМОЩЬ -->
+    <div id="view-help" class="tab-content">
+      <div class="panel">
+        <div class="section-title">❓ Правила и Помощь</div>
+        
+        <div class="help-text">
+          <b>⛏️ Как играть?</b><br>
+          Нажимай на заголовок «Золотодобыча», чтобы добывать руду вручную. Покупай «Кирку», «Фонарь» и «Вагонетку» — они дадут пассивную добычу руды (⚡ в секунду).
+        </div>
+
+        <div class="help-text">
+          <b>🥇 Откуда берется золото?</b><br>
+          При добыче руды есть шанс найти золото (изначально 5%). Золото нужно для покупки навыков и создания кланов.
+        </div>
+
+        <div class="help-text">
+          <b>⭐ Что такое Престиж?</b><br>
+          Когда у тебя накопится нужное количество золота (сначала 100), ты можешь сделать «Престиж». Это сбросит твою руду и улучшения, но даст <b>Звезду Престижа</b>. Звезды тратятся на мощные навыки (например, +10% к добыче навсегда). Каждый следующий престиж стоит в 2 раза дороже.
+        </div>
+
+        <div class="help-text">
+          <b>👥 Друзья и Кланы</b><br>
+          В профиле есть твой уникальный ID. Дай его другу, чтобы он добавил тебя. Создав клан за 500 золота, ты получишь доступ к закрытому чату клана и сможешь общаться только с его участниками.
+        </div>
+
+        <div class="help-text">
+          <b>🛡️ Админ</b><br>
+          Игроки с почтой `admin@mail.com` имеют доступ к секретной вкладке для выдачи ресурсов и бана читеров.
+        </div>
+
+        <button class="buy" style="width: 100%; padding: 12px;" onclick="switchTab('profile')">Назад в профиль</button>
       </div>
     </div>
 
@@ -274,7 +318,6 @@
     let unsubscribeChat = null;
     let unsubscribeClanChat = null;
 
-    // Очистка игры от багов (Infinity, NaN)
     function sanitizeGameData(data) {
       if (!data) return data;
       if (!isFinite(data.ore)) data.ore = 0;
@@ -322,7 +365,6 @@
       };
     }
 
-    // === ВХОД ===
     async function login() {
       let email = document.getElementById('login-email').value.trim().toLowerCase();
       if(!email || !email.includes('@')) return alert('Введите Gmail!');
@@ -341,7 +383,7 @@
           
           let def = getDefaultGame();
           game = { ...def, ...data };
-          game = sanitizeGameData(game); // Очищаем от бесконечностей
+          game = sanitizeGameData(game);
           
           if(!game.gameId) { game.gameId = generateGameId(); }
           if(!game.skillsPrestige) game.skillsPrestige = def.skillsPrestige;
@@ -376,7 +418,6 @@
         document.getElementById('nav-btn-admin').style.display = 'none';
       }
       
-      // Мгновенно прогружаем профиль
       document.getElementById('input-nick').value = game.user.nick;
       document.getElementById('profile-game-id').innerText = game.gameId;
       
@@ -430,12 +471,15 @@
       }
     }
 
-    // === НАВИГАЦИЯ ===
     function switchTab(tab) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + tab).classList.add('active');
-      document.getElementById('nav-btn-' + tab).classList.add('active');
+      
+      // Подсвечиваем кнопку в меню (если она есть)
+      let navBtn = document.getElementById('nav-btn-' + tab);
+      if(navBtn) navBtn.classList.add('active');
+      else if(tab === 'help') document.getElementById('nav-btn-profile').classList.add('active'); // Помощь относится к профилю
 
       if(tab === 'profile') { 
         document.getElementById('input-nick').value = game.user.nick; 
@@ -448,12 +492,11 @@
       if(tab === 'admin') { loadAdminPanel(); }
     }
 
-    // === СОХРАНЕНИЕ ===
     async function saveGame(showAlert) {
       if(!currentEmail || isSaving) return;
       isSaving = true;
       
-      game = sanitizeGameData(game); // Чистим перед отправкой
+      game = sanitizeGameData(game);
       game.orePerSec = Math.floor(getOrePerSec()); 
       
       try {
@@ -467,7 +510,6 @@
       }
     }
 
-    // === ТОПЫ ===
     function switchTop(type) {
       currentTopType = type;
       document.querySelectorAll('#view-top .sub-tab').forEach((el, i) => {
@@ -520,7 +562,6 @@
       }
     }
 
-    // === СОЦИАЛКА ===
     function switchSocial(tab) {
       document.querySelectorAll('#view-social .sub-tab').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-btn-' + tab).classList.add('active');
@@ -561,14 +602,22 @@
           else if (type === 'clan' && m.clanId === game.clanId) msgs.push(m);
         });
         
-        msgs.sort((a,b) => new Date(a.time) - new Date(b.time));
+        msgs.sort((a,b) => a.time - b.time); // Быстрая сортировка цифр
         
         let html = '';
         msgs.forEach(m => {
           let isMine = m.email === currentEmail ? 'my' : '';
+          
+          // Форматируем время
+          let dateObj = new Date(m.time);
+          let timeStr = dateObj.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+
           html += `
             <div class="msg ${isMine}">
-              <div class="msg-header"><span class="msg-nick">${m.nick}</span></div>
+              <div class="msg-header">
+                <span class="msg-nick">${m.nick}</span>
+                <span>${timeStr}</span>
+              </div>
               <div>${m.text}</div>
             </div>
           `;
@@ -593,7 +642,7 @@
           email: currentEmail,
           nick: game.user.nick,
           text: text,
-          time: new Date().toISOString(),
+          time: Date.now(), // Используем миллисекунды для моментальной загрузки
           clanId: type === 'clan' ? game.clanId : null
         });
       } catch(e) { alert('Ошибка отправки'); }
@@ -630,7 +679,6 @@
       }
     }
 
-    // === ДРУЗЬЯ ===
     async function addFriend() {
       const friendId = document.getElementById('friend-id-input').value.trim().toUpperCase();
       if(!friendId) return;
@@ -696,8 +744,10 @@
               <div style="font-size:11px;margin:4px 0;">Золото: ${fmt(data.gold)} | Престиж: ${fmt(data.prestige)}</div>
               <div class="admin-actions">
                 ${banBtn}
-                <button onclick="adminGive('${doc.id}', 'gold')">+Золото</button>
-                <button onclick="adminGive('${doc.id}', 'prestige')">+Престиж</button>
+                <button onclick="adminGive('${doc.id}', 'gold', 10000)">+10k 🥇</button>
+                <button onclick="adminGive('${doc.id}', 'prestige', 10000)">+10k ⭐</button>
+                <button onclick="adminGive('${doc.id}', 'ore', 100000)">+100k 💎</button>
+                <button class="btn-ban" onclick="adminReset('${doc.id}')">Сброс</button>
               </div>
             </div>`;
         });
@@ -710,21 +760,28 @@
       loadAdminPanel();
     }
 
-    async function adminGive(email, type) {
-      let amount = prompt("Сколько выдать?", "1000");
-      if(amount && !isNaN(amount)) {
-        const ref = doc(db, "users", email);
-        const snap = await getDoc(ref);
-        if(snap.exists()) {
-          let data = snap.data();
-          data[type] = (data[type] || 0) + Number(amount);
-          await setDoc(ref, data);
-          loadAdminPanel();
-        }
+    async function adminGive(email, type, amount) {
+      const ref = doc(db, "users", email);
+      const snap = await getDoc(ref);
+      if(snap.exists()) {
+        let data = snap.data();
+        data[type] = (data[type] || 0) + amount;
+        await setDoc(ref, data);
+        loadAdminPanel();
       }
     }
 
-    // === ПРОФИЛЬ И ЛОГИКА ===
+    async function adminReset(email) {
+      if(confirm(`Точно сбросить прогресс игроку ${email}?`)) {
+        const def = getDefaultGame();
+        def.user.nick = (await getDoc(doc(db, "users", email))).data().user.nick; // Сохраняем ник
+        def.gameId = (await getDoc(doc(db, "users", email))).data().gameId; // Сохраняем ID
+        await setDoc(doc(db, "users", email), def);
+        loadAdminPanel();
+      }
+    }
+
+    // === ПРОФИЛЬ ===
     function updateProfileStats() {
       document.getElementById('stat-clicks').innerText = fmt(game.user.totalClicks);
       document.getElementById('stat-gold').innerText = fmt(game.user.totalGold);
@@ -887,7 +944,7 @@
     window.hire = hire; window.buyClick = buyClick; window.buySkillPrestige = buySkillPrestige;
     window.buyUpgrade = buyUpgrade; window.prestige = prestige; window.saveGame = saveGame;
     window.sendChat = sendChat; window.createClan = createClan; window.joinClan = joinClan; window.leaveClan = leaveClan;
-    window.addFriend = addFriend; window.toggleBan = toggleBan; window.adminGive = adminGive; window.loadAdminPanel = loadAdminPanel;
+    window.addFriend = addFriend; window.toggleBan = toggleBan; window.adminGive = adminGive; window.adminReset = adminReset; window.loadAdminPanel = loadAdminPanel;
 
     checkAutoLogin();
   </script>
