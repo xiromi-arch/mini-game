@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Золотодобыча</title>
-  <!-- Иконка для браузера (кирка) -->
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2312/2312986.png">
   
   <style>
     :root {
-      --bg-image: linear-gradient(rgba(10, 10, 15, 0.7), rgba(10, 10, 15, 0.9)), url('https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg');
+      --bg-image: linear-gradient(rgba(10, 10, 15, 0.75), rgba(10, 10, 15, 0.95)), url('https://m.gjcdn.net/game-header/950/927019-zrjy6pdz-v4.jpg');
       --bg: #0f0f15; --panel: rgba(30, 30, 45, 0.95); --solid: #222233;
       --text: #fff; --muted: #889; --main: #9c27b0; --light: #ce93d8; --bright: #e040fb;
       --green: #4caf50; --red: #f44336; --gold: #ffd700; --blue: #2196f3;
@@ -17,22 +16,19 @@
     * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg); background-image: var(--bg-image); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
     
-    .app { width: 100%; max-width: 450px; padding: 10px; padding-top: 75px; }
+    .app { width: 100%; max-width: 450px; padding: 10px; padding-top: 70px; }
     
-    /* ВЕРХНЕЕ МЕНЮ (ИСПРАВЛЕНО) */
+    /* ВЕРХНЕЕ МЕНЮ */
     .top-nav {
       position: fixed; top: 0; left: 0; width: 100%; 
-      background: rgba(15, 15, 25, 0.98); 
-      display: flex; flex-wrap: nowrap; overflow-x: auto;
+      background: rgba(15, 15, 25, 0.98); display: flex; flex-wrap: nowrap; overflow-x: auto;
       border-bottom: 2px solid rgba(156, 39, 176, 0.5); z-index: 1000;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      scrollbar-width: none; /* Убираем скроллбар для Firefox */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5); scrollbar-width: none;
     }
-    .top-nav::-webkit-scrollbar { display: none; } /* Убираем скроллбар для Chrome/Safari */
+    .top-nav::-webkit-scrollbar { display: none; }
     
     .nav-btn {
-      flex: 0 0 auto; /* Кнопки не сжимаются, а занимают нужное место */
-      padding: 15px 20px; text-align: center; font-size: 13px; font-weight: bold;
+      flex: 0 0 auto; padding: 15px 18px; text-align: center; font-size: 13px; font-weight: bold;
       color: var(--muted); background: none; border: none; white-space: nowrap; cursor: pointer;
       transition: 0.2s; border-bottom: 3px solid transparent;
     }
@@ -70,6 +66,7 @@
     .btn-hire { background: linear-gradient(135deg, #4a148c, #6a1b9a); border: 1px solid var(--light); box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
     .btn-buy { background: linear-gradient(135deg, #6a1b9a, #9c27b0); border: 1px solid var(--light); box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
     .btn-prestige { background: linear-gradient(135deg, #e040fb, #ff80ab); border: none; color: #000; box-shadow: 0 2px 10px rgba(224, 64, 251, 0.4); }
+    .btn-daily { background: linear-gradient(135deg, #ffb300, #ffca28); border: none; color: #000; box-shadow: 0 2px 10px rgba(255, 179, 0, 0.4); width: 100%; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
     
     /* СПИСКИ И ЭЛЕМЕНТЫ */
     .section-title { color: var(--light); font-size: 14px; margin: 0 0 12px 0; font-weight: bold; border-bottom: 1px solid rgba(156, 39, 176, 0.3); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
@@ -94,6 +91,13 @@
     .file-btn input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; }
     .btn-logout { width: 100%; padding: 12px; background: linear-gradient(135deg, #b71c1c, #f44336); border: none; border-radius: 10px; color: white; font-weight: bold; margin-top: 10px; font-size: 14px; }
 
+    /* ДОСТИЖЕНИЯ */
+    .ach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ach-card { background: var(--solid); padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #444; opacity: 0.5; }
+    .ach-card.unlocked { opacity: 1; border-color: var(--green); background: rgba(76, 175, 80, 0.1); }
+    .ach-title { font-size: 11px; font-weight: bold; margin-bottom: 4px; }
+    .ach-desc { font-size: 9px; color: var(--muted); }
+
     /* ТОП И ДРУЗЬЯ */
     .lb-row { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--solid); border-radius: 10px; margin-bottom: 6px; border-left: 3px solid #555; }
     .lb-row.me { border-left-color: var(--bright); background: rgba(156, 39, 176, 0.15); }
@@ -102,17 +106,27 @@
     .lb-name { flex: 1; font-size: 13px; font-weight: bold; }
     .lb-score { font-size: 13px; color: var(--gold); font-weight: bold; }
 
-    /* ЧАТ */
+    /* ЧАТ (ОБНОВЛЕН) */
     .sub-tabs { display: flex; gap: 5px; margin-bottom: 12px; overflow-x: auto; }
     .sub-tab { flex: 1; padding: 10px; background: var(--solid); border: 1px solid #444; border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; color: var(--muted); white-space: nowrap; cursor: pointer; }
     .sub-tab.active { background: var(--main); color: white; border-color: var(--light); }
+    
     .chat-box { height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px; }
-    .msg { background: var(--solid); padding: 10px; border-radius: 10px; border-left: 3px solid var(--main); max-width: 90%; font-size: 13px; }
+    .msg { background: var(--solid); padding: 8px 10px; border-radius: 10px; border-left: 3px solid var(--main); max-width: 90%; font-size: 13px; position: relative; }
     .msg.my { align-self: flex-end; border-left: none; border-right: 3px solid var(--bright); background: #2a1a30; }
-    .msg-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; font-size: 10px; color: var(--muted); }
+    .msg-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; font-size: 10px; color: var(--muted); gap: 10px; }
     .msg-nick { color: var(--light); font-weight: bold; font-size: 11px; }
+    .msg-text { word-break: break-word; }
+    .msg-reply-block { background: rgba(0,0,0,0.3); border-left: 2px solid var(--muted); padding: 4px 8px; margin-bottom: 6px; font-size: 10px; border-radius: 4px; color: #aaa; }
+    
+    .msg-actions { display: flex; gap: 5px; margin-top: 5px; justify-content: flex-end; }
+    .msg-actions button { background: transparent; border: none; padding: 2px 5px; font-size: 12px; color: var(--muted); cursor: pointer; }
+    
     .chat-input-area { display: flex; gap: 8px; margin-top: 10px; }
     .chat-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #555; background: #111; color: white; }
+    
+    #reply-preview { display: none; background: rgba(156,39,176,0.2); padding: 8px; border-radius: 6px; margin-bottom: 5px; font-size: 11px; border-left: 3px solid var(--bright); align-items: center; justify-content: space-between; }
+    #reply-preview button { background: none; border: none; color: var(--red); font-weight: bold; font-size: 14px; padding: 0 5px; }
 
     /* АРТЕФАКТЫ */
     .art-card { background: linear-gradient(135deg, rgba(224, 64, 251, 0.1), rgba(30,30,45,0.9)); border: 1px solid rgba(224, 64, 251, 0.4); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
@@ -129,9 +143,23 @@
     /* ПОМОЩЬ */
     .help-text { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; border-left: 3px solid var(--main); }
     .help-text b { color: var(--bright); display: block; margin-bottom: 5px; font-size: 14px;}
+
+    /* МОДАЛКА ОФФЛАЙН */
+    #offline-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+    .modal-content { background: var(--panel); padding: 25px; border-radius: 16px; border: 2px solid var(--main); text-align: center; max-width: 300px; width: 90%; }
   </style>
 </head>
 <body>
+
+  <!-- МОДАЛКА ОФФЛАЙН -->
+  <div id="offline-modal">
+    <div class="modal-content">
+      <h2 style="color: var(--bright); margin-top: 0;">💤 С возвращением!</h2>
+      <p style="font-size: 14px; color: var(--muted);">Пока вас не было, шахтеры не спали!</p>
+      <div style="font-size: 24px; font-weight: bold; color: var(--gold); margin: 15px 0;" id="offline-ore-amount">0 💎</div>
+      <button class="buy" style="width: 100%; padding: 12px;" onclick="claimOffline()">Забрать</button>
+    </div>
+  </div>
 
   <div id="login-screen">
     <h1>⛏️ Золотодобыча</h1>
@@ -167,6 +195,9 @@
       </div>
       
       <div class="panel">
+        <!-- Ежедневный бонус -->
+        <button class="btn-daily" id="daily-btn" onclick="claimDaily()">🎁 Забрать ежедневный бонус</button>
+
         <div class="stats-row"><span>💎 Руда:</span><span id="ui-ore">0</span></div>
         <div class="stats-row"><span>🥇 Золото:</span><span id="ui-gold">0</span></div>
         <div class="stats-row"><span>⚡ Добыча:</span><span id="ui-ore-sec">0 / сек</span></div>
@@ -253,6 +284,12 @@
 
         <div id="social-global" class="social-tab">
           <div class="chat-box" id="global-chat-box"></div>
+          
+          <div id="reply-preview">
+            <span>Ответ на: <b id="reply-nick"></b></span>
+            <button onclick="cancelReply()">✖</button>
+          </div>
+
           <div class="chat-input-area">
             <input type="text" id="global-chat-input" class="chat-input" placeholder="Сообщение...">
             <button class="buy" onclick="sendChat('global')">➤</button>
@@ -272,7 +309,17 @@
               <span style="font-size:14px;">Клан: <b id="my-clan-name" style="color: var(--bright); font-size:16px;"></b></span>
               <button class="btn-logout" style="width: auto; padding: 6px 10px; margin: 0; font-size:11px;" onclick="leaveClan()">Выйти</button>
             </div>
-            <div class="chat-box" id="clan-chat-box" style="height: 250px;"></div>
+            
+            <!-- КАЗНА КЛАНА -->
+            <div class="panel" style="background:rgba(0,0,0,0.3); padding:10px; border:1px solid #444;">
+              <div style="font-size:12px; font-weight:bold; color:var(--gold);">🏦 Казна Клана (Ур. <span id="clan-level">1</span>)</div>
+              <div style="font-size:10px; color:var(--muted); margin:5px 0;">Собрано золота: <span id="clan-treasury">0</span> / <span id="clan-next-level">1000</span></div>
+              <div class="progress-container" style="height:8px;"><div class="progress-bar" id="clan-bar" style="background:var(--gold);"></div></div>
+              <div style="font-size:10px; color:var(--green); margin:5px 0;">Бонус всем: +<span id="clan-bonus">0</span>% к добыче</div>
+              <button class="buy" style="width:100%; margin-top:5px; background:#b8860b;" onclick="donateClan()">Внести 100 🥇</button>
+            </div>
+
+            <div class="chat-box" id="clan-chat-box" style="height: 200px; margin-top:10px;"></div>
             <div class="chat-input-area">
               <input type="text" id="clan-chat-input" class="chat-input" placeholder="Сообщение клану...">
               <button class="buy" onclick="sendChat('clan')">➤</button>
@@ -311,6 +358,13 @@
           <button class="btn-logout" onclick="logout()">Выйти из аккаунта</button>
         </div>
       </div>
+
+      <!-- ДОСТИЖЕНИЯ -->
+      <div class="panel">
+        <div class="section-title">🏆 Достижения</div>
+        <div class="ach-grid" id="achievements-list"></div>
+      </div>
+
       <div class="panel">
         <div class="section-title">📊 Статистика</div>
         <div class="stats-row"><span>Всего кликов:</span><span id="stat-clicks">0</span></div>
@@ -327,28 +381,27 @@
         
         <div class="help-text">
           <b>⛏️ Как зарабатывать руду?</b>
-          Тыкай пальцем по большой плашке с надписью «Золотодобыча». Каждый клик дает тебе руду (💎). Кнопка «Улучшить клик» увеличивает количество руды за одно нажатие. Кнопки «Кирка», «Фонарь» и «Вагонетка» дают пассивный доход (руда капает сама каждую секунду).
+          Тыкай пальцем по большой плашке с надписью «Золотодобыча». Кнопка «Улучшить клик» увеличивает количество руды за нажатие. Улучшения (Кирка, Фонарь, Вагонетка) дают пассивный доход.
         </div>
 
         <div class="help-text">
-          <b>🥇 Где брать золото и зачем оно нужно?</b>
-          Золото падает случайно (базовый шанс 5%) при добыче руды. Оно нужно для улучшения артефактов, создания клана (500🥇) и для совершения Престижа.
+          <b>💤 Оффлайн-добыча</b>
+          Если ты закроешь игру, шахтеры продолжат работать. При возвращении (максимум через 4 часа) ты получишь накопленную руду.
         </div>
 
         <div class="help-text">
-          <b>⭐ Что такое Престиж?</b>
-          Это «перерождение». Нажми на кнопку Престижа, если накопил нужную сумму золота. Игра сбросит твою руду, клики и купленные кирки, но выдаст тебе <b>Звезду Престижа (⭐)</b>. Звезды дают вечные бонусы (например, +10% ко всей добыче). Каждый следующий Престиж стоит в 2 раза дороже.
+          <b>🎁 Ежедневный бонус</b>
+          Раз в 24 часа на главном экране появляется кнопка с сундуком. Забери золото и руду!
         </div>
 
         <div class="help-text">
-          <b>✨ Артефакты</b>
-          Раз в 30 секунд игра пытается найти артефакт (базовый шанс всего 1%, но его можно улучшить за золото). Артефакты нужно собирать в коллекцию. Каждый артефакт можно улучшить за золото, чтобы его бонус стал сильнее. 
-          <br><i>Например: Кирка Древних дает процент к силе клика, а Часы Хроноса уменьшают время поиска следующих артефактов.</i>
+          <b>🛡️ Кланы и Казна</b>
+          Создай клан за 500🥇. Все участники могут вносить золото в Казну (кнопка внутри клана). Когда казна заполняется, уровень клана растет, и <b>все участники получают бонус к добыче</b>.
         </div>
 
         <div class="help-text">
-          <b>👥 Друзья и Кланы</b>
-          В профиле есть твой уникальный ID (например, XM7C3L). Дай его другу, чтобы он тебя добавил. Создав клан, ты получишь отдельный чат для общения с соклановцами.
+          <b>🏆 Достижения</b>
+          Выполняй условия (например, сделать 1000 кликов или 10 престижей) и получай награды в профиле.
         </div>
 
         <button class="buy" style="width: 100%; padding: 12px;" onclick="switchTab('profile')">Назад в профиль</button>
@@ -368,7 +421,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, orderBy, limit, getDocs, where, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCSLP9qMEKj98ZN-GJtqlAOFM4seacfVtU",
@@ -392,12 +445,23 @@
     let currentTopType = 'gold';
     let unsubscribeChat = null;
     let unsubscribeClanChat = null;
+    let currentClanData = null;
+    let replyTo = null;
 
     const ARTIFACT_TYPES = {
       pick: { name: '⛏️ Кирка Древних', desc: '+5% к силе клика', baseCost: 50, effect: 0.05 },
       drill: { name: '🛠️ Бур Титана', desc: '+10% к пассивной добыче', baseCost: 100, effect: 0.10 },
       coin: { name: '🪙 Монета Фортуны', desc: '+1% к шансу золота', baseCost: 150, effect: 0.01 },
       clock: { name: '⏳ Часы Хроноса', desc: '-0.5с к таймеру артефактов', baseCost: 200, effect: 0.5 }
+    };
+
+    const ACHIEVEMENTS = {
+      click1k: { title: 'Кликер-мастер', desc: '1000 кликов', reward: '500 золота', done: false },
+      click10k: { title: 'Тык-тык', desc: '10 000 кликов', reward: '5000 золота', done: false },
+      pres1: { title: 'Новая жизнь', desc: '1 Престиж', reward: '1000 золота', done: false },
+      pres10: { title: 'Феникс', desc: '10 Престижей', reward: '10000 золота', done: false },
+      art1: { title: 'Коллекционер', desc: 'Найти 1 артефакт', reward: '+2% к добыче', done: false },
+      clanCreate: { title: 'Босс', desc: 'Создать клан', reward: '1000 золота', done: false }
     };
 
     function sanitizeGameData(data) {
@@ -408,6 +472,8 @@
       if (!isFinite(data.level)) data.level = 1;
       if (!isFinite(data.totalOre)) data.totalOre = 0;
       if (!isFinite(data.artChanceLvl)) data.artChanceLvl = 0;
+      if (!isFinite(data.clanLevel)) data.clanLevel = 0;
+      if (!data.achievements) data.achievements = { click1k: false, click10k: false, pres1: false, pres10: false, art1: false, clanCreate: false };
       if (data.user) {
         if (!isFinite(data.user.totalClicks)) data.user.totalClicks = 0;
         if (!isFinite(data.user.totalGold)) data.user.totalGold = 0;
@@ -446,8 +512,10 @@
           coin: { level: 0, count: 0 }, clock: { level: 0, count: 0 }
         },
         artTimer: 30, artChanceLvl: 0,
+        clanId: null, clanLevel: 0, friends: [], gameId: generateGameId(),
+        achievements: { click1k: false, click10k: false, pres1: false, pres10: false, art1: false, clanCreate: false },
+        lastDaily: 0, lastSaveTime: Date.now(),
         isBanned: false, playTime: 0, createdAt: new Date().toISOString(),
-        clanId: null, friends: [], gameId: generateGameId(),
         user: { nick: 'Игрок', avatarImg: '', totalClicks: 0, totalGold: 0 }
       };
     }
@@ -470,15 +538,25 @@
           
           let def = getDefaultGame();
           game = { ...def, ...data };
-          
-          if(!game.artifacts) game.artifacts = def.artifacts;
-          if(!game.artChanceLvl) game.artChanceLvl = 0;
-          if(game.artTimer === undefined) game.artTimer = 30;
-          if(!game.clickLvl) game.clickLvl = data.clickPowerLvl || 0;
-
           game = sanitizeGameData(game);
+          
           if(!game.gameId) game.gameId = generateGameId();
           
+          // ОФФЛАЙН ДОБЫЧА
+          let timeNow = Date.now();
+          let lastSave = game.lastSaveTime || timeNow;
+          let offlineSecs = Math.floor((timeNow - lastSave) / 1000);
+          if (offlineSecs > 60 && getOrePerSec() > 0) { // Если прошло больше минуты
+             let maxOfflineSecs = 4 * 3600; // Максимум 4 часа
+             let actualSecs = Math.min(offlineSecs, maxOfflineSecs);
+             let earnedOre = Math.floor(getOrePerSec() * actualSecs);
+             if(earnedOre > 0) {
+                game.ore += earnedOre;
+                document.getElementById('offline-ore-amount').innerText = fmt(earnedOre) + ' 💎';
+                document.getElementById('offline-modal').style.display = 'flex';
+             }
+          }
+
           await setDoc(docRef, game);
         } else {
           game = getDefaultGame();
@@ -496,7 +574,6 @@
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-app').style.display = 'block';
       
-      // ЖЕСТКАЯ ПРОВЕРКА НА АДМИНА
       if(currentEmail.trim().toLowerCase() === ADMIN_EMAIL) {
         document.getElementById('nav-btn-admin').style.display = 'block';
       } else {
@@ -508,8 +585,14 @@
       
       renderHeader();
       updateUI();
+      checkAchievements();
       switchTab('game');
       updateSocialUI();
+    }
+
+    function claimOffline() {
+      document.getElementById('offline-modal').style.display = 'none';
+      updateUI();
     }
 
     function logout() {
@@ -519,10 +602,7 @@
         if(unsubscribeClanChat) unsubscribeClanChat();
         localStorage.removeItem('activeUserEmail');
         currentEmail = ''; game = {};
-        
-        // СКРЫВАЕМ АДМИНКУ ПРИ ВЫХОДЕ
         document.getElementById('nav-btn-admin').style.display = 'none';
-        
         document.getElementById('login-screen').style.display = 'flex';
         document.getElementById('main-app').style.display = 'none';
       }
@@ -541,13 +621,23 @@
             
             let def = getDefaultGame();
             game = { ...def, ...data };
-            if(!game.artifacts) game.artifacts = def.artifacts;
-            if(!game.artChanceLvl) game.artChanceLvl = 0;
-            if(game.artTimer === undefined) game.artTimer = 30;
-            if(!game.clickLvl) game.clickLvl = data.clickPowerLvl || 0;
-
             game = sanitizeGameData(game);
             if(!game.gameId) game.gameId = generateGameId();
+            
+            // ОФФЛАЙН ДОБЫЧА (при автовходе)
+            let timeNow = Date.now();
+            let lastSave = game.lastSaveTime || timeNow;
+            let offlineSecs = Math.floor((timeNow - lastSave) / 1000);
+            if (offlineSecs > 60 && getOrePerSec() > 0) {
+               let maxOfflineSecs = 4 * 3600;
+               let actualSecs = Math.min(offlineSecs, maxOfflineSecs);
+               let earnedOre = Math.floor(getOrePerSec() * actualSecs);
+               if(earnedOre > 0) {
+                  game.ore += earnedOre;
+                  document.getElementById('offline-ore-amount').innerText = fmt(earnedOre) + ' 💎';
+                  document.getElementById('offline-modal').style.display = 'flex';
+               }
+            }
 
             initGameUI();
           }
@@ -556,9 +646,8 @@
     }
 
     function switchTab(tab) {
-      // БЛОКИРОВКА ВКЛАДКИ АДМИНА
       if (tab === 'admin' && currentEmail.trim().toLowerCase() !== ADMIN_EMAIL) {
-        return alert("Доступ запрещен. Вы не администратор.");
+        return alert("Доступ запрещен.");
       }
 
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -569,15 +658,12 @@
       
       let navBtn = document.getElementById('nav-btn-' + tab);
       if(navBtn) navBtn.classList.add('active');
-      else if(tab === 'help') {
-        document.getElementById('nav-btn-profile').classList.add('active');
-        window.scrollTo(0,0);
-      }
+      else if(tab === 'help') document.getElementById('nav-btn-profile').classList.add('active');
 
       if(tab === 'profile') { 
         document.getElementById('input-nick').value = game.user.nick; 
         document.getElementById('profile-game-id').innerText = game.gameId;
-        renderHeader(); updateProfileStats(); 
+        renderHeader(); updateProfileStats(); checkAchievements(); 
       }
       if(tab === 'top') { loadTop(currentTopType); }
       if(tab === 'social') { updateSocialUI(); }
@@ -590,6 +676,7 @@
       
       game = sanitizeGameData(game);
       game.orePerSec = Math.floor(getOrePerSec()); 
+      game.lastSaveTime = Date.now(); // ОБНОВЛЯЕМ ВРЕМЯ ДЛЯ ОФФЛАЙНА
       
       try {
         await setDoc(doc(db, "users", currentEmail), game);
@@ -600,40 +687,85 @@
       } finally { isSaving = false; }
     }
 
+    // --- ДОСТИЖЕНИЯ И ЕЖЕДНЕВНЫЙ БОНУС ---
+    function checkAchievements() {
+      let changed = false;
+      if (game.user.totalClicks >= 1000 && !game.achievements.click1k) { game.achievements.click1k = true; game.gold += 500; changed = true; }
+      if (game.user.totalClicks >= 10000 && !game.achievements.click10k) { game.achievements.click10k = true; game.gold += 5000; changed = true; }
+      if (game.prestige >= 1 && !game.achievements.pres1) { game.achievements.pres1 = true; game.gold += 1000; changed = true; }
+      if (game.prestige >= 10 && !game.achievements.pres10) { game.achievements.pres10 = true; game.gold += 10000; changed = true; }
+      if (game.clanId && !game.achievements.clanCreate) { game.achievements.clanCreate = true; game.gold += 1000; changed = true; }
+      
+      // Отрисовка сетки
+      let html = '';
+      for(let key in ACHIEVEMENTS) {
+        let ach = ACHIEVEMENTS[key];
+        let unlocked = game.achievements[key];
+        html += `
+          <div class="ach-card ${unlocked ? 'unlocked' : ''}">
+            <div class="ach-title">${ach.title}</div>
+            <div class="ach-desc">${ach.desc}</div>
+            <div style="font-size:10px; color:var(--gold); margin-top:5px;">${ach.reward}</div>
+          </div>
+        `;
+      }
+      document.getElementById('achievements-list').innerHTML = html;
+      if(changed) saveGame(false);
+    }
+
+    function claimDaily() {
+      let timeNow = Date.now();
+      if (timeNow - game.lastDaily < 24 * 60 * 60 * 1000) {
+        let timeLeft = Math.ceil((24 * 60 * 60 * 1000 - (timeNow - game.lastDaily)) / (1000 * 60 * 60));
+        return alert(`Следующий бонус через ${timeLeft} ч.`);
+      }
+      game.lastDaily = timeNow;
+      game.gold += 500;
+      game.ore += 10000;
+      alert('🎁 Вы получили 500 золота и 10,000 руды!');
+      saveGame(false);
+      updateDailyButton();
+    }
+
+    function updateDailyButton() {
+      let btn = document.getElementById('daily-btn');
+      let timeNow = Date.now();
+      if (timeNow - game.lastDaily < 24 * 60 * 60 * 1000) {
+        btn.disabled = true;
+        btn.innerText = '🎁 Бонус получен (Ждите 24ч)';
+        btn.style.opacity = 0.5;
+      } else {
+        btn.disabled = false;
+        btn.innerText = '🎁 Забрать ежедневный бонус';
+        btn.style.opacity = 1;
+      }
+    }
+
     // --- МАТЕМАТИКА ---
     function getClickPower() { 
       let base = 1 + game.clickLvl;
       let skill = 1 + (game.skillsPrestige.master * 0.10);
       let art = 1 + (game.artifacts.pick.level * 0.05);
-      return Math.floor(base * skill * art); 
+      let clan = 1 + (game.clanLevel * 0.05); // Бонус клана
+      return Math.floor(base * skill * art * clan); 
     }
 
     function getOrePerSec() { 
       let base = (game.hireLvl * 1) + (game.upgrades.pick * 5) + (game.upgrades.lamp * 15) + (game.upgrades.cart * 40);
       let skill = 1 + (game.skillsPrestige.master * 0.10) + (game.skillsPrestige.speed * 0.05);
       let art = 1 + (game.artifacts.drill.level * 0.10);
-      return base * skill * art; 
+      let clan = 1 + (game.clanLevel * 0.05); // Бонус клана
+      return base * skill * art * clan; 
     }
 
     function getGoldChance() { 
       return 0.05 + (game.skillsPrestige.goldVein * 0.02) + (game.artifacts.coin.level * 0.01); 
     }
 
-    function getArtChance() {
-      return 0.01 + (game.artChanceLvl * 0.005) + (game.skillsPrestige.fortune * 0.001);
-    }
-
-    function getMaxArtTimer() {
-      let base = 30;
-      let reduce = game.artifacts.clock.level * 0.5;
-      return Math.max(5, base - reduce);
-    }
-
+    function getArtChance() { return 0.01 + (game.artChanceLvl * 0.005) + (game.skillsPrestige.fortune * 0.001); }
+    function getMaxArtTimer() { return Math.max(5, 30 - (game.artifacts.clock.level * 0.5)); }
     function getEcoDiscount() { return Math.min(0.8, (game.skillsPrestige.engineer * 0.05)); }
-    function getCost(base, lvl, mult = 1.25) { 
-      let safeLvl = Math.min(lvl, 500); 
-      return Math.floor(base * Math.pow(mult, safeLvl) * (1 - getEcoDiscount())); 
-    }
+    function getCost(base, lvl, mult = 1.25) { return Math.floor(base * Math.pow(mult, Math.min(lvl, 500)) * (1 - getEcoDiscount())); }
     function getPrestigeCost() { return 100 * Math.pow(2, Math.min(game.prestige, 60)); }
 
     // --- ОТРИСОВКА ---
@@ -641,7 +773,6 @@
       document.getElementById('header-nick').innerText = game.user.nick;
       let ha = document.getElementById('header-avatar');
       let pa = document.getElementById('profile-avatar-preview');
-      
       if (game.user.avatarImg && game.user.avatarImg.length > 10) {
         ha.style.backgroundImage = `url(${game.user.avatarImg})`; ha.innerText = '';
         pa.style.backgroundImage = `url(${game.user.avatarImg})`; pa.innerText = '';
@@ -702,6 +833,8 @@
         skillHtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${fmt(game.skillsPrestige[s])}</span></div><button class="buy" id="btn-sk-${s}" onclick="buySkillPrestige('${s}')" ${game.prestige < cost ? 'disabled' : ''}>⭐${fmt(cost)}</button></div>`;
       });
       document.getElementById('prestige-skills-list').innerHTML = skillHtml;
+      
+      updateDailyButton();
     }
 
     function updateArtifactsUI() {
@@ -744,38 +877,19 @@
       if(!currentEmail) return;
       game.ore += getClickPower(); game.totalOre += getClickPower(); game.user.totalClicks++;
       if(Math.random() < getGoldChance()) { game.gold++; game.user.totalGold++; }
-      checkLevel(); updateUI();
+      checkLevel(); updateUI(); checkAchievements();
     });
 
     function hire() { let c = getCost(10, game.hireLvl); if(game.ore >= c) { game.ore -= c; game.hireLvl++; updateUI(); } }
     function buyClick() { let c = getCost(5, game.clickLvl); if(game.ore >= c) { game.ore -= c; game.clickLvl++; updateUI(); } }
     function buyUpgrade(t) { let bp = { pick: 15, lamp: 50, cart: 150 }[t]; let c = getCost(bp, game.upgrades[t]); if(game.ore >= c) { game.ore -= c; game.upgrades[t]++; updateUI(); } }
-    
     function buySkillPrestige(s) { 
       let i = ['master','goldVein','engineer','fortune','speed'].indexOf(s);
       let c = Math.floor([10, 15, 20, 25, 30][i] * Math.pow(1.8, game.skillsPrestige[s]));
       if(game.prestige >= c) { game.prestige -= c; game.skillsPrestige[s]++; updateUI(); } 
     }
-
-    function upgradeArtChance() {
-      let cost = Math.floor(100 * Math.pow(2, game.artChanceLvl));
-      if(game.gold >= cost) {
-        game.gold -= cost;
-        game.artChanceLvl++;
-        updateUI(); updateArtifactsUI();
-      } else { alert('Не хватает золота!'); }
-    }
-
-    function upgradeArtifact(key) {
-      let myArt = game.artifacts[key];
-      let cost = Math.floor(ARTIFACT_TYPES[key].baseCost * Math.pow(2.5, myArt.level));
-      if(myArt.count > 0 && game.gold >= cost) {
-        myArt.count--;
-        game.gold -= cost;
-        myArt.level++;
-        updateArtifactsUI(); updateUI();
-      } else { alert('Нужно больше артефактов или золота!'); }
-    }
+    function upgradeArtChance() { let cost = Math.floor(100 * Math.pow(2, game.artChanceLvl)); if(game.gold >= cost) { game.gold -= cost; game.artChanceLvl++; updateUI(); updateArtifactsUI(); } else { alert('Не хватает золота!'); } }
+    function upgradeArtifact(key) { let myArt = game.artifacts[key]; let cost = Math.floor(ARTIFACT_TYPES[key].baseCost * Math.pow(2.5, myArt.level)); if(myArt.count > 0 && game.gold >= cost) { myArt.count--; game.gold -= cost; myArt.level++; updateArtifactsUI(); updateUI(); } else { alert('Нужно больше артефактов или золота!'); } }
 
     function prestige() {
       let cost = getPrestigeCost();
@@ -784,7 +898,7 @@
           game.gold -= cost; game.prestige += 1;
           game.ore = 0; game.totalOre = 0; game.level = 1; game.clickLvl = 0; game.hireLvl = 0;
           game.upgrades = { pick: 0, lamp: 0, cart: 0 };
-          saveGame(false); updateUI();
+          saveGame(false); updateUI(); checkAchievements();
         }
       }
     }
@@ -815,15 +929,122 @@
           game.artifacts[rand].count++;
           alert(`✨ Невероятная удача! Вы нашли артефакт: ${ARTIFACT_TYPES[rand].name}!`);
           if(document.getElementById('view-artifacts').classList.contains('active')) updateArtifactsUI();
+          checkAchievements();
         }
       }
 
       updateUI();
-      if(document.getElementById('view-profile').classList.contains('active')) updateProfileStats();
+      if(document.getElementById('view-profile').classList.contains('active')) { updateProfileStats(); }
       if(document.getElementById('view-artifacts').classList.contains('active')) updateArtifactsUI();
     }, 1000);
 
     setInterval(() => { if(currentEmail) saveGame(false); }, 10000);
+
+    // --- КЛАНЫ ---
+    async function loadClanData() {
+      if(!game.clanId) return;
+      try {
+        const docRef = doc(db, "clans", game.clanId);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()) {
+          currentClanData = docSnap.data();
+          game.clanLevel = currentClanData.level;
+          document.getElementById('clan-level').innerText = currentClanData.level;
+          document.getElementById('clan-treasury').innerText = fmt(currentClanData.treasury);
+          document.getElementById('clan-next-level').innerText = fmt(currentClanData.level * 1000);
+          document.getElementById('clan-bonus').innerText = currentClanData.level * 5;
+          
+          let percent = (currentClanData.treasury / (currentClanData.level * 1000)) * 100;
+          document.getElementById('clan-bar').style.width = Math.min(percent, 100) + '%';
+        } else {
+          // Если клан удален
+          game.clanId = null;
+          updateSocialUI();
+        }
+      } catch(e) { console.log(e); }
+    }
+
+    async function donateClan() {
+      if(!game.clanId || !currentClanData) return;
+      if(game.gold < 100) return alert('Нужно 100 золота!');
+      
+      game.gold -= 100;
+      let newTreasury = currentClanData.treasury + 100;
+      let newLevel = currentClanData.level;
+      let req = currentClanData.level * 1000;
+      
+      if(newTreasury >= req) {
+        newTreasury -= req;
+        newLevel++;
+        alert(`🎉 Клан повысил уровень до ${newLevel}! Бонус к добыче увеличен!`);
+      }
+      
+      await updateDoc(doc(db, "clans", game.clanId), {
+        treasury: newTreasury,
+        level: newLevel
+      });
+      
+      saveGame(false);
+      loadClanData();
+      updateUI();
+    }
+
+    async function createClan() {
+      const name = document.getElementById('clan-name-input').value.trim();
+      if(!name) return alert('Введите название!');
+      if(game.gold < 500) return alert('Нужно 500 золота!');
+      
+      try {
+        const docSnap = await getDoc(doc(db, "clans", name));
+        if(docSnap.exists()) return alert('Клан с таким названием уже существует!');
+        
+        await setDoc(doc(db, "clans", name), {
+          level: 1,
+          treasury: 0,
+          leader: currentEmail,
+          createdAt: Date.now()
+        });
+        
+        game.gold -= 500; 
+        game.clanId = name;
+        await saveGame(false); updateSocialUI(); initChat('clan'); checkAchievements();
+        alert('Клан создан!');
+      } catch(e) { alert('Ошибка создания'); }
+    }
+
+    async function joinClan() {
+      const id = document.getElementById('clan-join-input').value.trim();
+      if(!id) return;
+      
+      try {
+        const docSnap = await getDoc(doc(db, "clans", id));
+        if(!docSnap.exists()) return alert('Клан не найден!');
+        
+        game.clanId = id;
+        await saveGame(false); updateSocialUI(); initChat('clan'); checkAchievements();
+        alert('Вы вступили в клан ' + id);
+      } catch(e) { alert('Ошибка вступления'); }
+    }
+
+    async function leaveClan() {
+      if(confirm('Выйти из клана?')) {
+        game.clanId = null; 
+        await saveGame(false); updateSocialUI();
+        if(unsubscribeClanChat) unsubscribeClanChat();
+      }
+    }
+
+    function updateSocialUI() {
+      if(game.clanId) {
+        document.getElementById('clan-not-in').style.display = 'none';
+        document.getElementById('clan-in').style.display = 'block';
+        document.getElementById('my-clan-name').innerText = game.clanId;
+        loadClanData();
+      } else {
+        document.getElementById('clan-not-in').style.display = 'block';
+        document.getElementById('clan-in').style.display = 'none';
+      }
+    }
 
     // --- ТОП, ЧАТ, ДРУЗЬЯ, АДМИНКА ---
     function switchTop(type) {
@@ -860,14 +1081,7 @@
           if(type==='prestige') scoreText = `⭐ ${fmt(data.prestige)}`;
           if(type==='speed') scoreText = `⚡ ${fmt(data.orePerSec||0)}/с`;
 
-          html += `
-            <div class="lb-row ${isMe}">
-              <span class="lb-rank">${rank}.</span>
-              <div class="lb-avatar" style="${avStyle}">${avText}</div>
-              <span class="lb-name">${data.user.nick}</span>
-              <span class="lb-score">${scoreText}</span>
-            </div>
-          `;
+          html += `<div class="lb-row ${isMe}"><span class="lb-rank">${rank}.</span><div class="lb-avatar" style="${avStyle}">${avText}</div><span class="lb-name">${data.user.nick}</span><span class="lb-score">${scoreText}</span></div>`;
           rank++;
         });
         listDiv.innerHTML = html || '<div style="text-align:center;color:var(--muted)">Пусто</div>';
@@ -883,17 +1097,6 @@
       if(tab === 'global') { initChat('global'); }
       if(tab === 'clan') { updateSocialUI(); initChat('clan'); }
       if(tab === 'friends') { loadFriends(); }
-    }
-
-    function updateSocialUI() {
-      if(game.clanId) {
-        document.getElementById('clan-not-in').style.display = 'none';
-        document.getElementById('clan-in').style.display = 'block';
-        document.getElementById('my-clan-name').innerText = game.clanId;
-      } else {
-        document.getElementById('clan-not-in').style.display = 'block';
-        document.getElementById('clan-in').style.display = 'none';
-      }
     }
 
     function initChat(type) {
@@ -917,7 +1120,29 @@
           let isMine = m.email === currentEmail ? 'my' : '';
           let dateObj = new Date(m.time);
           let timeStr = dateObj.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
-          html += `<div class="msg ${isMine}"><div class="msg-header"><span class="msg-nick">${m.nick}</span><span>${timeStr}</span></div><div>${m.text}</div></div>`;
+          
+          let replyHtml = '';
+          if(m.replyTo) {
+            replyHtml = `<div class="msg-reply-block"><b>@${m.replyTo.nick}:</b> ${m.replyTo.text}</div>`;
+          }
+          
+          let safeText = m.text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          let safeNick = m.nick.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+          html += `
+            <div class="msg ${isMine}">
+              <div class="msg-header">
+                <span class="msg-nick">${m.nick}</span>
+                <span>${timeStr}</span>
+              </div>
+              ${replyHtml}
+              <div class="msg-text">${m.text}</div>
+              <div class="msg-actions">
+                <button onclick="setReply('${safeNick}', '${safeText}')">↩️ Ответить</button>
+                <button onclick="copyMsg('${safeText}')">📋 Копировать</button>
+              </div>
+            </div>
+          `;
         });
         box.innerHTML = html;
         box.scrollTop = box.scrollHeight;
@@ -927,42 +1152,45 @@
       if(type === 'clan') unsubscribeClanChat = unsub;
     }
 
+    window.setReply = function(nick, text) {
+      replyTo = { nick: nick, text: text };
+      document.getElementById('reply-nick').innerText = nick;
+      document.getElementById('reply-preview').style.display = 'flex';
+      document.getElementById('global-chat-input').focus();
+    }
+
+    window.cancelReply = function() {
+      replyTo = null;
+      document.getElementById('reply-preview').style.display = 'none';
+    }
+
+    window.copyMsg = function(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Текст скопирован!');
+      });
+    }
+
     async function sendChat(type) {
       const input = document.getElementById(type + '-chat-input');
       const text = input.value.trim();
       if(!text) return;
       if(type === 'clan' && !game.clanId) return alert('Вы не в клане!');
+      
       input.value = '';
-      try {
-        await addDoc(collection(db, "chat"), {
-          email: currentEmail, nick: game.user.nick, text: text, time: Date.now(),
-          clanId: type === 'clan' ? game.clanId : null
-        });
-      } catch(e) { alert('Ошибка отправки'); }
-    }
-
-    async function createClan() {
-      const name = document.getElementById('clan-name-input').value.trim();
-      if(!name) return alert('Введите название!');
-      if(game.gold < 500) return alert('Нужно 500 золота!');
-      game.gold -= 500; game.clanId = name;
-      await saveGame(false); updateSocialUI(); initChat('clan');
-      alert('Клан создан!');
-    }
-
-    async function joinClan() {
-      const id = document.getElementById('clan-join-input').value.trim();
-      if(!id) return;
-      game.clanId = id;
-      await saveGame(false); updateSocialUI(); initChat('clan');
-      alert('Вы вступили в клан ' + id);
-    }
-
-    async function leaveClan() {
-      if(confirm('Выйти из клана?')) {
-        game.clanId = null; await saveGame(false); updateSocialUI();
-        if(unsubscribeClanChat) unsubscribeClanChat();
+      
+      let msgData = {
+        email: currentEmail, nick: game.user.nick, text: text, time: Date.now(),
+        clanId: type === 'clan' ? game.clanId : null
+      };
+      
+      if(replyTo && type === 'global') {
+        msgData.replyTo = replyTo;
+        cancelReply();
       }
+
+      try {
+        await addDoc(collection(db, "chat"), msgData);
+      } catch(e) { alert('Ошибка отправки'); }
     }
 
     async function addFriend() {
@@ -1024,22 +1252,12 @@
       } catch(e) { listDiv.innerHTML = 'Ошибка'; }
     }
 
-    async function toggleBan(email, isBanned) {
-      await updateDoc(doc(db, "users", email), { isBanned });
-      loadAdminPanel();
-    }
-
+    async function toggleBan(email, isBanned) { await updateDoc(doc(db, "users", email), { isBanned }); loadAdminPanel(); }
     async function adminGive(email, type, amount) {
       const ref = doc(db, "users", email);
       const snap = await getDoc(ref);
-      if(snap.exists()) {
-        let data = snap.data();
-        data[type] = (data[type] || 0) + amount;
-        await setDoc(ref, data);
-        loadAdminPanel();
-      }
+      if(snap.exists()) { let data = snap.data(); data[type] = (data[type] || 0) + amount; await setDoc(ref, data); loadAdminPanel(); }
     }
-
     async function adminGiveArt(email) {
       let keys = Object.keys(ARTIFACT_TYPES);
       let rand = keys[Math.floor(Math.random() * keys.length)];
@@ -1054,15 +1272,11 @@
         loadAdminPanel();
       }
     }
-
     async function adminReset(email) {
-      if(confirm(`Точно сбросить прогресс игроку ${email}?`)) {
+      if(confirm(`Сбросить прогресс игроку ${email}?`)) {
         const def = getDefaultGame();
         const userDoc = await getDoc(doc(db, "users", email));
-        if(userDoc.exists()) {
-          def.user.nick = userDoc.data().user.nick;
-          def.gameId = userDoc.data().gameId;
-        }
+        if(userDoc.exists()) { def.user.nick = userDoc.data().user.nick; def.gameId = userDoc.data().gameId; }
         await setDoc(doc(db, "users", email), def);
         loadAdminPanel();
       }
@@ -1104,6 +1318,7 @@
     window.sendChat = sendChat; window.createClan = createClan; window.joinClan = joinClan; window.leaveClan = leaveClan;
     window.addFriend = addFriend; window.toggleBan = toggleBan; window.adminGive = adminGive; 
     window.adminGiveArt = adminGiveArt; window.adminReset = adminReset; window.loadAdminPanel = loadAdminPanel;
+    window.claimDaily = claimDaily; window.claimOffline = claimOffline; window.donateClan = donateClan;
 
     checkAutoLogin();
   </script>
