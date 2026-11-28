@@ -11,13 +11,11 @@
     body{background-color:var(--bg);background-image:var(--bg-image);background-size:cover;background-position:center;background-attachment:fixed;color:var(--text);margin:0;padding:0;display:flex;flex-direction:column;align-items:center;}
     .app{width:100%;max-width:450px;padding:10px;padding-top:70px;}
     
-    /* МЕНЮ */
     .top-nav{position:fixed;top:0;left:0;width:100%;background:rgba(15,15,25,0.98);display:flex;flex-wrap:nowrap;overflow-x:auto;border-bottom:2px solid rgba(156,39,176,0.5);z-index:1000;box-shadow:0 4px 15px rgba(0,0,0,0.5);scrollbar-width:none;}
     .top-nav::-webkit-scrollbar{display:none;}
     .nav-btn{flex:0 0 auto;padding:15px 15px;text-align:center;font-size:12px;font-weight:bold;color:var(--muted);background:none;border:none;white-space:nowrap;cursor:pointer;transition:0.2s;border-bottom:3px solid transparent;}
     .nav-btn.active{color:var(--bright);border-bottom:3px solid var(--bright);background:rgba(156,39,176,0.15);}
 
-    /* ПАНЕЛИ */
     .panel{background:var(--panel);border-radius:16px;padding:15px;margin-bottom:12px;border:1px solid rgba(156,39,176,0.3);box-shadow:0 4px 10px rgba(0,0,0,0.3);backdrop-filter:blur(10px);}
     .header{text-align:center;cursor:pointer;background:linear-gradient(135deg,rgba(106,27,154,0.6) 0%,rgba(30,30,45,0.9) 100%);padding:20px 15px;border:2px solid var(--main);position:relative;overflow:hidden;}
     .header:active{transform:scale(0.98);}
@@ -25,7 +23,6 @@
     .mini-profile{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;position:relative;z-index:1;}
     .mini-avatar{width:35px;height:35px;border-radius:50%;background:#222;border:2px solid var(--light);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:18px;}
     
-    /* ВХОД */
     #login-screen{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;width:100%;max-width:400px;padding:20px;}
     #login-screen h1{color:var(--bright);font-size:32px;margin-bottom:10px;}
     .login-box{width:100%;background:var(--panel);padding:25px;border-radius:16px;border:1px solid var(--main);}
@@ -37,7 +34,6 @@
     @keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
     @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-50px) scale(1.5);}}
 
-    /* РЕСУРСЫ */
     .stats-row{display:flex;justify-content:space-between;font-size:15px;font-weight:bold;margin-bottom:8px;}
     .stats-row span:last-child{color:var(--gold);}
     .sub-stats{display:flex;justify-content:space-between;font-size:12px;margin:10px 0;background:rgba(0,0,0,0.4);padding:10px;border-radius:8px;border:1px solid #333;}
@@ -47,7 +43,6 @@
     .btn-buy{background:linear-gradient(135deg,#6a1b9a,#9c27b0);border:1px solid var(--light);box-shadow:0 2px 5px rgba(0,0,0,0.3);}
     .btn-prestige{background:linear-gradient(135deg,#e040fb,#ff80ab);border:none;color:#000;box-shadow:0 2px 10px rgba(224,64,251,0.4);}
     
-    /* ЭЛЕМЕНТЫ */
     .section-title{color:var(--light);font-size:14px;margin:0 0 12px 0;font-weight:bold;border-bottom:1px solid rgba(156,39,176,0.3);padding-bottom:6px;text-transform:uppercase;}
     .item{display:flex;align-items:center;justify-content:space-between;background:var(--solid);padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid var(--main);}
     .item-info{display:flex;flex-direction:column;flex:1;}
@@ -58,11 +53,9 @@
     button:disabled{background:#1a1a24;color:#555;border-color:#333;}
     button:active:not(:disabled){transform:scale(0.95);}
     
-    /* ПРОГРЕСС */
     .progress-container{background:#111;border-radius:10px;height:16px;overflow:hidden;margin-top:6px;border:1px solid #333;}
     .progress-bar{background:linear-gradient(90deg,var(--main),var(--bright));height:100%;width:0%;transition:width 0.2s;}
     
-    /* ПРОФИЛЬ */
     .profile-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:15px 0;}
     .big-avatar{width:90px;height:90px;border-radius:50%;background:#222;border:3px solid var(--bright);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:40px;}
     .profile-input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--main);background:#111;color:white;text-align:center;font-size:14px;}
@@ -70,7 +63,6 @@
     .file-btn input[type=file]{position:absolute;left:0;top:0;opacity:0;width:100%;height:100%;}
     .btn-logout{width:100%;padding:12px;background:var(--red);border:none;border-radius:10px;color:white;font-weight:bold;margin-top:10px;font-size:14px;}
 
-    /* ТОП */
     .lb-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--solid);border-radius:10px;margin-bottom:6px;border-left:3px solid #555;}
     .lb-row.me{border-left-color:var(--bright);background:rgba(156,39,176,0.15);}
     .lb-avatar{width:30px;height:30px;border-radius:50%;background:#111;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-size:16px;}
@@ -78,7 +70,6 @@
     .lb-name{flex:1;font-size:13px;font-weight:bold;}
     .lb-score{font-size:13px;color:var(--gold);font-weight:bold;}
 
-    /* ЧАТ */
     .sub-tabs{display:flex;gap:5px;margin-bottom:12px;overflow-x:auto;}
     .sub-tab{flex:1;padding:10px;background:var(--solid);border:1px solid #444;border-radius:8px;text-align:center;font-size:12px;font-weight:bold;color:var(--muted);cursor:pointer;}
     .sub-tab.active{background:var(--main);color:white;border-color:var(--light);}
@@ -95,27 +86,22 @@
     #reply-preview{display:none;background:rgba(156,39,176,0.2);padding:8px;border-radius:6px;margin-bottom:5px;font-size:11px;border-left:3px solid var(--bright);align-items:center;justify-content:space-between;}
     #reply-preview button{background:none;border:none;color:var(--red);font-weight:bold;font-size:14px;}
 
-    /* АРТЕФАКТЫ */
     .art-card{background:linear-gradient(135deg,rgba(224,64,251,0.1),rgba(30,30,45,0.9));border:1px solid rgba(224,64,251,0.4);border-radius:12px;padding:12px;margin-bottom:10px;}
     .art-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
     .art-title{font-size:15px;font-weight:bold;color:var(--bright);}
     .art-count{background:var(--main);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;}
     
-    /* КОЛЕСО И ПИТОМЦЫ */
     .wheel-container{text-align:center;padding:20px 0;}
     .wheel{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--main) 0 45deg, var(--bright) 45deg 90deg, var(--main) 90deg 135deg, var(--bright) 135deg 180deg, var(--main) 180deg 225deg, var(--bright) 225deg 270deg, var(--main) 270deg 315deg, var(--bright) 315deg 360deg);margin:0 auto 20px auto;border:4px solid #111;transition:transform 3s cubic-bezier(0.2,0.8,0.2,1);}
     .pet-card{display:flex;align-items:center;gap:10px;background:var(--solid);padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid var(--gold);}
     .pet-avatar{font-size:30px;background:#111;padding:10px;border-radius:50%;}
     
-    /* АДМИНКА */
     .admin-card{background:var(--solid);padding:12px;border-radius:10px;margin-bottom:10px;border-left:3px solid var(--red);}
     .admin-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
     .admin-actions button{font-size:10px;padding:6px 8px;}
     
-    /* ОФФЛАЙН */
     #offline-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:2000;}
     .modal-content{background:var(--panel);padding:25px;border-radius:16px;border:2px solid var(--main);text-align:center;max-width:300px;width:90%;}
-    
     .float-text{position:fixed;color:var(--gold);font-weight:bold;font-size:18px;pointer-events:none;animation:floatUp 0.8s ease-out forwards;z-index:9999;text-shadow:0 0 5px #000;}
   </style>
 </head>
@@ -245,7 +231,7 @@
       </div>
     </div>
 
-    <!-- ТОП, СОЦИАЛКА, ПРОФИЛЬ, АДМИНКА (Сокращено для экономии места, логика та же) -->
+    <!-- ТОП -->
     <div id="view-top" class="tab-content">
       <div class="panel">
         <div class="section-title">🏆 Топ игроков</div>
@@ -258,6 +244,7 @@
       </div>
     </div>
 
+    <!-- СОЦИАЛКА -->
     <div id="view-social" class="tab-content">
       <div class="panel">
         <div class="sub-tabs">
@@ -295,6 +282,7 @@
       </div>
     </div>
 
+    <!-- ПРОФИЛЬ -->
     <div id="view-profile" class="tab-content">
       <div class="panel">
         <div class="profile-card">
@@ -357,22 +345,19 @@
     const ADMIN_EMAIL = "admin@mail.com";
     signInAnonymously(auth).catch(e => console.error(e));
 
-    // ЗВУКИ (Web Audio API)
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
     function playSound(freq, type, duration) {
       if(!audioCtx) audioCtx = new AudioContext();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
       gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
       osc.connect(gain); gain.connect(audioCtx.destination);
       osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
-    // ДАННЫЕ УЛУЧШЕНИЙ
     const PASSIVE_UPGRADES = [
       { id: 'u1', name: '⛏️ Кирка', cost: 15, mult: 1.25, effect: 5 },
       { id: 'u2', name: '💡 Фонарь', cost: 50, mult: 1.25, effect: 15 },
@@ -418,16 +403,42 @@
       };
     }
 
+    // МИГРАЦИЯ ДАННЫХ (Защита от старых сохранений)
+    function migrateGameData(data) {
+      let def = getDefaultGame();
+      let newGame = { ...def, ...data };
+
+      if (!newGame.upgrades || typeof newGame.upgrades !== 'object') newGame.upgrades = {};
+      PASSIVE_UPGRADES.forEach(u => { if (newGame.upgrades[u.id] === undefined) newGame.upgrades[u.id] = 0; });
+
+      if (!newGame.clickUpgrades || typeof newGame.clickUpgrades !== 'object') newGame.clickUpgrades = {};
+      CLICK_UPGRADES.forEach(u => { if (newGame.clickUpgrades[u.id] === undefined) newGame.clickUpgrades[u.id] = 0; });
+
+      if (!newGame.pets || typeof newGame.pets !== 'object') newGame.pets = {};
+      PETS.forEach(p => { if (newGame.pets[p.id] === undefined) newGame.pets[p.id] = false; });
+
+      if (!newGame.artifacts) newGame.artifacts = def.artifacts;
+      Object.keys(def.artifacts).forEach(k => {
+        if (!newGame.artifacts[k]) newGame.artifacts[k] = { level: 0, count: 0 };
+      });
+
+      if (!newGame.achievements) newGame.achievements = def.achievements;
+      if (!newGame.user) newGame.user = def.user;
+      if (!newGame.skillsPrestige) newGame.skillsPrestige = def.skillsPrestige;
+
+      return newGame;
+    }
+
     async function login() {
       let email = document.getElementById('login-email').value.trim().toLowerCase();
       if(!email || !email.includes('@')) return alert('Введите Gmail!');
       currentEmail = email; localStorage.setItem('activeUserEmail', email);
       try {
         const snap = await getDoc(doc(db, "users", currentEmail));
-        if(snap.exists()) { game = { ...getDefaultGame(), ...snap.data() }; checkOffline(); } 
+        if(snap.exists()) { game = migrateGameData(snap.data()); checkOffline(); } 
         else { game = getDefaultGame(); await setDoc(doc(db, "users", currentEmail), game); }
         initUI();
-      } catch(e) { alert("Ошибка входа"); }
+      } catch(e) { console.error(e); alert("Ошибка входа: " + e.message); }
     }
 
     function checkOffline() {
@@ -444,7 +455,7 @@
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-app').style.display = 'block';
       if(currentEmail.trim() === ADMIN_EMAIL) document.getElementById('nav-btn-admin').style.display = 'block';
-      renderHeader(); updateUI(); renderAllUpgrades(); switchTab('game'); updateSocialUI();
+      renderHeader(); updateUI(); renderAllUpgrades(); switchTab('game'); updateSocialUI(); updateWheelTimer();
     }
 
     function logout() {
@@ -457,8 +468,8 @@
         currentEmail = saved;
         try {
           const snap = await getDoc(doc(db, "users", currentEmail));
-          if(snap.exists()) { game = { ...getDefaultGame(), ...snap.data() }; checkOffline(); initUI(); }
-        } catch(e) {}
+          if(snap.exists()) { game = migrateGameData(snap.data()); checkOffline(); initUI(); }
+        } catch(e) { console.error(e); }
       }
     }
 
@@ -482,10 +493,9 @@
       try {
         await setDoc(doc(db, "users", currentEmail), game);
         if(showAlert) alert('Сохранено!');
-      } catch(e) {} finally { isSaving = false; }
+      } catch(e) { console.error(e); } finally { isSaving = false; }
     }
 
-    // МАТЕМАТИКА
     function getPetBonus() { let b=0; for(let k in game.pets) { if(game.pets[k]) b += PETS.find(p=>p.id===k).effect; } return 1+b; }
     function getClickPower() { 
       let base = 1 + game.clickLvl; 
@@ -508,13 +518,11 @@
     function getCost(base, lvl) { return Math.floor(base * Math.pow(1.25, Math.min(lvl, 500))); }
     function getPrestigeCost() { return 100 * Math.pow(2, Math.min(game.prestige, 60)); }
 
-    // ДЕЙСТВИЯ
     function handleClick(e) {
       if(!currentEmail) return;
       game.ore += getClickPower(); game.totalOre += getClickPower(); game.user.totalClicks++;
       if(Math.random() < getGoldChance()) { game.gold++; game.user.totalGold++; playSound(800, 'sine', 0.1); }
       
-      // Эффект клика
       let rect = e.currentTarget.getBoundingClientRect();
       let x = e.clientX || (rect.left + rect.width/2);
       let y = e.clientY || (rect.top + rect.height/2);
@@ -540,9 +548,7 @@
 
     function checkLevel() { let req = game.level * 5; if(game.totalOre >= req) { game.level++; game.totalOre -= req; game.gold++; } }
 
-    // РЕНДЕР УЛУЧШЕНИЙ
     function renderAllUpgrades() {
-      // Пассивные
       let phtml = '';
       PASSIVE_UPGRADES.forEach(u => {
         let lvl = game.upgrades[u.id] || 0; let cost = getCost(u.cost, lvl);
@@ -550,7 +556,6 @@
       });
       document.getElementById('passive-upgrades-list').innerHTML = phtml;
 
-      // Клики
       let chtml = '';
       CLICK_UPGRADES.forEach(u => {
         let lvl = game.clickUpgrades[u.id] || 0; let cost = getCost(u.cost, lvl);
@@ -558,7 +563,6 @@
       });
       document.getElementById('click-upgrades-list').innerHTML = chtml;
 
-      // Навыки престижа
       let shtml = '';
       ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach((s, i) => {
         let bc = [10, 15, 20, 25, 30][i]; let cost = Math.floor(bc * Math.pow(1.8, game.skillsPrestige[s]));
@@ -572,7 +576,6 @@
     window.buyClickUpg = function(id) { let lvl = game.clickUpgrades[id]||0; let cost = getCost(CLICK_UPGRADES.find(u=>u.id===id).cost, lvl); if(game.ore>=cost) { game.ore-=cost; game.clickUpgrades[id]=lvl+1; renderAllUpgrades(); updateUI(); playSound(600, 'triangle', 0.1); } };
     window.buySkill = function(s) { let i = ['master','goldVein','engineer','fortune','speed'].indexOf(s); let c = Math.floor([10,15,20,25,30][i]*Math.pow(1.8,game.skillsPrestige[s])); if(game.prestige>=c) { game.prestige-=c; game.skillsPrestige[s]++; renderAllUpgrades(); updateUI(); playSound(900, 'sine', 0.2); } };
 
-    // ПИТОМЦЫ
     function renderPets() {
       let html = '';
       PETS.forEach(p => {
@@ -583,7 +586,6 @@
     }
     window.buyPet = function(id) { let p = PETS.find(x=>x.id===id); if(game.gold >= p.cost && !game.pets[id]) { game.gold -= p.cost; game.pets[id] = true; renderPets(); updateUI(); playSound(1200, 'sine', 0.3); } };
 
-    // КОЛЕСО
     let wheelRot = 0;
     window.spinWheel = function() {
       if(Date.now() - game.lastWheel < 4*3600*1000) return alert('Колесо перезаряжается!');
@@ -607,7 +609,6 @@
       else { document.getElementById('spin-btn').disabled = false; document.getElementById('wheel-timer').innerText = 'Готово'; }
     }
 
-    // UI
     function renderHeader() {
       document.getElementById('header-nick').innerText = game.user.nick;
       let ha = document.getElementById('header-avatar'); let pa = document.getElementById('profile-avatar-preview');
@@ -634,7 +635,6 @@
       document.getElementById('ui-art-bar').style.width = ((Math.max(5,30-(game.artifacts.clock.level*0.5)) - game.artTimer) / Math.max(5,30-(game.artifacts.clock.level*0.5)) * 100) + '%';
     }
 
-    // ЦИКЛ
     setInterval(() => {
       if(!currentEmail) return;
       game.playTime++;
@@ -645,7 +645,6 @@
     }, 1000);
     setInterval(() => { if(currentEmail) saveGame(false); updateWheelTimer(); }, 10000);
 
-    // ОСТАЛЬНОЕ (ЧАТ, ТОП, АДМИНКА) - сохранены функции для работы
     function switchTop(t){currentTopType=t; loadTop(t);}
     async function loadTop(t){const l=document.getElementById('top-list');l.innerHTML='Загрузка...';let f='gold';if(t==='time')f='playTime';if(t==='prestige')f='prestige';try{const s=await getDocs(query(collection(db,"users"),orderBy(f,"desc"),limit(20)));let h='';let r=1;s.forEach(d=>{let da=d.data();if(!da.user)return;let av=da.user.avatarImg?`background-image:url(${da.user.avatarImg});`:'';let sc=t==='gold'?`🥇 ${fmt(da.gold)}`:t==='time'?`⏳ ${Math.floor((da.playTime||0)/3600)}ч`:`⭐ ${fmt(da.prestige)}`;h+=`<div class="lb-row ${d.id===currentEmail?'me':''}"><span class="lb-rank">${r}.</span><div class="lb-avatar" style="${av}">${da.user.avatarImg?'':'⛏️'}</div><span class="lb-name">${da.user.nick}</span><span class="lb-score">${sc}</span></div>`;r++;});l.innerHTML=h||'Пусто';}catch(e){l.innerHTML='Ошибка';}}
     
@@ -676,12 +675,11 @@
     function handleAvatarUpload(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){const img=new Image();img.onload=function(){const c=document.createElement('canvas');const ctx=c.getContext('2d');let m=150,w=img.width,h=img.height;if(w>h){if(w>m){h*=m/w;w=m;}}else{if(h>m){w*=m/h;h=m;}}c.width=w;c.height=h;ctx.drawImage(img,0,0,w,h);game.user.avatarImg=c.toDataURL('image/jpeg',0.8);renderHeader();};img.src=ev.target.result;};r.readAsDataURL(f);}
     function saveProfile(){let n=document.getElementById('input-nick').value.trim();if(n)game.user.nick=n;saveGame(false);renderHeader();alert('Сохранено');switchTab('game');}
 
-    // ЭКСПОРТ
     window.login=login; window.logout=logout; window.switchTab=switchTab; window.switchTop=switchTop; window.switchSocial=switchSocial;
     window.saveProfile=saveProfile; window.handleAvatarUpload=handleAvatarUpload; window.hire=hire; window.buyClick=buyClick;
     window.prestige=prestige; window.saveGame=saveGame; window.claimOffline=claimOffline; window.sendChat=sendChat;
     window.createClan=createClan; window.joinClan=joinClan; window.leaveClan=leaveClan; window.addFriend=addFriend;
-    window.donateClan=donateClan;
+    window.donateClan=donateClan; window.spinWheel=spinWheel;
     
     checkAutoLogin();
   </script>
