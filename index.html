@@ -11,6 +11,7 @@
     body{background-color:var(--bg);background-image:var(--bg-image);background-size:cover;background-position:center;background-attachment:fixed;color:var(--text);margin:0;padding:0;display:flex;flex-direction:column;align-items:center;}
     .app{width:100%;max-width:450px;padding:10px;padding-top:70px;}
     
+    /* МЕНЮ */
     .top-nav{position:fixed;top:0;left:0;width:100%;background:rgba(15,15,25,0.98);display:flex;flex-wrap:nowrap;overflow-x:auto;border-bottom:2px solid rgba(156,39,176,0.5);z-index:1000;box-shadow:0 4px 15px rgba(0,0,0,0.5);scrollbar-width:none;}
     .top-nav::-webkit-scrollbar{display:none;}
     .nav-btn{flex:0 0 auto;padding:15px 15px;text-align:center;font-size:12px;font-weight:bold;color:var(--muted);background:none;border:none;white-space:nowrap;cursor:pointer;transition:0.2s;border-bottom:3px solid transparent;}
@@ -403,29 +404,20 @@
       };
     }
 
-    // МИГРАЦИЯ ДАННЫХ (Защита от старых сохранений)
     function migrateGameData(data) {
       let def = getDefaultGame();
       let newGame = { ...def, ...data };
-
       if (!newGame.upgrades || typeof newGame.upgrades !== 'object') newGame.upgrades = {};
       PASSIVE_UPGRADES.forEach(u => { if (newGame.upgrades[u.id] === undefined) newGame.upgrades[u.id] = 0; });
-
       if (!newGame.clickUpgrades || typeof newGame.clickUpgrades !== 'object') newGame.clickUpgrades = {};
       CLICK_UPGRADES.forEach(u => { if (newGame.clickUpgrades[u.id] === undefined) newGame.clickUpgrades[u.id] = 0; });
-
       if (!newGame.pets || typeof newGame.pets !== 'object') newGame.pets = {};
       PETS.forEach(p => { if (newGame.pets[p.id] === undefined) newGame.pets[p.id] = false; });
-
       if (!newGame.artifacts) newGame.artifacts = def.artifacts;
-      Object.keys(def.artifacts).forEach(k => {
-        if (!newGame.artifacts[k]) newGame.artifacts[k] = { level: 0, count: 0 };
-      });
-
+      Object.keys(def.artifacts).forEach(k => { if (!newGame.artifacts[k]) newGame.artifacts[k] = { level: 0, count: 0 }; });
       if (!newGame.achievements) newGame.achievements = def.achievements;
       if (!newGame.user) newGame.user = def.user;
       if (!newGame.skillsPrestige) newGame.skillsPrestige = def.skillsPrestige;
-
       return newGame;
     }
 
@@ -479,7 +471,6 @@
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + tab).classList.add('active');
       if(document.getElementById('nav-btn-' + tab)) document.getElementById('nav-btn-' + tab).classList.add('active');
-      
       if(tab === 'profile') renderProfile();
       if(tab === 'top') loadTop(currentTopType);
       if(tab === 'social') updateSocialUI();
@@ -500,17 +491,13 @@
     function getClickPower() { 
       let base = 1 + game.clickLvl; 
       for(let k in game.clickUpgrades) { if(game.clickUpgrades[k]) base += CLICK_UPGRADES.find(c=>c.id===k).effect * game.clickUpgrades[k]; }
-      let skill = 1 + (game.skillsPrestige.master*0.1);
-      let art = 1 + (game.artifacts.pick.level*0.05);
-      let clan = 1 + (game.clanLevel*0.05);
+      let skill = 1 + (game.skillsPrestige.master*0.1); let art = 1 + (game.artifacts.pick.level*0.05); let clan = 1 + (game.clanLevel*0.05);
       return Math.floor(base * skill * art * clan * getPetBonus()); 
     }
     function getOrePerSec() { 
       let base = game.hireLvl * 1;
       for(let k in game.upgrades) { if(game.upgrades[k]) base += PASSIVE_UPGRADES.find(u=>u.id===k).effect * game.upgrades[k]; }
-      let skill = 1 + (game.skillsPrestige.master*0.1) + (game.skillsPrestige.speed*0.05);
-      let art = 1 + (game.artifacts.drill.level*0.1);
-      let clan = 1 + (game.clanLevel*0.05);
+      let skill = 1 + (game.skillsPrestige.master*0.1) + (game.skillsPrestige.speed*0.05); let art = 1 + (game.artifacts.drill.level*0.1); let clan = 1 + (game.clanLevel*0.05);
       return base * skill * art * clan * getPetBonus(); 
     }
     function getGoldChance() { return 0.05 + (game.skillsPrestige.goldVein*0.02) + (game.artifacts.coin.level*0.01); }
@@ -522,21 +509,14 @@
       if(!currentEmail) return;
       game.ore += getClickPower(); game.totalOre += getClickPower(); game.user.totalClicks++;
       if(Math.random() < getGoldChance()) { game.gold++; game.user.totalGold++; playSound(800, 'sine', 0.1); }
-      
-      let rect = e.currentTarget.getBoundingClientRect();
-      let x = e.clientX || (rect.left + rect.width/2);
-      let y = e.clientY || (rect.top + rect.height/2);
-      let el = document.createElement('div');
-      el.className = 'float-text'; el.style.left = x+'px'; el.style.top = y+'px'; el.innerText = '+'+fmt(getClickPower())+'💎';
+      let rect = e.currentTarget.getBoundingClientRect(); let x = e.clientX || (rect.left + rect.width/2); let y = e.clientY || (rect.top + rect.height/2);
+      let el = document.createElement('div'); el.className = 'float-text'; el.style.left = x+'px'; el.style.top = y+'px'; el.innerText = '+'+fmt(getClickPower())+'💎';
       document.body.appendChild(el); setTimeout(()=>el.remove(), 800);
-      
-      playSound(300, 'square', 0.05);
-      checkLevel(); updateUI();
+      playSound(300, 'square', 0.05); checkLevel(); updateUI();
     }
 
     function hire() { let c = getCost(10, game.hireLvl); if(game.ore >= c) { game.ore -= c; game.hireLvl++; updateUI(); playSound(500, 'triangle', 0.1); } }
     function buyClick() { let c = getCost(5, game.clickLvl); if(game.ore >= c) { game.ore -= c; game.clickLvl++; updateUI(); playSound(500, 'triangle', 0.1); } }
-    
     function prestige() {
       let cost = getPrestigeCost();
       if(game.gold >= cost && confirm(`Сбросить прогресс за 1⭐?`)) {
@@ -565,16 +545,16 @@
 
       let shtml = '';
       ['master', 'goldVein', 'engineer', 'fortune', 'speed'].forEach((s, i) => {
-        let bc = [10, 15, 20, 25, 30][i]; let cost = Math.floor(bc * Math.pow(1.8, game.skillsPrestige[s]));
+        let bc = [10, 15, 20, 25, 30][i]; let cost = Math.floor(bc * Math.pow(1.8, game.skillsPrestige[s] || 0));
         let names = ['🏆 Мастер (+10%)', '💰 Жила (+2%)', '🛠️ Инженер (-5%)', '🎲 Фортуна (+0.1%)', '🚀 Ускорение (+5%)'];
-        shtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${game.skillsPrestige[s]}</span></div><button class="buy" onclick="buySkill('${s}')" ${game.prestige<cost?'disabled':''}>⭐${fmt(cost)}</button></div>`;
+        shtml += `<div class="item"><div class="item-info"><span class="item-title">${names[i]} Ур.${game.skillsPrestige[s] || 0}</span></div><button class="buy" onclick="buySkill('${s}')" ${game.prestige<cost?'disabled':''}>⭐${fmt(cost)}</button></div>`;
       });
       document.getElementById('prestige-skills-list').innerHTML = shtml;
     }
 
     window.buyPassive = function(id) { let lvl = game.upgrades[id]||0; let cost = getCost(PASSIVE_UPGRADES.find(u=>u.id===id).cost, lvl); if(game.ore>=cost) { game.ore-=cost; game.upgrades[id]=lvl+1; renderAllUpgrades(); updateUI(); playSound(600, 'triangle', 0.1); } };
     window.buyClickUpg = function(id) { let lvl = game.clickUpgrades[id]||0; let cost = getCost(CLICK_UPGRADES.find(u=>u.id===id).cost, lvl); if(game.ore>=cost) { game.ore-=cost; game.clickUpgrades[id]=lvl+1; renderAllUpgrades(); updateUI(); playSound(600, 'triangle', 0.1); } };
-    window.buySkill = function(s) { let i = ['master','goldVein','engineer','fortune','speed'].indexOf(s); let c = Math.floor([10,15,20,25,30][i]*Math.pow(1.8,game.skillsPrestige[s])); if(game.prestige>=c) { game.prestige-=c; game.skillsPrestige[s]++; renderAllUpgrades(); updateUI(); playSound(900, 'sine', 0.2); } };
+    window.buySkill = function(s) { let i = ['master','goldVein','engineer','fortune','speed'].indexOf(s); let c = Math.floor([10,15,20,25,30][i]*Math.pow(1.8,game.skillsPrestige[s]||0)); if(game.prestige>=c) { game.prestige-=c; game.skillsPrestige[s]=(game.skillsPrestige[s]||0)+1; renderAllUpgrades(); updateUI(); playSound(900, 'sine', 0.2); } };
 
     function renderPets() {
       let html = '';
@@ -589,8 +569,7 @@
     let wheelRot = 0;
     window.spinWheel = function() {
       if(Date.now() - game.lastWheel < 4*3600*1000) return alert('Колесо перезаряжается!');
-      game.lastWheel = Date.now();
-      wheelRot += 1440 + Math.random()*360;
+      game.lastWheel = Date.now(); wheelRot += 1440 + Math.random()*360;
       document.getElementById('wheel-visual').style.transform = `rotate(${wheelRot}deg)`;
       playSound(400, 'sawtooth', 2);
       setTimeout(() => {
@@ -684,4 +663,4 @@
     checkAutoLogin();
   </script>
 </body>
-  </html>
+</html>
